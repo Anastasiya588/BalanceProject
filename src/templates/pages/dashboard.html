@@ -1,0 +1,31 @@
+<div class="dashboard">
+    <h1 class="dashboard-title pb-5">Главная</h1>
+    <div class="dashboard-dates d-flex align-items-center gap-3 pt-3 mb-5">
+        <a href="/" class="block py-2 px-3 text-decoration-none rounded-1">Сегодня</a>
+        <a href="/" class="block py-2 px-3 text-decoration-none rounded-1">Неделя</a>
+        <a href="/" class="block py-2 px-3 text-decoration-none rounded-1">Месяц</a>
+        <a href="/" class="block py-2 px-3 text-decoration-none rounded-1">Год</a>
+        <a href="/" class="block py-2 px-3 text-decoration-none rounded-1">Все</a>
+        <div class="interval d-flex align-items-center gap-3">
+            <a href="/" class="block py-2 px-3 text-decoration-none rounded-1">Интервал</a>
+            <p class="m-0">с</p>
+            <a href="/" class="text-decoration-none border-bottom border-secondary">Дата</a>
+            <p class="m-0">по</p>
+            <a href="/" class="text-decoration-none border-bottom border-secondary">Дата</a>
+        </div>
+    </div>
+
+    <div class="pie-items d-flex">
+        <div class="pie-item text-center">
+            <h2 class="pi-title m-0">Доходы</h2>
+            <div id="legend-income-container"></div>
+            <canvas id="pie-chart-income"></canvas>
+        </div>
+        <div class="pie-item text-center ">
+            <h2 class="pi-title m-0">Расходы</h2>
+            <div id="legend-expenses-container"></div>
+            <canvas id="pie-chart-expenses"></canvas>
+        </div>
+    </div>
+
+</div>
