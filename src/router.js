@@ -2,6 +2,15 @@ import {Dashboard} from "./components/dashboard.js";
 import {Login} from "./components/login.js";
 import {SignUp} from "./components/sign-up.js";
 import {FileUtils} from "../utils/file-utils.js";
+import {Incomes} from "./components/incomes.js";
+import {CreateIncomes} from "./components/create-incomes.js";
+import {EditIncomes} from "./components/edit-incomes.js";
+import {Expenses} from "./components/expenses.js";
+import {CreateExpenses} from "./components/create-expenses.js";
+import {EditExpenses} from "./components/edit-expenses.js";
+import {Operations} from "./components/operations.js";
+import {CreateOperations} from "./components/create-operations.js";
+import {EditOperations} from "./components/edit-operations.js";
 
 
 const feather = require('feather-icons');
@@ -16,17 +25,16 @@ export class Router {
         this.initEvents();
         this.routes = [
             {
-                route: '/',
+                route: '/api',
                 title: 'Главная',
                 filePathTemplate: '/templates/pages/dashboard.html',
                 useLayout: '/templates/layout.html',
-                load() {
+                load: () => {
                     new Dashboard();
                 },
-                scripts: ['chart.umd.js']
             },
             {
-                route: '/404',
+                route: '/api/404',
                 title: 'Страница не найдена',
                 filePathTemplate: '/templates/404.html',
                 load: () => {
@@ -34,19 +42,100 @@ export class Router {
                 },
             },
             {
-                route: '/login',
+                route: '/api/login',
                 title: 'Авторизация',
-                filePathTemplate: '/templates/page/auth/login.html',
+                filePathTemplate: '/templates/pages/auth/login.html',
                 load: () => {
                     new Login()
                 },
             },
             {
-                route: '/signup',
+                route: '/api/signup',
                 title: 'Регистрация',
                 filePathTemplate: '/templates/pages/auth/sign-up.html',
                 load: () => {
                     new SignUp()
+                },
+            },
+            {
+                route: '/api/categories/income',
+                title: 'Доходы',
+                filePathTemplate: '/templates/pages/incomes.html',
+                useLayout: '/templates/layout.html',
+                load: () => {
+                    new Incomes()
+                },
+            },
+            {
+                route: '/api/categories/income/create',
+                title: 'Создание категории доходов',
+                filePathTemplate: '/templates/pages/create-incomes.html',
+                useLayout: '/templates/layout.html',
+                load: () => {
+                    new CreateIncomes()
+                },
+            },
+            {
+                route: '/api/categories/income/edit',
+                title: 'Редактирование категории доходов',
+                filePathTemplate: '/templates/pages/edit-incomes.html',
+                useLayout: '/templates/layout.html',
+                load: () => {
+                    new EditIncomes()
+                },
+            },
+            {
+                route: '/api/categories/expense',
+                title: 'Расходы',
+                filePathTemplate: '/templates/pages/expenses.html',
+                useLayout: '/templates/layout.html',
+                load: () => {
+                    new Expenses()
+                },
+            },
+            {
+                route: '/api/categories/expense/create',
+                title: 'Создание категории расходов',
+                filePathTemplate: '/templates/pages/create-expenses.html',
+                useLayout: '/templates/layout.html',
+                load: () => {
+                    new CreateExpenses()
+                },
+            },
+            {
+                route: '/api/categories/expense/edit',
+                title: 'Редактирование категории расходов',
+                filePathTemplate: '/templates/pages/edit-expenses.html',
+                useLayout: '/templates/layout.html',
+                load: () => {
+                    new EditExpenses()
+                },
+            },
+            {
+                route: '/api/operations',
+                title: 'Доходы и расходы',
+                filePathTemplate: '/templates/pages/operations.html',
+                useLayout: '/templates/layout.html',
+                load: () => {
+                    new Operations()
+                },
+            },
+            {
+                route: '/api/operations/create',
+                title: 'Создание дохода/расхода',
+                filePathTemplate: '/templates/pages/create-operations.html',
+                useLayout: '/templates/layout.html',
+                load: () => {
+                    new CreateOperations()
+                },
+            },
+            {
+                route: '/api/operations/edit',
+                title: 'Редактирование дохода/расхода',
+                filePathTemplate: '/templates/pages/edit-operations.html',
+                useLayout: '/templates/layout.html',
+                load: () => {
+                    new EditOperations()
                 },
             },
 
@@ -137,7 +226,6 @@ export class Router {
                 if (newRoute.useLayout) {
                     this.contentPageElement.innerHTML = await fetch(newRoute.useLayout).then(response => response.text());
                     contentBlock = document.getElementById('content-layout');
-
                 }
                 //запрос на получение страницы
                 contentBlock.innerHTML = await fetch(newRoute.filePathTemplate).then(response => response.text());
@@ -147,14 +235,10 @@ export class Router {
             }
         } else {
             console.log('No route found')
-            history.pushState({}, '', '/404');
+            history.pushState({}, '', '/api/404');
             await this.activateRoute();
         }
-
-
     }
-
-
 }
 
 

@@ -14,9 +14,17 @@
   src: url("../static/fonts/Roboto-Medium.ttf") format('truetype');
 }
 
+@font-face {
+  font-family: "RobotoBold";
+  src: url("../static/fonts/Roboto-Bold.ttf") format('truetype');
+}
+
 $grey-color: #6C757D;
+$light-grey-color: #D9D9D9;
+$card-border-grey-color: #CED4DA;
 $blue-color: #052C65;
 $purple-color: #290661;
+
 html, body {
   height: 100%;
 }
@@ -181,25 +189,268 @@ body {
   }
 
   .pie-items {
-    .pi-title {
-      font-family: 'RobotoMedium', sans-serif;
-      font-size: 28px;
-      color: $purple-color;
-    }
-
     .pie-item {
-      width: 360px;
-      height: 360px;
+
+      .pi-title {
+        font-family: 'RobotoMedium', sans-serif;
+        font-size: 28px;
+        color: $purple-color;
+      }
+
+      canvas {
+        margin: 0 auto;
+        width: 360px;
+        height: 360px;
+      }
     }
 
     .line {
-      height: 450px;
       width: 1px;
+      background-color: $light-grey-color;
+      height: 450px;
+      align-self: flex-end;
     }
-
 
   }
 }
+
+
+//Incomes
+.incomes {
+  .incomes-title {
+    font-family: "RobotoMedium", sans-serif;
+    font-size: 40px;
+  }
+
+  .card {
+    width: 352px;
+    height: 121px;
+    border-color: $card-border-grey-color;
+
+    .card-title {
+      font-family: 'RobotoMedium', sans-serif;
+      font-size: 28px;
+      color: $purple-color;
+
+      .btn {
+        font-family: 'RobotoMedium', sans-serif;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+//Create Incomes
+.create-incomes {
+  .create-incomes-title {
+    font-family: "RobotoMedium", sans-serif;
+    font-size: 40px;
+  }
+
+  #create-income-input {
+    font-family: 'RobotoRegular', sans-serif;
+    font-size: 15px;
+
+    ::placeholder {
+      font-family: 'RobotoRegular', sans-serif;
+      font-size: 15px;
+      color: $grey-color;
+    }
+  }
+}
+
+//Edit Incomes
+.edit-incomes {
+  .edit-incomes-title {
+    font-family: "RobotoMedium", sans-serif;
+    font-size: 40px;
+  }
+
+  #edit-income-input {
+    font-family: 'RobotoRegular', sans-serif;
+    font-size: 15px;
+
+    ::placeholder {
+      font-family: 'RobotoRegular', sans-serif;
+      font-size: 15px;
+      color: $grey-color;
+    }
+  }
+}
+
+
+//Expenses
+.expenses {
+  .expenses-title {
+    font-family: "RobotoMedium", sans-serif;
+    font-size: 40px;
+  }
+
+  .card {
+    width: 352px;
+    height: 121px;
+    border-color: $card-border-grey-color;
+
+    .card-title {
+      font-family: 'RobotoMedium', sans-serif;
+      font-size: 28px;
+      color: $purple-color;
+
+      .btn {
+        font-family: 'RobotoMedium', sans-serif;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+//Create Expenses
+.create-expenses {
+  .create-expenses-title {
+    font-family: "RobotoMedium", sans-serif;
+    font-size: 40px;
+  }
+
+  #create-expenses-input {
+    font-family: 'RobotoRegular', sans-serif;
+    font-size: 15px;
+
+    ::placeholder {
+      font-family: 'RobotoRegular', sans-serif;
+      font-size: 15px;
+      color: $grey-color;
+    }
+  }
+}
+
+//Edit Expenses
+.edit-expenses {
+  .edit-expenses-title {
+    font-family: "RobotoMedium", sans-serif;
+    font-size: 40px;
+  }
+
+  #edit-expenses-input {
+    font-family: 'RobotoRegular', sans-serif;
+    font-size: 15px;
+
+    ::placeholder {
+      font-family: 'RobotoRegular', sans-serif;
+      font-size: 15px;
+      color: $grey-color;
+    }
+  }
+}
+
+//Operations
+.operations {
+  .operations-title {
+    font-family: "RobotoMedium", sans-serif;
+    font-size: 40px;
+  }
+
+  .operations-dates {
+    font-family: "RobotoMedium", sans-serif;
+    font-size: 16px;
+
+    a {
+      color: $grey-color;
+      line-height: 16px;
+    }
+
+
+    .block {
+      box-sizing: border-box;
+      border: 1px solid $grey-color;
+      font-family: "RobotoMedium", sans-serif;
+      font-size: 16px;
+      color: $grey-color;
+    }
+  }
+
+  thead {
+    tr {
+      th {
+        font-family: 'RobotoBold', sans-serif;
+        font-size: 16px;
+        color: $blue-color;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      th {
+        font-family: 'RobotoBold', sans-serif;
+        font-size: 16px;
+        line-height: 1;
+      }
+
+      td {
+        font-family: 'RobotoRegular', sans-serif;
+        font-size: 16px;
+        line-height: 1;
+      }
+    }
+  }
+}
+
+//Create Operations
+.create-operations {
+  .create-operations-title {
+    font-family: "RobotoMedium", sans-serif;
+    font-size: 40px;
+  }
+
+  #create-operations-input {
+    font-family: 'RobotoRegular', sans-serif;
+    font-size: 15px;
+
+    ::placeholder {
+      font-family: 'RobotoRegular', sans-serif;
+      font-size: 15px;
+      color: $grey-color;
+    }
+  }
+}
+
+//Edit Operations
+.edit-operations {
+  .edit-operations-title {
+    font-family: "RobotoMedium", sans-serif;
+    font-size: 40px;
+  }
+
+  #edit-operations-input {
+    font-family: 'RobotoRegular', sans-serif;
+    font-size: 15px;
+
+    ::placeholder {
+      font-family: 'RobotoRegular', sans-serif;
+      font-size: 15px;
+      color: $grey-color;
+    }
+  }
+}
+
+
+//Pop-up
+.pop-up-container {
+  background-color: rgba(0, 0, 0, 0.45);
+
+  .pop-up {
+    width: 530px;
+    top: calc(50% - 184px / 2);
+    right: calc(50% - 530px / 2);
+
+    .pop-up-text {
+      font-family: 'RobotoMedium', sans-serif;
+      font-size: 20px;
+      color: $purple-color;
+    }
+  }
+}
+
 
 
 

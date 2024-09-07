@@ -1,0 +1,5 @@
+export class CreateExpenses {
+    constructor() {
+
+    }
+}

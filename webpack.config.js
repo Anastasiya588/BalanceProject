@@ -1,3 +1,5 @@
+'use strict'
+
 const path = require('path');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
@@ -35,7 +37,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: "./index.html",
-            baseUrl: '/',
+            baseUrl: '/api',
         }),
         new CopyPlugin({
             patterns: [
@@ -47,7 +49,8 @@ module.exports = {
                 {from: "./src/static/fonts", to: "static/fonts"},
                 {from: "./node_modules/bootstrap/dist/css/bootstrap.min.css", to: "css"},
                 {from: "./node_modules/bootstrap/dist/js/bootstrap.min.js", to: "js"},
-                {from: "./node_modules/chart.js/dist/chart.umd.js", to: "js"},
+                // {from: "./node_modules/chart.js/dist/chart.umd.js", to: "js"},
+                {from: "./node_modules/chart.js/auto", to: "js/chart.js/auto"},
                 // {from: "./node_modules/chart.js/dist/chunks/helpers.segment.js", to: "js"},
             ],
         }),],
