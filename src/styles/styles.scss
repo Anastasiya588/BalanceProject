@@ -1,3 +1,5 @@
+@import "404-style.css";
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -27,6 +29,7 @@ $purple-color: #290661;
 
 html, body {
   height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -35,12 +38,14 @@ body {
 }
 
 //auth styles
+
+
 .form {
-  width: 413px;
+  max-width: 413px;
+
 
   .login-title, .signUp-title {
     font-family: 'RobotoMedium', sans-serif;
-    //color: $blue-color;
   }
 
 
@@ -85,6 +90,7 @@ body {
     font-size: 12px;
   }
 }
+
 
 //Layout
 .row > * {
@@ -172,6 +178,10 @@ body {
   .dashboard-dates {
     font-family: "RobotoMedium", sans-serif;
     font-size: 16px;
+    @media (max-width: 1151px) {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
     a {
       color: $grey-color;
@@ -189,12 +199,39 @@ body {
   }
 
   .pie-items {
+    @media (max-width: 1081px) {
+      flex-direction: column;
+    }
+
+
     .pie-item {
 
       .pi-title {
         font-family: 'RobotoMedium', sans-serif;
         font-size: 28px;
         color: $purple-color;
+      }
+
+      ul {
+        flex-wrap: wrap;
+        @media (max-width: 1227px) {
+          justify-content: center;
+        }
+
+
+        li:not(:last-child) {
+          @media (max-width: 1179px) {
+            padding-bottom: 15px;
+          }
+        }
+
+        li {
+          @media (max-width: 1089px) {
+            padding-bottom: 15px;
+          }
+        }
+
+
       }
 
       canvas {
@@ -209,6 +246,9 @@ body {
       background-color: $light-grey-color;
       height: 450px;
       align-self: flex-end;
+      @media (max-width: 1081px) {
+        display: none;
+      }
     }
 
   }
@@ -220,24 +260,34 @@ body {
   .incomes-title {
     font-family: "RobotoMedium", sans-serif;
     font-size: 40px;
+    @media screen and (max-width: 1451px) {
+      text-align: center;
+    }
   }
 
-  .card {
-    width: 352px;
-    height: 121px;
-    border-color: $card-border-grey-color;
+  .cards {
+    @media screen and (max-width: 1451px) {
+      justify-content: center;
+    }
 
-    .card-title {
-      font-family: 'RobotoMedium', sans-serif;
-      font-size: 28px;
-      color: $purple-color;
+    .card {
+      width: 352px;
+      height: 121px;
+      border-color: $card-border-grey-color;
 
-      .btn {
+      .card-title {
         font-family: 'RobotoMedium', sans-serif;
-        font-size: 14px;
+        font-size: 28px;
+        color: $purple-color;
+
+        .btn {
+          font-family: 'RobotoMedium', sans-serif;
+          font-size: 14px;
+        }
       }
     }
   }
+
 }
 
 //Create Incomes
@@ -284,21 +334,30 @@ body {
   .expenses-title {
     font-family: "RobotoMedium", sans-serif;
     font-size: 40px;
+    @media screen and (max-width: 1451px) {
+      text-align: center;
+    }
   }
 
-  .card {
-    width: 352px;
-    height: 121px;
-    border-color: $card-border-grey-color;
+  .cards {
+    @media screen and (max-width: 1451px) {
+      justify-content: center;
+    }
 
-    .card-title {
-      font-family: 'RobotoMedium', sans-serif;
-      font-size: 28px;
-      color: $purple-color;
+    .card {
+      width: 352px;
+      height: 121px;
+      border-color: $card-border-grey-color;
 
-      .btn {
+      .card-title {
         font-family: 'RobotoMedium', sans-serif;
-        font-size: 14px;
+        font-size: 28px;
+        color: $purple-color;
+
+        .btn {
+          font-family: 'RobotoMedium', sans-serif;
+          font-size: 14px;
+        }
       }
     }
   }
@@ -347,11 +406,25 @@ body {
   .operations-title {
     font-family: "RobotoMedium", sans-serif;
     font-size: 40px;
+    @media (max-width: 1023px) {
+      text-align: center;
+    }
+  }
+
+  .btns {
+    @media (max-width: 1023px) {
+      display: flex;
+      justify-content: center;
+    }
   }
 
   .operations-dates {
     font-family: "RobotoMedium", sans-serif;
     font-size: 16px;
+    @media (max-width: 1023px) {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
     a {
       color: $grey-color;

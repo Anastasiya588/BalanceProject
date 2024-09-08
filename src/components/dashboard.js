@@ -18,7 +18,7 @@ export class Dashboard {
                 listContainer = document.createElement('ul');
                 listContainer.style.display = 'flex';
                 listContainer.style.flexDirection = 'row';
-                listContainer.style.margin = 0;
+                listContainer.style.margin = '20px 0 40px 0';
                 listContainer.style.padding = 0;
                 legendContainer.appendChild(listContainer);
             }
@@ -38,10 +38,10 @@ export class Dashboard {
                     li.style.cursor = 'pointer';
                     li.style.display = 'flex';
                     li.style.flexDirection = 'row';
-                    li.style.margin = '20px 15px 40px 0';
+                    li.style.margin = '0 15px 0 0';
                     // Добавляем стиль только для последнего элемента
                     if (index === items.length - 1) {
-                        li.style.margin = '20px 0 40px 0';
+                        li.style.margin = 0;
                     }
                     li.onclick = () => {
                         if (chart.config.type === 'pie' || chart.config.type === 'doughnut') {
@@ -83,7 +83,10 @@ export class Dashboard {
             // График доходов
             if (this.incomeCanvas && this.expensesCanvas) {
                 const incomeItem = document.createElement('div');
-                incomeItem.classList = 'pie-content me-4 mb-4 pb-3';
+                incomeItem.classList = 'pie-content mb-md-4 mb-sm-3 pb-sm-3';
+                if (document.documentElement.clientWidth > 1080) {
+                    incomeItem.classList = 'me-4';
+                }
                 incomeItem.appendChild(document.createElement('h2')).className = 'pi-title m-0';
                 incomeItem.lastChild.textContent = 'Доходы';
                 const incomeLegendContainer = document.createElement('div');
@@ -121,10 +124,12 @@ export class Dashboard {
 
                 // График расходов
                 const expensesItem = document.createElement('div');
-                expensesItem.classList = 'pie-content ms-4 mb-4 pb-3';
+                expensesItem.classList = 'pie-content  mb-md-4 mb-sm-3 pb-sm-3';
                 expensesItem.appendChild(document.createElement('h2')).className = 'pi-title m-0';
                 expensesItem.lastChild.textContent = 'Расходы';
-
+                if (document.documentElement.clientWidth > 1080) {
+                    expensesItem.classList = 'ms-4';
+                }
                 const expensesLegendContainer = document.createElement('div');
                 expensesLegendContainer.id = 'legend-expenses-container';
                 expensesItem.appendChild(expensesLegendContainer);
