@@ -37,7 +37,8 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: "./index.html",
-            baseUrl: '/api',
+            baseUrl: '/',
+
         }),
         new CopyPlugin({
             patterns: [
@@ -48,10 +49,11 @@ module.exports = {
                 {from: "./src/static/images", to: "static/images"},
                 {from: "./src/static/fonts", to: "static/fonts"},
                 {from: "./node_modules/bootstrap/dist/css/bootstrap.min.css", to: "css"},
-                {from: "./node_modules/bootstrap/dist/js/bootstrap.min.js", to: "js"},
-                // {from: "./node_modules/chart.js/dist/chart.umd.js", to: "js"},
+                {from: "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js", to: "js"},
+                {from: "./node_modules/jquery/dist/jquery.min.js", to: "js"},
                 {from: "./node_modules/chart.js/auto", to: "js/chart.js/auto"},
-                // {from: "./node_modules/chart.js/dist/chunks/helpers.segment.js", to: "js"},
+                {from: "./node_modules/js-datepicker/dist/datepicker.min.css", to: "css"},
+                {from: "./node_modules/js-datepicker/dist/datepicker.min.js", to: "js"},
             ],
         }),],
 };

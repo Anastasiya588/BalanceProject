@@ -1,10 +1,10 @@
 <div class="container-fluid p-0 m-0 d-flex vh-100">
-    <div class="row p-0 m-0 g-0 flex-grow-1 vw-100">
-        <div class="col-auto d-flex flex-column justify-content-between border-end"
+    <div class="row d-flex p-0 m-0 g-0 flex-grow-1 vw-100">
+        <div class="col-auto flex-column justify-content-between border-end"
              style="width: 219px;">
             <div class="layout d-flex flex-column flex-shrink-0 pt-3">
                 <div class="logo text-center pt-4 pb-3 px-3 border-bottom">
-                    <a href="javascript:void(0)" class="text-center">
+                    <a href="/" class="text-center">
                         <img src="/static/images/Logo.png" alt="Logo" style="width: 98px; height:40px">
                     </a>
                 </div>
@@ -34,10 +34,10 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="btn btn-toggle w-100 d-inline-flex align-items-center rounded border-0 collapsed py-2 px-3"
-                           data-bs-toggle="collapse" data-bs-target="#category-collapse" aria-expanded="false">
+                        <button class="btn btn-toggle w-100 d-inline-flex align-items-center rounded border-0 collapsed py-2 px-3"
+                                data-bs-toggle="collapse" data-bs-target="#category-collapse" aria-expanded="false">
                             Категории
-                        </a>
+                        </button>
                         <div class="collapse px-3" id="category-collapse">
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                                 <li class="py-2"><a href="/"
@@ -57,16 +57,30 @@
                                                                           class="text-decoration-none text-primary ms-2">500$</a>
                 </p>
 
-                <div class="user pt-3 pb-4 mb-3 px-3 d-flex align-items-center">
-                    <div class="user-photo rounded-circle bg-secondary-subtle d-flex align-items-center justify-content-center">
-                        <i class="fa-regular fa-user"></i>
-                    </div>
-                    <p class="user-name m-0 ms-3">RomanChernov</p>
+                <div class="user btn-group dropup btn-group pt-3 pb-4 mb-3 px-3 d-flex align-items-start">
+                    <button type="button"
+                            class="btn border-0 dropdown-toggle d-flex align-items-center dropdown-toggle-split"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="btn border-0 p-0 text-decoration-none d-flex align-items-start" href="#"
+                           role="button">
+                            <p class="user-photo m-0 btn rounded-circle bg-secondary-subtle d-flex align-items-center justify-content-center">
+                                <i class="fa-regular fa-user"></i>
+                            </p>
+                            <p class="user-name btn m-0 ms-1 pe-2">RomanChernov</p>
+                        </a>
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu p-2 text-center shadow">
+                        <li class="d-flex align-items-center"><a class="dropdown-item logout"
+                                                                 href="/logout">Logout</a><i
+                                class="fa-solid fa-arrow-right-from-bracket"></i></li>
+                    </ul>
                 </div>
+
             </div>
         </div>
-        <div class="col py-lg-5 py-sm-4 px-3 d-flex flex-column flex-grow-1">
-            <div id="content-layout" class="p-xxl-5 p-md-3"></div>
+        <div class="col py-lg-5 py-sm-4 px-xxl-3 px-2 d-flex flex-column flex-grow-1">
+            <div id="content-layout" class="p-xxl-5 p-lg-4 p-md-3 px-2 py-3"></div>
         </div>
     </div>
 </div>

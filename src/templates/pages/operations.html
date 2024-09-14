@@ -1,85 +1,185 @@
 <div class="operations">
-    <h1 class="operations-title mb-5 p-0">Доходы и расходы</h1>
-    <div class="btns">
+    <div class="menu d-flex justify-content-between mb-5 p-0">
+        <h1 class="operations-title title m-0 text-center">Доходы и расходы</h1>
+        <div class="menu-logo-burger">
+            <a href="/" class="logo">
+                <img src="/static/images/Logo.png" alt="Logo" style="width: 120px; height:55px">
+            </a>
+            <a class="burger-menu my-auto p-0 btn text-decoration-none" type="button" data-bs-toggle="offcanvas"
+               data-bs-target="#menuRight" aria-controls="menuRight">
+                <input type="checkbox" id="burger-checkbox" class="burger-checkbox">
+                <label class="burger" for="burger-checkbox"></label>
+            </a>
+        </div>
+    </div>
+    <div class="btns mb-5">
         <a href="#" class="btn btn-success py-2 px-3 me-2">Создать доход</a>
         <a href="#" class="btn btn-danger py-2 px-3">Создать расход</a>
     </div>
 
-    <div class="operations-dates d-flex align-items-center gap-3 my-5">
-        <a href="/" class="block py-2 px-3 text-decoration-none rounded-1">Сегодня</a>
-        <a href="/" class="block py-2 px-3 text-decoration-none rounded-1">Неделя</a>
-        <a href="/" class="block py-2 px-3 text-decoration-none rounded-1">Месяц</a>
-        <a href="/" class="block py-2 px-3 text-decoration-none rounded-1">Год</a>
-        <a href="/" class="block py-2 px-3 text-decoration-none rounded-1">Все</a>
-        <div class="interval d-flex align-items-center gap-3">
-            <a href="/" class="block py-2 px-3 text-decoration-none rounded-1">Интервал</a>
+    <div class="operations-dates d-flex align-items-center gap-3 pb-xl-5 pb-lg-4 pb-sm-3 pb-3 mb-xl-5 mb-lg-4 mb-sm-3 mb-5">
+        <button class="btn block py-2 px-3 text-decoration-none rounded-1 active" id="filter-today">Сегодня</button>
+        <button class="btn block py-2 px-3 text-decoration-none rounded-1" id="filter-week">Неделя</button>
+        <button class="btn block py-2 px-3 text-decoration-none rounded-1" id="filter-month">Месяц</button>
+        <button class="btn block py-2 px-3 text-decoration-none rounded-1" id="filter-year">Год</button>
+        <button class="btn block py-2 px-3 text-decoration-none rounded-1" id="filter-all">Все</button>
+        <div class="interval d-flex align-items-center gap-4 gap-sm-5">
+            <button class="btn block py-2 px-3 text-decoration-none rounded-1" id="filter-interval">Интервал</button>
             <p class="m-0">с</p>
-            <a href="/" class="text-decoration-none border-bottom border-secondary">Дата</a>
+            <a href="#" class="text-decoration-none border-bottom border-secondary" id="from-date">Дата</a>
             <p class="m-0">по</p>
-            <a href="/" class="text-decoration-none border-bottom border-secondary">Дата</a>
+            <a href="#" class="text-decoration-none border-bottom border-secondary" id="till-date">Дата</a>
         </div>
     </div>
-    <div class="table">
-        <table class="table text-center">
-            <thead>
+    <div class="table-container">
+        <table class="table align-middle text-center">
+            <thead class="border-top align-middle border-bottom">
             <tr>
                 <th scope="col" class="p-3" style="width: 125px">№ операции</th>
                 <th scope="col" class="p-3">Тип</th>
                 <th scope="col" class="p-3">Категория</th>
                 <th scope="col" class="p-3">Сумма</th>
                 <th scope="col" class="p-3">Дата</th>
-                <th scope="col" class="p-3">Комментарий</th>
+                <th scope="col" class="p-3 comment">Комментарий</th>
                 <th scope="col" class="p-3"></th>
             </tr>
             </thead>
             <tbody>
-            <tr>
+            <tr class="border-bottom align-middle h-100">
                 <th scope="row" class="p-3">1</th>
                 <td class="p-3 text-success">доход</td>
                 <td class="p-3">зарплата</td>
                 <td class="p-3">500$</td>
                 <td class="p-3">11.09.2022</td>
-                <td class="p-3"></td>
-                <td class="py-3 px-0 d-flex border-0 justify-content-end">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         class="bi bi-trash me-2" viewBox="0 0 16 16">
-                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         class="bi bi-pencil" viewBox="0 0 16 16">
-                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                    </svg>
+                <td class="p-3 comment"></td>
+                <td class="svgs py-3 ps-3 pe-0 align-middle border-0 align-items-center">
+                    <p class="d-flex align-items-center my-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-trash me-2" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-pencil" viewBox="0 0 16 16">
+                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                        </svg>
+                    </p>
                 </td>
             </tr>
-            <tr>
+            <tr class="border-bottom align-middle">
                 <th scope="row" class="p-3">2</th>
                 <td class="p-3 text-danger">расход</td>
                 <td class="p-3">жильё</td>
                 <td class="p-3">2500$</td>
                 <td class="p-3">12.09.2022</td>
-                <td class="p-3"></td>
-                <td class="py-3 px-0 d-flex border-0 justify-content-end">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         class="bi bi-trash me-2" viewBox="0 0 16 16">
-                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         class="bi bi-pencil" viewBox="0 0 16 16">
-                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                    </svg>
+                <td class="p-3 comment"></td>
+                <td class="svgs py-3 ps-3 pe-0 align-middle border-0 align-items-center">
+                    <p class="d-flex align-items-center my-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                             fill="currentColor"
+                             class="bi bi-trash me-2" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                             fill="currentColor"
+                             class="bi bi-pencil" viewBox="0 0 16 16">
+                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                        </svg>
+                    </p>
                 </td>
             </tr>
             </tbody>
         </table>
+
+    </div>
+    <div class="offcanvas px-0 offcanvas-end" tabindex="-1" id="menuRight" aria-labelledby="menuRightLabel">
+        <div class="offcanvas-header">
+            <a href="/" id="menuRightLabel" class="text-center">
+                <img src="/static/images/Logo.png" alt="Logo" style="width: 120px; height:50px">
+            </a>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column justify-content-between">
+            <div class="layout d-flex flex-column flex-shrink-0">
+
+                <ul class="nav layout-nav border-top nav-pills flex-column mb-auto py-4 px-3">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link d-flex align-items-center" aria-current="page">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="14" class="bi bi-house"
+                                 viewBox="0 0 16 16">
+                                <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+                            </svg>
+                            <p class="m-0 ms-2">Главная</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/" class="nav-link d-flex align-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-cash-coin"
+                                 viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8m5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0"/>
+                                <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195z"/>
+                                <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083q.088-.517.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1z"/>
+                                <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 6 6 0 0 1 3.13-1.567"/>
+                            </svg>
+                            <p class="m-0 ms-2">Доходы & Расходы</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <button class="btn btn-toggle w-100 d-inline-flex align-items-center rounded border-0 collapsed py-2 px-3"
+                                data-bs-toggle="collapse" data-bs-target="#category-collapse" aria-expanded="false">
+                            Категории
+                        </button>
+                        <div class="collapse px-3" id="category-collapse">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                <li class="py-2"><a href="/"
+                                                    class="d-inline-flex text-decoration-none rounded">Доходы</a>
+                                </li>
+                                <li class="py-2"><a href="#"
+                                                    class="d-inline-flex text-decoration-none rounded">Расходы</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <p class="balance px-3 py-3 border-bottom m-0">Баланс: <a href="/"
+                                                                          class="text-decoration-none text-primary ms-2">500$</a>
+                </p>
+
+                <div class="user btn-group dropup btn-group pt-3 pb-4 mb-3 px-3 d-flex align-items-start">
+                    <button type="button"
+                            class="btn border-0 dropdown-toggle d-flex align-items-center dropdown-toggle-split"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="btn border-0 p-0 text-decoration-none d-flex align-items-start" href="#"
+                           role="button">
+                            <p class="user-photo m-0 btn rounded-circle bg-secondary-subtle d-flex align-items-center justify-content-center">
+                                <i class="fa-regular fa-user"></i>
+                            </p>
+                            <p class="user-name btn m-0 ms-1">RomanChernov</p>
+                        </a>
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu p-2 text-center shadow">
+                        <li class="d-flex align-items-center"><a class="dropdown-item logout"
+                                                                 href="/logout">Logout</a><i
+                                class="fa-solid fa-arrow-right-from-bracket"></i></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="pop-up-container d-block position-absolute top-0 start-0 end-0 bottom-0">
-    <div class="pop-up bg-white p-3 toast rounded-3 d-block position-absolute" role="alert"
+<div class="pop-up-container p-2 d-flex position-fixed justify-content-center align-items-center top-0 start-0 end-0 bottom-0 w-100 h-100">
+    <div class="pop-up bg-white px-2 py-3 py-md-4 toast rounded-3 d-block position-absolute" role="alert"
          aria-live="assertive" aria-atomic="true">
-        <div class="toast-body p-4 text-center">
+        <div class="toast-body px-2 py-3 py-md-4 p-md-3 text-center">
             <p class="pop-up-text">Вы действительно хотите удалить операцию?</p>
             <button type="button" class="btn btn-success btn-sm py-2 px-3 me-2">Да, удалить</button>
             <button type="button" class="btn btn-danger btn-sm py-2 px-3" data-bs-dismiss="toast">Не удалять
@@ -87,3 +187,4 @@
         </div>
     </div>
 </div>
+

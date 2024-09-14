@@ -1,38 +1,39 @@
-<div class="signUp-container vh-100 d-flex justify-content-center align-items-center">
+<div class="signUp-container min-vh-100 d-flex justify-content-center align-items-center">
     <div class="row">
         <div class="col">
-            <form class="signUp-form form p-2" id="signUp-form">
-                <div class="logo text-center mb-5 pb-2">
-                    <a href="javascript:void(0)" class="text-center">
-                        <img src="/static/images/Logo.png" alt="Logo">
-                    </a>
-                </div>
+            <div class="container">
+                <form class="signUp-form form p-2" id="signUp-form">
+                    <div class="logo text-center mb-3 mb-sm-5 pb-2">
+                        <a href="/" class="text-center">
+                            <img src="/static/images/Logo.png" alt="Logo">
+                        </a>
+                    </div>
 
-                <h1 class="signUp-title text-center mb-4">Создайте аккаунт</h1>
+                    <h1 class="signUp-title text-center mb-4">Создайте аккаунт</h1>
 
-                <div class="name-group input-group has-validation mb-2">
+                    <div class="name-group input-group has-validation mb-2">
                     <span class="input-group-text icon" id="nameIcon">
                           <i class="fa-regular fa-user"></i>
                     </span>
-                    <input type="text" class="form-input form-control is-invalid py-2" id="inputName"
-                           aria-describedby="nameIcon inputName-error" placeholder="ФИО" required>
-                    <div id="inputName-error" class="invalid-feedback">
-                        Заполните поле ФИО.
+                        <input type="text" class="form-input form-control is-invalid py-2" id="inputName"
+                               aria-describedby="nameIcon inputName-error" placeholder="ФИО" required>
+                        <div id="inputName-error" class="invalid-feedback">
+                            Заполните поле ФИО.
+                        </div>
                     </div>
-                </div>
 
-                <div class="email-group input-group has-validation mb-2">
+                    <div class="email-group input-group has-validation mb-2">
                     <span class="input-group-text icon" id="emailIcon">
                           <i class="fa-regular fa-envelope-open"></i>
                     </span>
-                    <input type="text" class="form-input form-control is-invalid py-2" id="inputEmail"
-                           aria-describedby="emailIcon inputEmail-error" placeholder="Электронная почта" required>
-                    <div id="inputEmail-error" class="invalid-feedback">
-                        Введите корректный Email.
+                        <input type="text" class="form-input form-control is-invalid py-2" id="inputEmail"
+                               aria-describedby="emailIcon inputEmail-error" placeholder="Электронная почта" required>
+                        <div id="inputEmail-error" class="invalid-feedback">
+                            Введите корректный Email.
+                        </div>
                     </div>
-                </div>
 
-                <div class="password-group input-group has-validation mb-2">
+                    <div class="password-group input-group has-validation mb-2">
                     <span class="input-group-text icon" id="passwordIcon">
                          <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24"
                               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -41,14 +42,14 @@
                              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                          </svg>
                     </span>
-                    <input type="text" class="form-input form-control is-invalid py-2" id="inputPassword"
-                           aria-describedby="passwordIcon inputPassword-error" placeholder="Пароль" required>
-                    <div id="inputPassword-error" class="invalid-feedback">
-                        Введите корректный пароль.
+                        <input type="text" class="form-input form-control is-invalid py-2" id="inputPassword"
+                               aria-describedby="passwordIcon inputPassword-error" placeholder="Пароль" required>
+                        <div id="inputPassword-error" class="invalid-feedback">
+                            Введите корректный пароль.
+                        </div>
                     </div>
-                </div>
 
-                <div class="repeat-password-group input-group has-validation mb-4">
+                    <div class="repeat-password-group input-group has-validation mb-4">
                     <span class="input-group-text icon" id="repeatPasswordIcon">
                          <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24"
                               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -57,18 +58,21 @@
                              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                          </svg>
                     </span>
-                    <input type="text" class="form-input form-control is-invalid py-2" id="inputRepeatPassword"
-                           aria-describedby="repeatPasswordIcon inputRepeatPassword-error"
-                           placeholder="Подтверждение пароля" required>
-                    <div id="inputRepeatPassword-error" class="invalid-feedback">
-                        Пароль и повторение пароля должны совпадать.
+                        <input type="text" class="form-input form-control is-invalid py-2" id="inputRepeatPassword"
+                               aria-describedby="repeatPasswordIcon inputRepeatPassword-error"
+                               placeholder="Подтверждение пароля" required>
+                        <div id="inputRepeatPassword-error" class="invalid-feedback">
+                            Пароль и повторение пароля должны совпадать.
+                        </div>
                     </div>
-                </div>
 
-                <button type="submit" class="btn btn-primary btn-block w-100 mb-2">Войти</button>
+                    <button type="submit" class="btn btn-primary btn-block w-100 mb-2">Войти</button>
 
-                <p class="registration-link m-0">Уже есть аккаунт? <a href="/api/login" class="text-decoration-none border-bottom border-1 border-primary">Войдите в систему</a></p>
-            </form>
+                    <p class="registration-link m-0">Уже есть аккаунт? <a href="/login"
+                                                                          class="text-decoration-none border-bottom border-1 border-primary">Войдите
+                        в систему</a></p>
+                </form>
+            </div>
         </div>
     </div>
 </div>

@@ -1,27 +1,28 @@
-<div class="login-container vh-100 d-flex justify-content-center align-items-center">
+<div class="login-container min-vh-100 d-flex justify-content-center align-items-center">
     <div class="row">
         <div class="col">
-            <form class="login-form form p-2" id="login-form">
-                <div class="logo text-center mb-5 pb-2">
-                    <a href="javascript:void(0)" class="text-center">
-                        <img src="/static/images/Logo.png" alt="Logo">
-                    </a>
-                </div>
+            <div class="container">
+                <form class="login-form form p-2" id="login-form">
+                    <div class="logo text-center mb-3 mb-sm-5 pb-2">
+                        <a href="/" class="text-center">
+                            <img src="/static/images/Logo.png" alt="Logo">
+                        </a>
+                    </div>
 
-                <h1 class="login-title text-center mb-4">Вход</h1>
+                    <h1 class="login-title title text-center mb-4">Вход</h1>
 
-                <div class="email-group input-group has-validation mb-2">
+                    <div class="email-group input-group has-validation mb-2">
                     <span class="input-group-text icon" id="emailIcon">
                           <i class="fa-regular fa-envelope-open"></i>
                     </span>
-                    <input type="text" class="form-input form-control is-invalid py-2" id="inputEmail"
-                           aria-describedby="emailIcon inputEmail-error" placeholder="Электронная почта" required>
-                    <div id="inputEmail-error" class="invalid-feedback">
-                        Введите корректный Email.
+                        <input type="text" class="form-input form-control is-invalid py-2" id="inputEmail"
+                               aria-describedby="emailIcon inputEmail-error" placeholder="Электронная почта" required>
+                        <div id="inputEmail-error" class="invalid-feedback">
+                            Введите корректный Email.
+                        </div>
                     </div>
-                </div>
 
-                <div class="password-group input-group has-validation mb-2">
+                    <div class="password-group input-group has-validation mb-2">
                     <span class="input-group-text icon" id="passwordIcon">
                          <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24"
                               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -30,25 +31,29 @@
                              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                          </svg>
                     </span>
-                    <input type="text" class="form-input form-control is-invalid py-2" id="inputPassword"
-                           aria-describedby="passwordIcon inputPassword-error" placeholder="Пароль" required>
-                    <div id="inputPassword-error" class="invalid-feedback">
-                        Введите корректный пароль.
+                        <input type="text" class="form-input form-control is-invalid py-2" id="inputPassword"
+                               aria-describedby="passwordIcon inputPassword-error" placeholder="Пароль" required>
+                        <div id="inputPassword-error" class="invalid-feedback">
+                            Введите корректный пароль.
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-check text-start remember-me d-flex align-items-center p-0 mt-0 mb-4">
-                    <input class="form-check-input my-0 ms-0 me-2" type="checkbox" value="remember-me"
-                           id="rememberCheckbox">
-                    <label class="form-check-label" for="rememberCheckbox">
-                        Запомнить меня
-                    </label>
-                </div>
+                    <div class="form-check text-start remember-me d-flex align-items-center p-0 mt-0 mb-4">
+                        <input class="form-check-input my-0 ms-0 me-2" type="checkbox" value="remember-me"
+                               id="rememberCheckbox">
+                        <label class="form-check-label" for="rememberCheckbox">
+                            Запомнить меня
+                        </label>
+                    </div>
 
-                <button type="submit" class="btn btn-primary btn-block w-100 mb-2">Войти</button>
+                    <button type="submit" class="btn btn-primary btn-block w-100 mb-2">Войти</button>
 
-                <p class="registration-link m-0">Ещё нет аккаунта? <a href="/api/signup" class="text-decoration-none border-bottom border-1 border-primary">Пройдите регистрацию</a></p>
-            </form>
+                    <p class="registration-link p m-0">Ещё нет аккаунта? <a href="/signup"
+                                                                          class="text-decoration-none border-bottom border-1 border-primary">Пройдите
+                        регистрацию</a></p>
+                </form>
+            </div>
+
         </div>
     </div>
 </div>

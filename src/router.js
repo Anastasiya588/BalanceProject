@@ -12,11 +12,11 @@ import {Operations} from "./components/operations.js";
 import {CreateOperations} from "./components/create-operations.js";
 import {EditOperations} from "./components/edit-operations.js";
 
-
 const feather = require('feather-icons');
 
 export class Router {
     constructor() {
+
         this.titlePageElement = document.getElementById('title');
         this.contentPageElement = document.getElementById('content');
 
@@ -25,7 +25,7 @@ export class Router {
         this.initEvents();
         this.routes = [
             {
-                route: '/api',
+                route: '/',
                 title: 'Главная',
                 filePathTemplate: '/templates/pages/dashboard.html',
                 useLayout: '/templates/layout.html',
@@ -34,7 +34,7 @@ export class Router {
                 },
             },
             {
-                route: '/api/404',
+                route: '/404',
                 title: 'Страница не найдена',
                 filePathTemplate: '/templates/404.html',
                 load: () => {
@@ -42,7 +42,7 @@ export class Router {
                 },
             },
             {
-                route: '/api/login',
+                route: '/login',
                 title: 'Авторизация',
                 filePathTemplate: '/templates/pages/auth/login.html',
                 load: () => {
@@ -50,7 +50,7 @@ export class Router {
                 },
             },
             {
-                route: '/api/signup',
+                route: '/signup',
                 title: 'Регистрация',
                 filePathTemplate: '/templates/pages/auth/sign-up.html',
                 load: () => {
@@ -58,7 +58,7 @@ export class Router {
                 },
             },
             {
-                route: '/api/categories/income',
+                route: '/categories/income',
                 title: 'Доходы',
                 filePathTemplate: '/templates/pages/incomes.html',
                 useLayout: '/templates/layout.html',
@@ -67,7 +67,7 @@ export class Router {
                 },
             },
             {
-                route: '/api/categories/income/create',
+                route: '/categories/income/create',
                 title: 'Создание категории доходов',
                 filePathTemplate: '/templates/pages/create-incomes.html',
                 useLayout: '/templates/layout.html',
@@ -76,7 +76,7 @@ export class Router {
                 },
             },
             {
-                route: '/api/categories/income/edit',
+                route: '/categories/income/edit',
                 title: 'Редактирование категории доходов',
                 filePathTemplate: '/templates/pages/edit-incomes.html',
                 useLayout: '/templates/layout.html',
@@ -85,7 +85,7 @@ export class Router {
                 },
             },
             {
-                route: '/api/categories/expense',
+                route: '/categories/expense',
                 title: 'Расходы',
                 filePathTemplate: '/templates/pages/expenses.html',
                 useLayout: '/templates/layout.html',
@@ -94,7 +94,7 @@ export class Router {
                 },
             },
             {
-                route: '/api/categories/expense/create',
+                route: '/categories/expense/create',
                 title: 'Создание категории расходов',
                 filePathTemplate: '/templates/pages/create-expenses.html',
                 useLayout: '/templates/layout.html',
@@ -103,7 +103,7 @@ export class Router {
                 },
             },
             {
-                route: '/api/categories/expense/edit',
+                route: '/categories/expense/edit',
                 title: 'Редактирование категории расходов',
                 filePathTemplate: '/templates/pages/edit-expenses.html',
                 useLayout: '/templates/layout.html',
@@ -112,7 +112,7 @@ export class Router {
                 },
             },
             {
-                route: '/api/operations',
+                route: '/operations',
                 title: 'Доходы и расходы',
                 filePathTemplate: '/templates/pages/operations.html',
                 useLayout: '/templates/layout.html',
@@ -121,7 +121,7 @@ export class Router {
                 },
             },
             {
-                route: '/api/operations/create',
+                route: '/operations/create',
                 title: 'Создание дохода/расхода',
                 filePathTemplate: '/templates/pages/create-operations.html',
                 useLayout: '/templates/layout.html',
@@ -130,7 +130,7 @@ export class Router {
                 },
             },
             {
-                route: '/api/operations/edit',
+                route: '/operations/edit',
                 title: 'Редактирование дохода/расхода',
                 filePathTemplate: '/templates/pages/edit-operations.html',
                 useLayout: '/templates/layout.html',
@@ -235,7 +235,7 @@ export class Router {
             }
         } else {
             console.log('No route found')
-            history.pushState({}, '', '/api/404');
+            history.pushState({}, '', '/404');
             await this.activateRoute();
         }
     }

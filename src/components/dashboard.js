@@ -4,7 +4,6 @@ export class Dashboard {
     constructor() {
         this.incomeCanvas = document.getElementById('pie-chart-income');
         this.expensesCanvas = document.getElementById('pie-chart-expenses');
-
         this.createCharts();
 
     }
@@ -21,6 +20,9 @@ export class Dashboard {
                 listContainer.style.margin = '20px 0 40px 0';
                 listContainer.style.padding = 0;
                 legendContainer.appendChild(listContainer);
+            }
+            if (document.documentElement.clientWidth < 500) {
+                listContainer.style.margin = '20px 0 20px 0';
             }
             return listContainer;
         };
@@ -83,7 +85,7 @@ export class Dashboard {
             // График доходов
             if (this.incomeCanvas && this.expensesCanvas) {
                 const incomeItem = document.createElement('div');
-                incomeItem.classList = 'pie-content mb-md-4 mb-sm-3 pb-sm-3';
+                incomeItem.classList = 'pie-content mb-md-4 mb-sm-3 mb-3 pb-sm-3';
                 if (document.documentElement.clientWidth > 1080) {
                     incomeItem.classList = 'me-4';
                 }
@@ -124,12 +126,13 @@ export class Dashboard {
 
                 // График расходов
                 const expensesItem = document.createElement('div');
-                expensesItem.classList = 'pie-content  mb-md-4 mb-sm-3 pb-sm-3';
+                expensesItem.classList = 'pie-content  mb-md-4 mb-sm-3 mb-3 pb-sm-3';
                 expensesItem.appendChild(document.createElement('h2')).className = 'pi-title m-0';
                 expensesItem.lastChild.textContent = 'Расходы';
                 if (document.documentElement.clientWidth > 1080) {
                     expensesItem.classList = 'ms-4';
                 }
+
                 const expensesLegendContainer = document.createElement('div');
                 expensesLegendContainer.id = 'legend-expenses-container';
                 expensesItem.appendChild(expensesLegendContainer);

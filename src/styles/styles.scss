@@ -29,7 +29,7 @@ $purple-color: #290661;
 
 html, body {
   height: 100%;
-  overflow-x: hidden;
+  overflow-x: auto;
 }
 
 body {
@@ -37,9 +37,108 @@ body {
   color: $blue-color;
 }
 
+.btn {
+  --bs-btn-font-size: 14px;
+}
+
+//h1
+.title {
+  font-size: 40px;
+  @media screen and (max-width: 500px) {
+    font-size: 32px !important;
+  }
+}
+
+//h2
+.pi-title {
+  @media screen and (max-width: 500px) {
+    font-size: 26px !important;
+  }
+}
+
+//input
+input {
+  @media screen and (max-width: 500px) {
+    font-size: 14px !important;
+  }
+
+  ::placeholder {
+    @media screen and (max-width: 500px) {
+      font-size: 14px !important;
+    }
+  }
+}
+
+//Burger Menu
+.burger-menu {
+  display: none;
+  @media screen and (max-width: 700px) {
+    display: block;
+  }
+}
+
+.burger-checkbox {
+  position: absolute;
+  visibility: hidden;
+}
+
+.burger {
+  cursor: pointer;
+  display: block;
+  position: relative;
+  border: none;
+  background: transparent;
+  width: 40px;
+  height: 26px;
+  margin: 10px auto;
+  @media screen and (max-width: 500px) {
+    width: 35px;
+    height: 20px;
+  }
+}
+
+.burger::before,
+.burger::after {
+  content: '';
+  left: 0;
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 4px;
+  border-radius: 10px;
+  background: $blue-color;
+}
+
+.burger::before {
+  top: 0;
+  box-shadow: 0 11px 0 $blue-color;
+  transition: box-shadow .3s .15s, top .3s .15s, transform .3s;
+  @media screen and (max-width: 500px) {
+    box-shadow: 0 8px 0 $blue-color;
+  }
+}
+
+.burger::after {
+  bottom: 0;
+  transition: bottom .3s .15s, transform .3s;
+}
+
+.btn:active {
+  border-color: transparent !important;
+}
+
+
+.btn-close {
+  --bs-btn-close-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23052C65'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+  --bs-btn-close-opacity: 0.9;
+}
+
+.btn-close:hover {
+  --bs-btn-close-hover-opacity: 1;
+}
+
+
 //auth styles
-
-
 .form {
   max-width: 413px;
 
@@ -54,24 +153,39 @@ body {
     color: $grey-color;
     stroke: $grey-color;
     fill: transparent;
+    @media screen and (max-width: 500px) {
+      font-size: 12px;
+    }
 
     :before {
       font-size: 14px;
+      @media screen and (max-width: 500px) {
+        font-size: 12px;
+      }
     }
   }
 
-
-  .form-input {
-    font-size: 15px;
-    line-height: 0;
-
-    ::placeholder {
-      color: $grey-color;
+  .input-group {
+    .form-input {
       font-size: 15px;
       line-height: 0;
+
+      ::placeholder {
+        color: $grey-color;
+        font-size: 15px;
+        line-height: 0;
+
+      }
+
     }
 
+    .invalid-feedback {
+      @media screen and (max-width: 500px) {
+        font-size: 12px;
+      }
+    }
   }
+
 
   .remember-me {
 
@@ -89,27 +203,45 @@ body {
   .registration-link {
     font-size: 12px;
   }
+
+  .btn {
+    @media screen and (max-width: 500px) {
+      font-size: 14px;
+    }
+  }
 }
 
 
 //Layout
+
 .row > * {
   padding: 0;
   margin: 0;
 }
 
 .container-fluid {
+  height: 100%;
+
+  .col-auto {
+    display: flex;
+    @media (max-width: 700px) {
+      display: none;
+    }
+  }
+
+
   .layout {
 
     .layout-nav {
       .nav-item {
-        a {
+        a, .btn {
           font-size: 14px;
           line-height: 16px;
           color: $blue-color;
           fill: $blue-color;
           position: relative;
         }
+
 
         .btn-toggle::before {
           content: "";
@@ -149,6 +281,7 @@ body {
     font-size: 14px;
     font-family: "RobotoMedium", sans-serif;
     line-height: 0;
+    color: $blue-color;
 
     a {
       line-height: 0;
@@ -156,372 +289,829 @@ body {
   }
 
   .user {
-    .user-photo {
-      width: 36px;
-      height: 36px;
-
-      .fa-regular.fa-user {
-        color: $grey-color;
-      }
-    }
-  }
-}
-
-
-//Dashboard
-.dashboard {
-  .dashboard-title {
-    font-family: "RobotoMedium", sans-serif;
-    font-size: 40px;
-  }
-
-  .dashboard-dates {
-    font-family: "RobotoMedium", sans-serif;
-    font-size: 16px;
-    @media (max-width: 1151px) {
-      flex-wrap: wrap;
-      justify-content: center;
+    .dropdown-menu.show {
+      color: $blue-color;
     }
 
-    a {
-      color: $grey-color;
-      line-height: 16px;
-    }
-
-
-    .block {
-      box-sizing: border-box;
-      border: 1px solid $grey-color;
-      font-family: "RobotoMedium", sans-serif;
-      font-size: 16px;
-      color: $grey-color;
-    }
-  }
-
-  .pie-items {
-    @media (max-width: 1081px) {
-      flex-direction: column;
-    }
-
-
-    .pie-item {
-
-      .pi-title {
-        font-family: 'RobotoMedium', sans-serif;
-        font-size: 28px;
-        color: $purple-color;
+    .dropdown-menu {
+      .dropdown-item {
+        color: $blue-color;
+        font-family: "RobotoMedium", sans-serif;
       }
 
-      ul {
-        flex-wrap: wrap;
-        @media (max-width: 1227px) {
-          justify-content: center;
-        }
-
-
-        li:not(:last-child) {
-          @media (max-width: 1179px) {
-            padding-bottom: 15px;
-          }
-        }
-
-        li {
-          @media (max-width: 1089px) {
-            padding-bottom: 15px;
-          }
-        }
-
-
-      }
-
-      canvas {
-        margin: 0 auto;
-        width: 360px;
-        height: 360px;
-      }
-    }
-
-    .line {
-      width: 1px;
-      background-color: $light-grey-color;
-      height: 450px;
-      align-self: flex-end;
-      @media (max-width: 1081px) {
-        display: none;
-      }
-    }
-
-  }
-}
-
-
-//Incomes
-.incomes {
-  .incomes-title {
-    font-family: "RobotoMedium", sans-serif;
-    font-size: 40px;
-    @media screen and (max-width: 1451px) {
-      text-align: center;
-    }
-  }
-
-  .cards {
-    @media screen and (max-width: 1451px) {
-      justify-content: center;
-    }
-
-    .card {
-      width: 352px;
-      height: 121px;
-      border-color: $card-border-grey-color;
-
-      .card-title {
-        font-family: 'RobotoMedium', sans-serif;
-        font-size: 28px;
-        color: $purple-color;
-
-        .btn {
-          font-family: 'RobotoMedium', sans-serif;
-          font-size: 14px;
-        }
-      }
-    }
-  }
-
-}
-
-//Create Incomes
-.create-incomes {
-  .create-incomes-title {
-    font-family: "RobotoMedium", sans-serif;
-    font-size: 40px;
-  }
-
-  #create-income-input {
-    font-family: 'RobotoRegular', sans-serif;
-    font-size: 15px;
-
-    ::placeholder {
-      font-family: 'RobotoRegular', sans-serif;
-      font-size: 15px;
-      color: $grey-color;
-    }
-  }
-}
-
-//Edit Incomes
-.edit-incomes {
-  .edit-incomes-title {
-    font-family: "RobotoMedium", sans-serif;
-    font-size: 40px;
-  }
-
-  #edit-income-input {
-    font-family: 'RobotoRegular', sans-serif;
-    font-size: 15px;
-
-    ::placeholder {
-      font-family: 'RobotoRegular', sans-serif;
-      font-size: 15px;
-      color: $grey-color;
-    }
-  }
-}
-
-
-//Expenses
-.expenses {
-  .expenses-title {
-    font-family: "RobotoMedium", sans-serif;
-    font-size: 40px;
-    @media screen and (max-width: 1451px) {
-      text-align: center;
-    }
-  }
-
-  .cards {
-    @media screen and (max-width: 1451px) {
-      justify-content: center;
-    }
-
-    .card {
-      width: 352px;
-      height: 121px;
-      border-color: $card-border-grey-color;
-
-      .card-title {
-        font-family: 'RobotoMedium', sans-serif;
-        font-size: 28px;
-        color: $purple-color;
-
-        .btn {
-          font-family: 'RobotoMedium', sans-serif;
-          font-size: 14px;
-        }
-      }
-    }
-  }
-}
-
-//Create Expenses
-.create-expenses {
-  .create-expenses-title {
-    font-family: "RobotoMedium", sans-serif;
-    font-size: 40px;
-  }
-
-  #create-expenses-input {
-    font-family: 'RobotoRegular', sans-serif;
-    font-size: 15px;
-
-    ::placeholder {
-      font-family: 'RobotoRegular', sans-serif;
-      font-size: 15px;
-      color: $grey-color;
-    }
-  }
-}
-
-//Edit Expenses
-.edit-expenses {
-  .edit-expenses-title {
-    font-family: "RobotoMedium", sans-serif;
-    font-size: 40px;
-  }
-
-  #edit-expenses-input {
-    font-family: 'RobotoRegular', sans-serif;
-    font-size: 15px;
-
-    ::placeholder {
-      font-family: 'RobotoRegular', sans-serif;
-      font-size: 15px;
-      color: $grey-color;
-    }
-  }
-}
-
-//Operations
-.operations {
-  .operations-title {
-    font-family: "RobotoMedium", sans-serif;
-    font-size: 40px;
-    @media (max-width: 1023px) {
-      text-align: center;
-    }
-  }
-
-  .btns {
-    @media (max-width: 1023px) {
-      display: flex;
-      justify-content: center;
-    }
-  }
-
-  .operations-dates {
-    font-family: "RobotoMedium", sans-serif;
-    font-size: 16px;
-    @media (max-width: 1023px) {
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    a {
-      color: $grey-color;
-      line-height: 16px;
-    }
-
-
-    .block {
-      box-sizing: border-box;
-      border: 1px solid $grey-color;
-      font-family: "RobotoMedium", sans-serif;
-      font-size: 16px;
-      color: $grey-color;
-    }
-  }
-
-  thead {
-    tr {
-      th {
-        font-family: 'RobotoBold', sans-serif;
-        font-size: 16px;
+      a.dropdown-item.logout-menu {
         color: $blue-color;
       }
     }
+
+    .btn {
+      color: $blue-color;
+      --bs-btn-color: $blue-color;
+
+      .user-photo {
+        width: 36px;
+        height: 36px;
+
+        .fa-regular.fa-user {
+          color: $grey-color;
+        }
+      }
+    }
   }
 
-  tbody {
-    tr {
-      th {
-        font-family: 'RobotoBold', sans-serif;
-        font-size: 16px;
+
+  //Dashboard
+  .dashboard {
+    .dashboard-title {
+      font-family: "RobotoMedium", sans-serif;
+    }
+
+    .dashboard-dates {
+      font-family: "RobotoMedium", sans-serif;
+      font-size: 16px;
+      @media (max-width: 1151px) {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      @media screen and (max-width: 500px) {
+        font-size: 12px;
+      }
+
+      .btn, a {
+        color: $grey-color;
         line-height: 1;
       }
 
-      td {
+      .block.active {
+        background-color: $grey-color;
+        color: white;
+      }
+
+      .block {
+        box-sizing: border-box;
+        border: 1px solid $grey-color;
+        font-family: "RobotoMedium", sans-serif;
+        font-size: 16px;
+        color: $grey-color;
+        @media screen and (max-width: 500px) {
+          font-size: 12px;
+          padding: 6px 12px;
+        }
+      }
+
+    }
+
+    .pie-items {
+      @media (max-width: 1081px) {
+        flex-direction: column;
+      }
+
+
+      .pie-item {
+
+        .pi-title {
+          font-family: 'RobotoMedium', sans-serif;
+          font-size: 28px;
+          color: $purple-color;
+        }
+
+        ul {
+          flex-wrap: wrap;
+          @media (max-width: 1227px) {
+            justify-content: center;
+          }
+
+
+          li:not(:last-child) {
+            @media (max-width: 1179px) {
+              padding-bottom: 15px;
+            }
+          }
+
+          li {
+            @media (max-width: 1089px) {
+              padding-bottom: 15px;
+            }
+          }
+
+
+        }
+
+        canvas {
+          margin: 0 auto;
+          width: 360px;
+          height: 360px;
+          @media screen and (max-width: 390px) {
+            width: 290px;
+            height: 290px;
+          }
+        }
+      }
+
+      .line {
+        width: 1px;
+        background-color: $light-grey-color;
+        height: 450px;
+        align-self: flex-end;
+        @media (max-width: 1081px) {
+          display: none;
+        }
+      }
+
+    }
+  }
+
+
+  //Incomes
+  .incomes {
+    .incomes-title {
+      font-family: "RobotoMedium", sans-serif;
+      font-size: 40px;
+    }
+
+    .cards {
+      @media screen and (max-width: 1435px) {
+        justify-content: center;
+      }
+
+      .card {
+        width: 352px;
+        height: 121px;
+        border-color: $card-border-grey-color;
+
+        .card-title {
+          font-family: 'RobotoMedium', sans-serif;
+          font-size: 28px;
+          color: $purple-color;
+          @media screen and (max-width: 500px) {
+            font-size: 26px !important;
+          }
+
+          .btn {
+            font-family: 'RobotoMedium', sans-serif;
+          }
+        }
+      }
+    }
+
+  }
+
+  //Create Incomes
+  .create-incomes {
+    .menu {
+      @media screen and (max-width: 700px) {
+        gap: 3rem;
+      }
+      @media screen and (max-width: 690px) {
+        flex-direction: column-reverse;
+      }
+
+      .create-incomes-title {
+        font-family: "RobotoMedium", sans-serif;
+        font-size: 40px;
+        @media screen and (max-width: 690px) {
+          text-align: center;
+          margin-right: 0 !important;
+        }
+      }
+
+      .menu-logo-burger {
+        @media screen and (max-width: 690px) {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .logo {
+          display: none;
+          @media screen and (max-width: 690px) {
+            display: inline-block;
+          }
+        }
+
+        .burger-menu {
+          @media screen and (max-width: 690px) {
+            align-self: flex-end;
+          }
+        }
+      }
+    }
+
+    .form {
+      @media screen and (max-width: 690px) {
+        margin: 0 auto;
+      }
+
+      #create-income-input {
         font-family: 'RobotoRegular', sans-serif;
-        font-size: 16px;
-        line-height: 1;
+        font-size: 15px;
+
+        ::placeholder {
+          font-family: 'RobotoRegular', sans-serif;
+          font-size: 15px;
+          color: $grey-color;
+        }
+      }
+    }
+
+
+    .create-buttons {
+      @media screen and (max-width: 690px) {
+        justify-content: center;
       }
     }
   }
-}
 
-//Create Operations
-.create-operations {
-  .create-operations-title {
-    font-family: "RobotoMedium", sans-serif;
-    font-size: 40px;
+  //Edit Incomes
+  .edit-incomes {
+    .menu {
+      @media screen and (max-width: 700px) {
+        gap: 3rem;
+      }
+      @media screen and (max-width: 690px) {
+        flex-direction: column-reverse;
+      }
+
+      .edit-incomes-title {
+        font-family: "RobotoMedium", sans-serif;
+        font-size: 40px;
+        @media screen and (max-width: 690px) {
+          text-align: center;
+          margin-right: 0 !important;
+        }
+      }
+
+      .menu-logo-burger {
+        @media screen and (max-width: 690px) {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .logo {
+          display: none;
+          @media screen and (max-width: 690px) {
+            display: inline-block;
+          }
+        }
+
+        .burger-menu {
+          @media screen and (max-width: 690px) {
+            align-self: flex-end;
+          }
+        }
+      }
+    }
+
+    .form {
+      @media screen and (max-width: 690px) {
+        margin: 0 auto;
+      }
+
+      #edit-income-input {
+        font-family: 'RobotoRegular', sans-serif;
+        font-size: 15px;
+
+        ::placeholder {
+          font-family: 'RobotoRegular', sans-serif;
+          font-size: 15px;
+          color: $grey-color;
+        }
+      }
+    }
+
+    .edit-buttons {
+      @media screen and (max-width: 690px) {
+        justify-content: center;
+      }
+    }
+
+
   }
 
-  #create-operations-input {
-    font-family: 'RobotoRegular', sans-serif;
-    font-size: 15px;
 
-    ::placeholder {
-      font-family: 'RobotoRegular', sans-serif;
-      font-size: 15px;
-      color: $grey-color;
+  //Expenses
+  .expenses {
+    .expenses-title {
+      font-family: "RobotoMedium", sans-serif;
+      font-size: 40px;
+    }
+
+    .cards {
+      @media screen and (max-width: 1435px) {
+        justify-content: center;
+      }
+
+      .card {
+        width: 352px;
+        height: 121px;
+        border-color: $card-border-grey-color;
+
+        .card-title {
+          font-family: 'RobotoMedium', sans-serif;
+          font-size: 28px;
+          color: $purple-color;
+          @media screen and (max-width: 500px) {
+            font-size: 26px !important;
+          }
+
+          .btn {
+            font-family: 'RobotoMedium', sans-serif;
+            font-size: 14px;
+          }
+        }
+      }
     }
   }
-}
 
-//Edit Operations
-.edit-operations {
-  .edit-operations-title {
-    font-family: "RobotoMedium", sans-serif;
-    font-size: 40px;
-  }
+  //Create Expenses
+  .create-expenses {
+    .menu {
+      @media screen and (max-width: 700px) {
+        gap: 3rem;
+      }
+      @media screen and (max-width: 680px) {
+        flex-direction: column-reverse;
+      }
 
-  #edit-operations-input {
-    font-family: 'RobotoRegular', sans-serif;
-    font-size: 15px;
+      .create-expenses-title {
+        font-family: "RobotoMedium", sans-serif;
+        font-size: 40px;
+        @media screen and (max-width: 680px) {
+          text-align: center;
+          margin-right: 0 !important;
+        }
+      }
 
-    ::placeholder {
-      font-family: 'RobotoRegular', sans-serif;
-      font-size: 15px;
-      color: $grey-color;
+      .menu-logo-burger {
+        @media screen and (max-width: 680px) {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .logo {
+          display: none;
+          @media screen and (max-width: 680px) {
+            display: inline-block;
+          }
+        }
+
+        .burger-menu {
+          @media screen and (max-width: 680px) {
+            align-self: flex-end;
+          }
+        }
+      }
+    }
+
+    .form {
+      @media screen and (max-width: 681px) {
+        margin: 0 auto;
+      }
+
+      #create-expenses-input {
+        font-family: 'RobotoRegular', sans-serif;
+        font-size: 15px;
+
+        ::placeholder {
+          font-family: 'RobotoRegular', sans-serif;
+          font-size: 15px;
+          color: $grey-color;
+        }
+      }
+    }
+
+    .create-buttons {
+      @media screen and (max-width: 681px) {
+        justify-content: center;
+      }
     }
   }
-}
+
+  //Edit Expenses
+  .edit-expenses {
+    .menu {
+      @media screen and (max-width: 700px) {
+        gap: 3rem;
+      }
+      @media screen and (max-width: 680px) {
+        flex-direction: column-reverse;
+      }
+
+      .edit-expenses-title {
+        font-family: "RobotoMedium", sans-serif;
+        font-size: 40px;
+        @media screen and (max-width: 680px) {
+          text-align: center;
+          margin-right: 0 !important;
+        }
+      }
+
+      .menu-logo-burger {
+        @media screen and (max-width: 680px) {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .logo {
+          display: none;
+          @media screen and (max-width: 680px) {
+            display: inline-block;
+          }
+        }
+
+        .burger-menu {
+          @media screen and (max-width: 680px) {
+            align-self: flex-end;
+          }
+        }
+      }
+    }
+
+    .form {
+      @media screen and (max-width: 681px) {
+        margin: 0 auto;
+      }
+
+      #edit-expenses-input {
+        font-family: 'RobotoRegular', sans-serif;
+        font-size: 15px;
+
+        ::placeholder {
+          font-family: 'RobotoRegular', sans-serif;
+          font-size: 15px;
+          color: $grey-color;
+        }
+      }
+    }
+
+    .edit-buttons {
+      @media screen and (max-width: 681px) {
+        justify-content: center;
+      }
+    }
+
+  }
+
+  //Operations
+  .col {
+    @media screen and (max-width: 1218px) {
+      max-width: 984px;
+      overflow-x: auto !important;
+    }
+
+    .operations {
+      .menu {
+        @media screen and (max-width: 1151px) {
+          justify-content: center !important;
+        }
+        @media screen and (max-width: 700px) {
+          justify-content: space-between !important;
+          gap: 3rem;
+        }
+        @media screen and (max-width: 680px) {
+          flex-direction: column-reverse;
+        }
+
+        .operations-title {
+          font-family: "RobotoMedium", sans-serif;
+          font-size: 40px;
+
+          @media screen and (max-width: 680px) {
+            margin-right: 0 !important;
+          }
+        }
+
+        .menu-logo-burger {
+          @media screen and (max-width: 680px) {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          }
+
+          .logo {
+            display: none;
+            @media screen and (max-width: 680px) {
+              display: inline-block;
+            }
+          }
+
+          .burger-menu {
+            @media screen and (max-width: 680px) {
+              align-self: flex-end;
+            }
+          }
+        }
+      }
+
+      .btns {
+        @media screen and (max-width: 1151px) {
+          display: flex;
+          justify-content: center;
+        }
+
+        .btn {
+          @media screen and (max-width: 501px) {
+            font-size: 12px;
+          }
+
+        }
+      }
+
+      .operations-dates {
+        font-family: "RobotoMedium", sans-serif;
+        font-size: 16px;
+        @media screen and (max-width: 1151px) {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        @media screen and (max-width: 500px) {
+          font-size: 12px;
+        }
 
 
-//Pop-up
-.pop-up-container {
-  background-color: rgba(0, 0, 0, 0.45);
+        .btn, a {
+          color: $grey-color;
+          line-height: 1;
+        }
 
-  .pop-up {
-    width: 530px;
-    top: calc(50% - 184px / 2);
-    right: calc(50% - 530px / 2);
+        .block.active {
+          background-color: $grey-color;
+          color: white;
+        }
 
-    .pop-up-text {
-      font-family: 'RobotoMedium', sans-serif;
-      font-size: 20px;
-      color: $purple-color;
+        .block {
+          box-sizing: border-box;
+          border: 1px solid $grey-color;
+          font-family: "RobotoMedium", sans-serif;
+          font-size: 16px;
+          color: $grey-color;
+          @media screen and (max-width: 500px) {
+            font-size: 12px;
+            padding: 6px 12px;
+          }
+        }
+      }
+
+      .table-container {
+        max-width: 1101px;
+        overflow-x: auto !important;
+        @media screen and (max-width: 1218px) {
+          max-width: 984px;
+          overflow-x: auto !important;
+        }
+
+        .table {
+          width: 100%;
+
+          td, th {
+            vertical-align: middle;
+            min-width: 56px;
+          }
+
+          thead {
+            tr {
+              th {
+                font-family: 'RobotoBold', sans-serif;
+                font-size: 16px;
+                color: $blue-color;
+                border: none;
+
+                @media screen and (max-width: 501px) {
+                  font-size: 14px;
+                }
+              }
+            }
+          }
+
+          tbody {
+            tr {
+
+              th {
+                font-family: 'RobotoBold', sans-serif;
+                font-size: 16px;
+                border: none;
+                @media screen and (max-width: 501px) {
+                  font-size: 14px;
+                }
+              }
+
+              td {
+                font-family: 'RobotoRegular', sans-serif;
+                font-size: 16px;
+                border: none;
+                @media screen and (max-width: 501px) {
+                  font-size: 14px;
+                }
+              }
+
+              .svgs {
+                p {
+                  svg {
+
+                    @media screen and (max-width: 501px) {
+                      width: 14px;
+                      height: 14px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+        }
+      }
     }
   }
+
+  //Create Operations
+  .create-operations {
+    .menu {
+      @media screen and (max-width: 700px) {
+        gap: 3rem;
+      }
+      @media screen and (max-width: 690px) {
+        flex-direction: column-reverse;
+      }
+
+      .create-operations-title {
+        font-family: "RobotoMedium", sans-serif;
+        font-size: 40px;
+        @media screen and (max-width: 690px) {
+          text-align: center;
+          margin-right: 0 !important;
+        }
+      }
+
+      .menu-logo-burger {
+        @media screen and (max-width: 690px) {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .logo {
+          display: none;
+          @media screen and (max-width: 690px) {
+            display: inline-block;
+          }
+        }
+
+        .burger-menu {
+          @media screen and (max-width: 690px) {
+            align-self: flex-end;
+          }
+        }
+      }
+    }
+
+    .form {
+      @media screen and (max-width: 690px) {
+        margin: 0 auto;
+      }
+
+      select {
+        width: 100%;
+        font-family: 'RobotoRegular', sans-serif;
+        font-size: 15px;
+        @media screen and (max-width: 500px) {
+          font-size: 14px !important;
+        }
+
+        option {
+          font-family: 'RobotoRegular', sans-serif;
+          font-size: 15px;
+          @media screen and (max-width: 500px) {
+            font-size: 14px !important;
+          }
+        }
+      }
+
+      input {
+        font-family: 'RobotoRegular', sans-serif;
+        font-size: 15px;
+
+        ::placeholder {
+          font-family: 'RobotoRegular', sans-serif;
+          font-size: 15px;
+          color: $grey-color;
+        }
+      }
+    }
+
+    .create-buttons {
+      @media screen and (max-width: 690px) {
+        justify-content: center;
+      }
+    }
+  }
+
+  //Edit Operations
+  .edit-operations {
+    .menu {
+      @media screen and (max-width: 700px) {
+        gap: 3rem;
+      }
+      @media screen and (max-width: 690px) {
+        flex-direction: column-reverse;
+      }
+
+      .edit-operations-title {
+        font-family: "RobotoMedium", sans-serif;
+        font-size: 40px;
+        @media screen and (max-width: 690px) {
+          text-align: center;
+          margin-right: 0 !important;
+        }
+      }
+
+      .menu-logo-burger {
+        @media screen and (max-width: 690px) {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .logo {
+          display: none;
+          @media screen and (max-width: 690px) {
+            display: inline-block;
+          }
+        }
+
+        .burger-menu {
+          @media screen and (max-width: 690px) {
+            align-self: flex-end;
+          }
+        }
+      }
+    }
+
+    .form {
+      @media screen and (max-width: 690px) {
+        margin: 0 auto;
+      }
+
+      select {
+        width: 100%;
+        font-family: 'RobotoRegular', sans-serif;
+        font-size: 15px;
+        @media screen and (max-width: 500px) {
+          font-size: 14px !important;
+        }
+
+        option {
+          font-family: 'RobotoRegular', sans-serif;
+          font-size: 15px;
+          @media screen and (max-width: 500px) {
+            font-size: 14px !important;
+          }
+        }
+      }
+
+      input {
+        font-family: 'RobotoRegular', sans-serif;
+        font-size: 15px;
+
+        ::placeholder {
+          font-family: 'RobotoRegular', sans-serif;
+          font-size: 15px;
+          color: $grey-color;
+        }
+      }
+    }
+
+    .edit-buttons {
+      @media screen and (max-width: 690px) {
+        justify-content: center;
+      }
+    }
+  }
+
+
+  //Pop-up
+  .pop-up-container {
+    background-color: rgba(0, 0, 0, 0.45);
+
+    .pop-up {
+      width: 530px;
+      @media screen and (max-width: 700px) {
+        max-width: 300px;
+      }
+
+      .pop-up-text {
+        font-family: 'RobotoMedium', sans-serif;
+        font-size: 20px;
+        color: $purple-color;
+        @media screen and (max-width: 700px) {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
 }
 
 
