@@ -1,7 +1,6 @@
 import {Dashboard} from "./components/dashboard.js";
 import {Login} from "./components/login.js";
 import {SignUp} from "./components/sign-up.js";
-import {FileUtils} from "../utils/file-utils.js";
 import {Incomes} from "./components/incomes.js";
 import {CreateIncomes} from "./components/create-incomes.js";
 import {EditIncomes} from "./components/edit-incomes.js";
@@ -11,6 +10,7 @@ import {EditExpenses} from "./components/edit-expenses.js";
 import {Operations} from "./components/operations.js";
 import {CreateOperations} from "./components/create-operations.js";
 import {EditOperations} from "./components/edit-operations.js";
+import {Logout} from "./components/logout.js";
 
 const feather = require('feather-icons');
 
@@ -19,6 +19,7 @@ export class Router {
 
         this.titlePageElement = document.getElementById('title');
         this.contentPageElement = document.getElementById('content');
+        this.adaptiveMeta = document.getElementById('adaptive-meta');
 
         feather.replace();
 
@@ -46,7 +47,7 @@ export class Router {
                 title: 'Авторизация',
                 filePathTemplate: '/templates/pages/auth/login.html',
                 load: () => {
-                    new Login()
+                    new Login(this.openNewRoute.bind(this))
                 },
             },
             {
@@ -54,7 +55,7 @@ export class Router {
                 title: 'Регистрация',
                 filePathTemplate: '/templates/pages/auth/sign-up.html',
                 load: () => {
-                    new SignUp()
+                    new SignUp(this.openNewRoute.bind(this))
                 },
             },
             {
@@ -128,6 +129,8 @@ export class Router {
                 load: () => {
                     new CreateOperations()
                 },
+                styles: ['datepicker.min.css'],
+                scripts: ['datepicker.min.js'],
             },
             {
                 route: '/operations/edit',
@@ -136,6 +139,12 @@ export class Router {
                 useLayout: '/templates/layout.html',
                 load: () => {
                     new EditOperations()
+                },
+            },
+            {
+                route: '/logout',
+                load: () => {
+                    new Logout(this.openNewRoute.bind(this))
                 },
             },
 
@@ -152,71 +161,75 @@ export class Router {
 
     }
 
-    async OpenNewRoute(url) {
-        //изменение url адреса
+    async openNewRoute(url) {
+        //текущий роут
         const currentRoute = window.location.pathname;
+        //Чтобы сверху url отображался тот, на который нажали (т.е. обновляем url-адрес в браузере)
         history.pushState({}, '', url);
-        await this.activateRoute(null, currentRoute);
+
+        //Так как может передаваться событие, то лучше сначала передать null, а потом currentRoute
+        await this.activateRoute(null, currentRoute)
     }
 
-    // код для изменения url, чтобы страницы не перезагружались, так как это SPA приложение
+    //Эта функция обрабатывает клик по ссылке и открывает новый роут(переход на другую страницу через функционал)
     async clickHandler(e) {
-
         let element = null;
         if (e.target.nodeName === 'A') {
-            element = e.target;
+            element = e.target
         } else if (e.target.parentNode.nodeName === 'A') {
             element = e.target.parentNode;
-
         }
 
         if (element) {
             e.preventDefault();
 
-            const currentRoute = window.location.pathname;
-
+            //Вырезаем из url http://localhost:9000 и заменяем на ''
             const url = element.href.replace(window.location.origin, '');
-            if (!url || currentRoute === url.replace('#', '') || url.startsWith('javascript:void(0)')) {
+            if (!url || url === '/#' || url.startsWith('javascript:void(0)')) {
                 return;
             }
 
-            await this.OpenNewRoute(url);
-
+            await this.openNewRoute(url);
         }
     }
 
-
     async activateRoute(e, oldRoute = null) {
         if (oldRoute) {
+            //Получаем старый роут, с которого мы уходим
             const currentRoute = this.routes.find(item => item.route === oldRoute);
-            // if (currentRoute.styles && currentRoute.styles.length > 0) {
-            //     currentRoute.styles.forEach(style => {
-            //         document.querySelector(`link[href='/css/${style}']`).remove();
-            //     })
-            // }
-            if (currentRoute.scripts && currentRoute.scripts.length > 0) {
-                currentRoute.scripts.forEach(script => {
-                    document.querySelector(`script[src='/js/${script}']`).remove();
+            //удаляем стили и скрипты у текущего роута
+            if (currentRoute.styles && currentRoute.styles.length > 0) {
+                currentRoute.styles.forEach(style => {
+                    document.querySelector(`link[href='/css/${style}']`).remove()
                 })
             }
-            if (currentRoute.unload && typeof currentRoute.unload === 'function') {
-                currentRoute.unload();
+            if (currentRoute.scripts && currentRoute.scripts.length > 0) {
+                currentRoute.scripts.forEach(script => {
+                    document.querySelector(`script[src='/js/${script}']`).remove()
+                })
             }
         }
-
-
         //Получаем текущий url, а точнее все что идет после pathname
         const urlRoute = window.location.pathname;
         //Находим какому url-адресу относится текущий url-адрес когда проходим по всем нашим routes
         const newRoute = this.routes.find(item => item.route === urlRoute);
 
         if (newRoute) {
-            if (newRoute.scripts && newRoute.scripts.length > 0) {
-                for (const script of newRoute.scripts) {
-                    await FileUtils.loadPageScript('/js/' + script);
-                }
+            if (newRoute.styles && newRoute.styles.length > 0) {
+                newRoute.styles.forEach(style => {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = '/css/' + style;
+                    document.head.insertBefore(link, this.adaptiveMeta);
+                })
             }
-
+            if (newRoute.scripts && newRoute.scripts.length > 0) {
+                newRoute.scripts.forEach(script => {
+                    const scriptElement = document.createElement('script');
+                    scriptElement.src = '/js/' + script;
+                    document.body.appendChild(scriptElement);
+                })
+            }
             if (newRoute.title) {
                 this.titlePageElement.innerText = newRoute.title + ' | Finance';
             }

@@ -10,12 +10,13 @@
                     </div>
 
                     <h1 class="signUp-title text-center mb-4">Создайте аккаунт</h1>
+                    <div id="common-error" class="invalid-feedback text-center mb-3">Не удалось зарегистрировать пользователя.</div>
 
                     <div class="name-group input-group has-validation mb-2">
                     <span class="input-group-text icon" id="nameIcon">
                           <i class="fa-regular fa-user"></i>
                     </span>
-                        <input type="text" class="form-input form-control is-invalid py-2" id="inputName"
+                        <input type="text" class="form-input form-control py-2" id="inputName"
                                aria-describedby="nameIcon inputName-error" placeholder="ФИО" required>
                         <div id="inputName-error" class="invalid-feedback">
                             Заполните поле ФИО.
@@ -26,7 +27,7 @@
                     <span class="input-group-text icon" id="emailIcon">
                           <i class="fa-regular fa-envelope-open"></i>
                     </span>
-                        <input type="text" class="form-input form-control is-invalid py-2" id="inputEmail"
+                        <input type="text" class="form-input form-control py-2" id="inputEmail"
                                aria-describedby="emailIcon inputEmail-error" placeholder="Электронная почта" required>
                         <div id="inputEmail-error" class="invalid-feedback">
                             Введите корректный Email.
@@ -42,7 +43,7 @@
                              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                          </svg>
                     </span>
-                        <input type="text" class="form-input form-control is-invalid py-2" id="inputPassword"
+                        <input type="password" class="form-input form-control py-2" id="inputPassword"
                                aria-describedby="passwordIcon inputPassword-error" placeholder="Пароль" required>
                         <div id="inputPassword-error" class="invalid-feedback">
                             Введите корректный пароль.
@@ -58,7 +59,7 @@
                              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                          </svg>
                     </span>
-                        <input type="text" class="form-input form-control is-invalid py-2" id="inputRepeatPassword"
+                        <input type="password" class="form-input form-control py-2" id="inputRepeatPassword"
                                aria-describedby="repeatPasswordIcon inputRepeatPassword-error"
                                placeholder="Подтверждение пароля" required>
                         <div id="inputRepeatPassword-error" class="invalid-feedback">
@@ -66,7 +67,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-block w-100 mb-2">Войти</button>
+                    <button type="button" class="btn btn-primary btn-block w-100 mb-2" id="process-button">Войти</button>
 
                     <p class="registration-link m-0">Уже есть аккаунт? <a href="/login"
                                                                           class="text-decoration-none border-bottom border-1 border-primary">Войдите
