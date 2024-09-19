@@ -4,7 +4,6 @@ import {HttpUtils} from "../../utils/http-utils.js";
 export class SignUp {
     constructor(openNewRoute) {
         this.openNewRoute = openNewRoute;
-
         if (AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             return this.openNewRoute('/');
         }
@@ -91,7 +90,7 @@ export class SignUp {
             const passwordRepeat = this.fields.find(item => item.name === 'repeatPassword').element.value;
             // request (Ответ)
 
-            const result = await HttpUtils.request('/signup', "POST", {
+            const result = await HttpUtils.request('/signup', "POST", false, {
                 name: name,
                 lastName: lastName,
                 email: email,
@@ -101,7 +100,7 @@ export class SignUp {
 
             if (result.error || !result.response ||
                 (result.response && (!result.response.user.name ||
-                    !result.response.user.lastName || !result.response.user.id|| !result.response.user.email))) {
+                    !result.response.user.lastName || !result.response.user.id || !result.response.user.email))) {
                 this.commonErrorElement.style.display = 'block';
                 return;
             }
@@ -112,9 +111,10 @@ export class SignUp {
                 lastName: result.response.user.lastName,
                 email: result.response.user.email,
             })
-
             //Перевод пользователя на главную страницу
             this.openNewRoute('/')
+
+
         }
     }
 }

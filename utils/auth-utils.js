@@ -1,5 +1,5 @@
+import {HttpUtils} from "./http-utils.js";
 import config from "../src/config/config.js";
-import {HttpUtils} from "./http-utils";
 
 export class AuthUtils {
     static accessTokenKey = 'accessToken';
@@ -39,27 +39,40 @@ export class AuthUtils {
         localStorage.removeItem(this.userInfoKey);
     }
 
+    static removeUserInfo() {
+        localStorage.removeItem(this.userInfoKey);
+    }
+
     static removeTokens() {
         localStorage.removeItem(this.accessTokenKey);
         localStorage.removeItem(this.refreshTokenKey);
     }
 
-    static async unauthorizedResponse() {
+    static async updateRefreshToken() {
+        let result = false;
         const refreshToken = this.getAuthInfo(this.refreshTokenKey);
         if (refreshToken) {
-            const result = await HttpUtils.request('/refresh', "POST", {
-                refreshToken: refreshToken
+            const response = await fetch(config.api + '/refresh', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({refreshToken: refreshToken})
             })
 
-            if (!result.error || result.response && result.response.status === 200) {
-                this.setTokens(result.response.accessToken, result.response.refreshToken);
-                return true;
+            if (response && response.status === 200) {
+                const tokens = await response.json();
+                if (tokens && !tokens.error) {
+                    this.setTokens(result.response.accessToken, result.response.refreshToken)
+                    result = true;
+                }
             }
         }
+        if (!result) {
+            this.removeAuthInfo();
+        }
 
-        this.removeTokens();
-
-        history.pushState({}, '', '/');
-        return false;
+        return result;
     }
 }

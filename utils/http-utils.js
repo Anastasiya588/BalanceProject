@@ -1,8 +1,8 @@
 import config from "../src/config/config.js";
-import {AuthUtils} from "./auth-utils";
+import {AuthUtils} from "./auth-utils.js";
 
 export class HttpUtils {
-    static async request(url, method = "GET", body = null) {
+    static async request(url, method = "GET", useAuth = true, body = null) {
         const result = {
             error: false,
             response: null
@@ -14,6 +14,14 @@ export class HttpUtils {
                 'Accept': 'application/json',
             },
         };
+
+        let accessToken = null;
+        if (useAuth) {
+            accessToken = AuthUtils.getAuthInfo(AuthUtils.accessTokenKey);
+            if (accessToken) {
+                params.headers['x-auth-token'] = accessToken;
+            }
+        }
 
         if (body) {
             params.body = JSON.stringify(body)
@@ -30,16 +38,34 @@ export class HttpUtils {
         }
 
         if (response.status < 200 || response.status >= 300) {
-            //когда истек токен
-            if (response.status === 401) {
-                const result = await AuthUtils.unauthorizedResponse();
-                if (result) {
-                    return await this.request(url, method, body)
+            result.error = true;
+            if (useAuth && response.status === 401) {
+                //1-токена нет
+                if (!accessToken) {
+                    result.redirect = '/login';
                 } else {
-                    return null
+                    //2-токен устарел либо невалидный (надо обновить)
+                    const updateTokenResult = await AuthUtils.updateRefreshToken();
+                    if (updateTokenResult) {
+                        //запрос повторно
+                        return this.request(url, method, useAuth, body);
+                    } else {
+                        result.redirect = '/login';
+                    }
                 }
             }
-            result.error = true;
+
+
+            // //когда истек токен
+            // if (response.status === 401) {
+            //     const result = await AuthUtils.unauthorizedResponse();
+            //     if (result) {
+            //         return await this.request(url, method, body)
+            //     } else {
+            //         return null
+            //     }
+            // }
+            // result.error = true;
         }
 
         return result;

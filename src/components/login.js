@@ -4,7 +4,6 @@ import {HttpUtils} from "../../utils/http-utils.js";
 export class Login {
     constructor(openNewRoute) {
         this.openNewRoute = openNewRoute;
-
         if (AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
             return this.openNewRoute('/');
         }
@@ -63,7 +62,7 @@ export class Login {
             const email = this.fields.find(item => item.name === 'email').element.value;
             const password = this.fields.find(item => item.name === 'password').element.value;
 
-            const result = await HttpUtils.request('/login', "POST", {
+            const result = await HttpUtils.request('/login', "POST", false, {
                 email: email,
                 password: password,
                 rememberMe: this.rememberMe.checked
@@ -84,7 +83,8 @@ export class Login {
             })
 
             //Перевод пользователя на главную страницу
-            this.openNewRoute('/')
+                this.openNewRoute('/');
+
         }
     }
 }

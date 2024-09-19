@@ -11,6 +11,7 @@ import {Operations} from "./components/operations.js";
 import {CreateOperations} from "./components/create-operations.js";
 import {EditOperations} from "./components/edit-operations.js";
 import {Logout} from "./components/logout.js";
+import {AuthUtils} from "../utils/auth-utils";
 
 const feather = require('feather-icons');
 
@@ -161,6 +162,10 @@ export class Router {
 
     }
 
+    isAuthentificated() {
+        return AuthUtils.getAuthInfo(AuthUtils.userInfoKey) !== null;
+    }
+
     async openNewRoute(url) {
         //текущий роут
         const currentRoute = window.location.pathname;
@@ -183,9 +188,11 @@ export class Router {
         if (element) {
             e.preventDefault();
 
+            const currentRoute = window.location.pathname;
+
             //Вырезаем из url http://localhost:9000 и заменяем на ''
             const url = element.href.replace(window.location.origin, '');
-            if (!url || url === '/#' || url.startsWith('javascript:void(0)')) {
+            if (!url || currentRoute === url.replace('#', '') || url.startsWith('javascript:void(0)')) {
                 return;
             }
 
@@ -215,6 +222,14 @@ export class Router {
         const newRoute = this.routes.find(item => item.route === urlRoute);
 
         if (newRoute) {
+            const isPublicRoute = newRoute.route === '/login' || newRoute.route === '/signup';
+
+            if (!isPublicRoute && !this.isAuthentificated()) {
+                history.pushState({}, '', '/login');
+                await this.activateRoute(null, '/login');
+                return;
+            }
+
             if (newRoute.styles && newRoute.styles.length > 0) {
                 newRoute.styles.forEach(style => {
                     const link = document.createElement('link');
