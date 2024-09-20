@@ -9,45 +9,46 @@
     </div>
 
     <div class="cards d-flex flex-wrap gap-3">
-        <div class="card p-3 rounded-3">
-            <div class="card-body p-1">
-                <h2 class="card-title mb-2">Депозиты</h2>
-                <a href="#" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
-                <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
-            </div>
-        </div>
-        <div class="card p-3 rounded-3">
-            <div class="card-body p-1">
-                <h2 class="card-title mb-2">Зарплата</h2>
-                <a href="#" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
-                <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
-            </div>
-        </div>
-        <div class="card p-3 rounded-3">
-            <div class="card-body p-1">
-                <h2 class="card-title mb-2">Сбережения</h2>
-                <a href="#" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
-                <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
-            </div>
-        </div>
-        <div class="card p-3 rounded-3">
-            <div class="card-body p-1">
-                <h2 class="card-title mb-2">Инвестиции</h2>
-                <a href="#" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
-                <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
-            </div>
-        </div>
-        <div class="card p-3 rounded-3">
+                <div class="card p-3 rounded-3">
+                    <div class="card-body p-1">
+                        <h2 class="card-title mb-2">Депозиты</h2>
+                        <a href="/categories/income/edit" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
+                        <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
+                    </div>
+                </div>
+                <div class="card p-3 rounded-3">
+                    <div class="card-body p-1">
+                        <h2 class="card-title mb-2">Зарплата</h2>
+                        <a href="/categories/income/edit" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
+                        <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
+                    </div>
+                </div>
+                <div class="card p-3 rounded-3">
+                    <div class="card-body p-1">
+                        <h2 class="card-title mb-2">Сбережения</h2>
+                        <a href="/categories/income/edit" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
+                        <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
+                    </div>
+                </div>
+                <div class="card p-3 rounded-3">
+                    <div class="card-body p-1">
+                        <h2 class="card-title mb-2">Инвестиции</h2>
+                        <a href="/categories/income/edit" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
+                        <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
+                    </div>
+                </div>
+        <div class="card p-3 rounded-3" id="card-add-income">
             <div class="card-body p-1 d-flex align-items-center justify-content-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
                      stroke="#CED4DA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                     class="feather feather-plus">
+                     class="feather feather-plus" id="feather-plus">
                     <line x1="12" y1="5" x2="12" y2="19"></line>
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
             </div>
         </div>
     </div>
+
     <div class="offcanvas px-0 offcanvas-end" tabindex="-1" id="menuRight" aria-labelledby="menuRightLabel">
         <div class="offcanvas-header">
             <a href="/" id="menuRightLabel" class="text-center">
@@ -69,7 +70,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/" class="nav-link d-flex align-items-center">
+                        <a href="/operations" class="nav-link d-flex align-items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-cash-coin"
                                  viewBox="0 0 16 16">
                                 <path fill-rule="evenodd"
@@ -89,10 +90,10 @@
                         </button>
                         <div class="collapse px-3" id="category-collapse">
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li class="py-2"><a href="/"
+                                <li class="py-2"><a href="/categories/income"
                                                     class="d-inline-flex text-decoration-none rounded">Доходы</a>
                                 </li>
-                                <li class="py-2"><a href="#"
+                                <li class="py-2"><a href="/categories/expense"
                                                     class="d-inline-flex text-decoration-none rounded">Расходы</a>
                                 </li>
                             </ul>
@@ -102,7 +103,7 @@
             </div>
 
             <div>
-                <p class="balance px-3 py-3 border-bottom m-0">Баланс: <a href="/"
+                <p class="balance px-3 py-3 border-bottom m-0">Баланс: <a href="#"
                                                                           class="text-decoration-none text-primary ms-2">500$</a>
                 </p>
 
@@ -131,7 +132,7 @@
 
 </div>
 
-<div class="pop-up-container p-2 d-flex position-fixed justify-content-center align-items-center top-0 start-0 end-0 bottom-0 w-100 h-100">
+<div class="pop-up-container p-2 d-none position-fixed justify-content-center align-items-center top-0 start-0 end-0 bottom-0 w-100 h-100">
     <div class="pop-up bg-white px-2 py-3 py-md-4 toast rounded-3 d-block position-absolute" role="alert"
          aria-live="assertive" aria-atomic="true">
         <div class="toast-body px-2 py-3 py-md-4 p-md-3 text-center">
