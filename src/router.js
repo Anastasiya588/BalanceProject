@@ -189,7 +189,6 @@ export class Router {
             e.preventDefault();
 
             const currentRoute = window.location.pathname;
-
             //Вырезаем из url http://localhost:9000 и заменяем на ''
             const url = element.href.replace(window.location.origin, '');
             if (!url || currentRoute === url.replace('#', '') || url.startsWith('javascript:void(0)')) {
@@ -223,7 +222,6 @@ export class Router {
 
         if (newRoute) {
             const isPublicRoute = newRoute.route === '/login' || newRoute.route === '/signup';
-
             if (!isPublicRoute && !this.isAuthentificated()) {
                 history.pushState({}, '', '/login');
                 await this.activateRoute(null, '/login');
