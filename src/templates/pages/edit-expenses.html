@@ -17,8 +17,8 @@
                value="Жильё">
     </div>
     <div class="edit-buttons d-flex">
-        <a href="#" class="btn btn-success py-2 px-3 me-2">Сохранить</a>
-        <a href="#" class="btn btn-danger py-2 px-3">Отмена</a>
+        <a href="#" class="btn btn-success py-2 px-3 me-2" id="saveBtn">Сохранить</a>
+        <a href="/categories/expense" class="btn btn-danger py-2 px-3">Отмена</a>
     </div>
 
     <div class="offcanvas px-0 offcanvas-end" tabindex="-1" id="menuRight" aria-labelledby="menuRightLabel">
@@ -30,7 +30,6 @@
         </div>
         <div class="offcanvas-body d-flex flex-column justify-content-between">
             <div class="layout d-flex flex-column flex-shrink-0">
-
                 <ul class="nav layout-nav border-top nav-pills flex-column mb-auto py-4 px-3">
                     <li class="nav-item">
                         <a href="/" class="nav-link d-flex align-items-center" aria-current="page">
@@ -55,18 +54,24 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <button class="btn btn-toggle w-100 d-inline-flex align-items-center rounded border-0 collapsed py-2 px-3"
+                    <li class="nav-item category-nav-item" id="category-nav-item">
+                        <button id="offcanvas-category"
+                                class="btn btn-toggle w-100 d-inline-flex align-items-center justify-content-between rounded border-0 collapsed py-2 px-3"
                                 data-bs-toggle="collapse" data-bs-target="#category-collapse" aria-expanded="false">
                             Категории
+                            <svg id="offcanvas-toggleIcon" class="toggleIcon" xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 320 512">
+                                <path id="myPath"
+                                      d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"></path>
+                            </svg>
                         </button>
-                        <div class="collapse px-3" id="category-collapse">
-                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li class="py-2"><a href="/categories/income"
-                                                    class="d-inline-flex text-decoration-none rounded">Доходы</a>
+                        <div class="collapse" id="category-collapse">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                                <li class="py-2 px-3"><a href="/categories/income"
+                                                         class="d-inline-flex text-decoration-none rounded">Доходы</a>
                                 </li>
-                                <li class="py-2"><a href="/categories/expense"
-                                                    class="d-inline-flex text-decoration-none rounded">Расходы</a>
+                                <li class="py-2 expenses-link px-3"><a href="/categories/expense"
+                                                                       class="d-inline-flex text-decoration-none rounded">Расходы</a>
                                 </li>
                             </ul>
                         </div>
@@ -75,9 +80,11 @@
             </div>
 
             <div>
-                <p class="balance px-3 py-3 border-bottom m-0">Баланс: <a href="#"
-                                                                          class="text-decoration-none text-primary ms-2">500$</a>
-                </p>
+                <div class="balance d-flex px-3 py-3 border-bottom m-0">Баланс: <a href="#"
+                                                                                   id="offcanvas-balance-number"
+                                                                                   class="offcanvas-balance-number text-decoration-none text-primary ms-2"></a>
+                    <p class="text-primary">$</p>
+                </div>
 
                 <div class="user btn-group dropup btn-group pt-3 pb-4 mb-3 px-3 d-flex align-items-start">
                     <button type="button"
@@ -101,6 +108,7 @@
             </div>
         </div>
     </div>
+
 
 </div>
 

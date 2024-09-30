@@ -1,6 +1,6 @@
 <div class="expenses">
     <div class="menu pb-xl-5 pb-lg-4 pb-4 d-flex justify-content-between">
-        <h1 class="expenses-title mb-5 title">Расходы</h1>
+        <h1 class="expenses-title title">Расходы</h1>
         <a class="burger-menu p-0 btn text-decoration-none" type="button" data-bs-toggle="offcanvas"
            data-bs-target="#menuRight" aria-controls="menuRight">
             <input type="checkbox" id="burger-checkbox" class="burger-checkbox">
@@ -9,78 +9,18 @@
     </div>
 
     <div class="cards d-flex flex-wrap gap-3">
-        <div class="card p-3 rounded-3">
-            <div class="card-body p-1">
-                <h2 class="card-title mb-2">Еда</h2>
-                <a href="/categories/expense/edit" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
-                <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
-            </div>
-        </div>
-        <div class="card p-3 rounded-3">
-            <div class="card-body p-1">
-                <h2 class="card-title mb-2">Жильё</h2>
-                <a href="/categories/expense/edit" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
-                <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
-            </div>
-        </div>
-        <div class="card p-3 rounded-3">
-            <div class="card-body p-1">
-                <h2 class="card-title mb-2">Здоровье</h2>
-                <a href="/categories/expense/edit" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
-                <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
-            </div>
-        </div>
-        <div class="card p-3 rounded-3">
-            <div class="card-body p-1">
-                <h2 class="card-title mb-2">Кафе</h2>
-                <a href="/categories/expense/edit" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
-                <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
-            </div>
-        </div>
-        <div class="card p-3 rounded-3">
-            <div class="card-body p-1">
-                <h2 class="card-title mb-2">Авто</h2>
-                <a href="/categories/expense/edit" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
-                <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
-            </div>
-        </div>
-        <div class="card p-3 rounded-3">
-            <div class="card-body p-1">
-                <h2 class="card-title mb-2">Одежда</h2>
-                <a href="/categories/expense/edit" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
-                <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
-            </div>
-        </div>
-        <div class="card p-3 rounded-3">
-            <div class="card-body p-1">
-                <h2 class="card-title mb-2">Развлечения</h2>
-                <a href="/categories/expense/edit" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
-                <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
-            </div>
-        </div>
-        <div class="card p-3 rounded-3">
-            <div class="card-body p-1">
-                <h2 class="card-title mb-2">Счета</h2>
-                <a href="/categories/expense/edit" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
-                <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
-            </div>
-        </div>
-        <div class="card p-3 rounded-3">
-            <div class="card-body p-1">
-                <h2 class="card-title mb-2">Спорт</h2>
-                <a href="/categories/expense/edit" class="btn btn-primary py-2 px-3 me-2">Редактировать</a>
-                <a href="#" class="btn btn-danger py-2 px-3">Удалить</a>
-            </div>
-        </div>
-        <div class="card p-3 rounded-3">
-            <div class="card-body p-1 d-flex align-items-center justify-content-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
-                     stroke="#CED4DA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                     class="feather feather-plus">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-            </div>
+        <div class="card p-3 rounded-3" id="card-add-expense">
+            <a href="/categories/expense/create"
+               class="d-flex align-items-center h-100 justify-content-center text-decoration-none">
+                <div class="card-body p-1 d-flex align-items-center justify-content-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                         stroke="#CED4DA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="feather feather-plus">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </div>
+            </a>
         </div>
     </div>
 
@@ -93,7 +33,6 @@
         </div>
         <div class="offcanvas-body d-flex flex-column justify-content-between">
             <div class="layout d-flex flex-column flex-shrink-0">
-
                 <ul class="nav layout-nav border-top nav-pills flex-column mb-auto py-4 px-3">
                     <li class="nav-item">
                         <a href="/" class="nav-link d-flex align-items-center" aria-current="page">
@@ -118,18 +57,24 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <button class="btn btn-toggle w-100 d-inline-flex align-items-center rounded border-0 collapsed py-2 px-3"
+                    <li class="nav-item category-nav-item" id="category-nav-item">
+                        <button id="offcanvas-category"
+                                class="btn btn-toggle w-100 d-inline-flex align-items-center justify-content-between rounded border-0 collapsed py-2 px-3"
                                 data-bs-toggle="collapse" data-bs-target="#category-collapse" aria-expanded="false">
                             Категории
+                            <svg id="offcanvas-toggleIcon" class="toggleIcon" xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 320 512">
+                                <path id="myPath"
+                                      d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"></path>
+                            </svg>
                         </button>
-                        <div class="collapse px-3" id="category-collapse">
-                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li class="py-2"><a href="/categories/income"
-                                                    class="d-inline-flex text-decoration-none rounded">Доходы</a>
+                        <div class="collapse" id="category-collapse">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal small">
+                                <li class="py-2 px-3"><a href="/categories/income"
+                                                         class="d-inline-flex text-decoration-none rounded">Доходы</a>
                                 </li>
-                                <li class="py-2"><a href="/categories/expense"
-                                                    class="d-inline-flex text-decoration-none rounded">Расходы</a>
+                                <li class="py-2 expenses-link px-3"><a href="/categories/expense"
+                                                                       class="d-inline-flex text-decoration-none rounded">Расходы</a>
                                 </li>
                             </ul>
                         </div>
@@ -138,9 +83,11 @@
             </div>
 
             <div>
-                <p class="balance px-3 py-3 border-bottom m-0">Баланс: <a href="#"
-                                                                          class="text-decoration-none text-primary ms-2">500$</a>
-                </p>
+                <div class="balance d-flex px-3 py-3 border-bottom m-0">Баланс: <a href="#"
+                                                                                   id="offcanvas-balance-number"
+                                                                                   class="offcanvas-balance-number text-decoration-none text-primary ms-2"></a>
+                    <p class="text-primary">$</p>
+                </div>
 
                 <div class="user btn-group dropup btn-group pt-3 pb-4 mb-3 px-3 d-flex align-items-start">
                     <button type="button"
@@ -167,13 +114,15 @@
 
 </div>
 
-<div class="pop-up-container p-2 d-none position-fixed justify-content-center align-items-center top-0 start-0 end-0 bottom-0 w-100 h-100">
+<div class="pop-up-container p-2 d-none position-fixed justify-content-center align-items-center top-0 start-0 end-0 bottom-0 w-100 h-100"
+     id="pop-up">
     <div class="pop-up bg-white px-2 py-3 py-md-4 toast rounded-3 d-block position-absolute" role="alert"
          aria-live="assertive" aria-atomic="true">
         <div class="toast-body px-2 py-3 py-md-4 p-md-3 text-center">
             <p class="pop-up-text">Вы действительно хотите удалить категорию? </p>
-            <button type="button" class="btn btn-success btn-sm py-2 px-3 me-2">Да, удалить</button>
-            <button type="button" class="btn btn-danger btn-sm py-2 px-3" data-bs-dismiss="toast">Не удалять
+            <button type="button" class="btn btn-success btn-sm py-2 px-3 me-2" id="agree-delete">Да, удалить</button>
+            <button type="button" class="btn btn-danger btn-sm py-2 px-3" data-bs-dismiss="toast" id="disagree-delete">
+                Не удалять
             </button>
         </div>
     </div>
