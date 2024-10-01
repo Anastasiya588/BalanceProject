@@ -47,39 +47,43 @@ export class HttpUtils {
 
 
         let response = null;
+
         try {
             response = await fetch(fullUrl, params);
-//получаем ответ от сервера
+            //Получение ответа
             result.response = await response.json();
+        } catch {
+            result.error = true;
+            return;
+        }
+
+        try {
+            if (response.status < 200 || response.status >= 300) {
+                result.error = true;
+
+                if (useAuth && response.status === 401) {
+                    result.error = true;
+                        if (!accessToken) {
+                            result.redirect = '/login'; // Токена нет
+                        } else {
+                            // Токен устарел или невалиден, необходимо обновить
+                            const updateTokenResult = await AuthUtils.updateRefreshToken();
+                            if (updateTokenResult) {
+                                return this.request(fullUrl, method, useAuth, body, period, dateFrom, dateTo);
+                            } else {
+                                result.redirect = '/login'; // Если обновление токена не удалось
+                            }
+                        }
+                }
+            }
         } catch (e) {
             console.error('Error during fetch:', e);
             result.error = true;
             return result;
         }
 
-        if (response.status < 200 || response.status >= 300) {
-            result.error = true;
-            console.log('Response status:', response.status);
-            if (useAuth && response.status === 401) { // Не авторизован
-                if (!accessToken) {
-                    result.redirect = '/login'; // Токена нет
-                } else {
-                    // Токен устарел или невалиден, необходимо обновить
-                    console.log('Attempting to update token...');
-                    const updateTokenResult = await AuthUtils.updateRefreshToken();
-                    if (updateTokenResult) {
-                        console.log('Token successfully updated. Making a retry request.');
-                        accessToken = AuthUtils.getAuthInfo(AuthUtils.accessTokenKey);
-                        params.headers['x-auth-token'] = accessToken; // Устанавливаем новый токен
-                        // Повторяем запрос
-                        return this.request(url, method, useAuth, body);
-                    } else {
-                        console.log('Token update failed. Redirecting to login.');
-                        result.redirect = '/login'; // Если обновление токена не удалось
-                    }
-                }
-            }
-        }
         return result;
     }
+
+
 }

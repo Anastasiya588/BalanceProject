@@ -113,8 +113,6 @@ export class SignUp {
             })
             //Перевод пользователя на главную страницу
             this.openNewRoute('/')
-
-
         }
     }
 }

@@ -18,7 +18,6 @@ const feather = require('feather-icons');
 
 export class Router {
     constructor() {
-
         this.titlePageElement = document.getElementById('title');
         this.contentPageElement = document.getElementById('content');
         this.adaptiveMeta = document.getElementById('adaptive-meta');

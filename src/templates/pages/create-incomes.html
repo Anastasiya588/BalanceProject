@@ -67,13 +67,15 @@
                             </svg>
                         </button>
                         <div class="collapse" id="category-collapse">
-                            <ul class="btn-toggle-nav list-unstyled fw-normal small">
-                                <li class="py-2 incomes-link px-3"><a href="/categories/income"
-                                                                      class="d-inline-flex text-decoration-none rounded">Доходы</a>
-                                </li>
-                                <li class="py-2 expenses-link px-3"><a href="/categories/expense"
-                                                                       class="d-inline-flex text-decoration-none rounded">Расходы</a>
-                                </li>
+                            <ul class="btn-toggle-nav list-unstyled fw-normal small d-flex flex-column">
+                                <a href="/categories/income"
+                                   class="d-inline-flex incomes-link text-decoration-none rounded">
+                                    <li class="py-2 px-3">Доходы</li>
+                                </a>
+                                <a href="/categories/expense"
+                                   class="d-inline-flex expenses-link text-decoration-none rounded">
+                                    <li class="py-2 px-3">Расходы</li>
+                                </a>
                             </ul>
                         </div>
                     </li>

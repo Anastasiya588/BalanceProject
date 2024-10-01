@@ -1,6 +1,7 @@
 import {Chart} from "chart.js/auto";
 import {FileUtils} from "../../utils/file-utils";
 import datepicker from "js-datepicker";
+import {HttpUtils} from "../../utils/http-utils";
 
 
 export class Dashboard {
@@ -59,8 +60,8 @@ export class Dashboard {
         FileUtils.showCanvasBalance().then();
 
         this.createFilter();
-        this.createCharts();
 
+        this.getOperations().then();
     }
 
     formatDate(date) {
@@ -89,6 +90,8 @@ export class Dashboard {
 
         this.todayDate.addEventListener('click', () => {
             resetButtons();
+            this.clearExistingTitles(this.titleIncomeContainer);
+            this.clearExistingTitles(this.titleExpenseContainer);
             this.todayDate.classList.add('active');
             this.todayDate.style.color = 'white';
             this.tillDate.disabled = true;
@@ -99,11 +102,13 @@ export class Dashboard {
             this.dateTo = '';
 
             this.period = 'today';
-            // this.createTable().then();
+            this.getOperations().then();
         })
 
         this.weekDate.addEventListener('click', () => {
             resetButtons();
+            this.clearExistingTitles(this.titleIncomeContainer);
+            this.clearExistingTitles(this.titleExpenseContainer);
             this.weekDate.classList.add('active');
             this.weekDate.style.color = 'white';
             this.tillDate.disabled = true;
@@ -114,11 +119,13 @@ export class Dashboard {
             this.dateTo = '';
 
             this.period = 'week';
-            // this.createTable().then();
+            this.getOperations().then();
         })
 
         this.monthDate.addEventListener('click', () => {
             resetButtons();
+            this.clearExistingTitles(this.titleIncomeContainer);
+            this.clearExistingTitles(this.titleExpenseContainer);
             this.monthDate.classList.add('active');
             this.monthDate.style.color = 'white';
             this.tillDate.disabled = true;
@@ -129,11 +136,13 @@ export class Dashboard {
             this.dateTo = '';
 
             this.period = 'month';
-            // this.createTable().then();
+            this.getOperations().then();
         })
 
         this.yearDate.addEventListener('click', () => {
             resetButtons();
+            this.clearExistingTitles(this.titleIncomeContainer);
+            this.clearExistingTitles(this.titleExpenseContainer);
             this.yearDate.classList.add('active');
             this.yearDate.style.color = 'white';
             this.tillDate.disabled = true;
@@ -144,11 +153,13 @@ export class Dashboard {
             this.dateTo = '';
 
             this.period = 'year';
-            // this.createTable().then();
+            this.getOperations().then();
         })
 
         this.allDate.addEventListener('click', () => {
             resetButtons();
+            this.clearExistingTitles(this.titleIncomeContainer);
+            this.clearExistingTitles(this.titleExpenseContainer);
             this.allDate.classList.add('active');
             this.allDate.style.color = 'white';
             this.tillDate.disabled = true;
@@ -159,7 +170,7 @@ export class Dashboard {
             this.dateTo = '';
 
             this.period = 'all';
-            // this.createTable().then();
+            this.getOperations().then();
         })
 
         this.intervalDate.addEventListener('click', () => {
@@ -176,7 +187,9 @@ export class Dashboard {
                 this.dateFrom = this.fromDate.value;
                 this.dateTo = this.tillDate.value;
                 if (this.dateFrom && this.dateTo) {
-                    // this.createTable().then();
+                    this.getOperations().then();
+                    this.clearExistingTitles(this.titleIncomeContainer);
+                    this.clearExistingTitles(this.titleExpenseContainer);
                 }
             };
 
@@ -191,7 +204,47 @@ export class Dashboard {
         })
     }
 
+    async getOperations() {
+        const result = await HttpUtils.request('/operations', 'GET', true, null, this.period, this.dateFrom, this.dateTo)
+        if (result && result.response) {
+            if (Array.isArray(result.response)) {
+                const incomeData = result.response.filter(item => item.type === 'income');
+                this.amountIncomeData = incomeData.map(item => item.amount);
+                console.log(this.amountIncomeData)
+                const expenseData = result.response.filter(item => item.type === 'expense');
+                this.amountExpenseData = expenseData.map(item => item.amount);
+                console.log(this.amountExpenseData)
+            }
+            this.createCharts();
+        }
+    }
+
     createCharts() {
+        this.clearExistingTitles = (container) => {
+            const existingTitle = container.querySelector('.pi-title');
+            if (existingTitle) {
+                existingTitle.remove();
+            }
+        };
+        // Создаем контейнер для заголовка доходов, если он отсутствует
+        this.titleIncomeContainer = document.getElementById('income-title-container');
+        if (!this.titleIncomeContainer) {
+            this.titleIncomeContainer = document.createElement('div');
+            this.titleIncomeContainer.id = 'income-title-container';
+            // Вы можете добавить CSS-класс для стилизации, если это необходимо
+            this.titleIncomeContainer.className = 'title-container';
+            document.querySelector('.pie-item:nth-child(1)').appendChild(this.titleIncomeContainer); // или нужный вам родительский элемент
+        }
+
+        // Создаем контейнер для заголовка расходов, если он отсутствует
+        this.titleExpenseContainer = document.getElementById('expense-title-container');
+        if (!this.titleExpenseContainer) {
+            this.titleExpenseContainer = document.createElement('div');
+            this.titleExpenseContainer.id = 'expense-title-container';
+            this.titleExpenseContainer.className = 'title-container';
+            document.querySelector('.pie-item:nth-child(3)').appendChild(this.titleExpenseContainer); // или нужный вам родительский элемент
+        }
+
         const getOrCreateLegendList = (chart, id) => {
             const legendContainer = document.getElementById(id);
             let listContainer = legendContainer.querySelector('ul');
@@ -262,35 +315,48 @@ export class Dashboard {
                 });
             }
         };
-
         // Создание графиков
         try {
             // График доходов
             if (this.incomeCanvas && this.expensesCanvas) {
-                const incomeItem = document.createElement('div');
-                incomeItem.classList = 'pie-content mb-md-4 mb-sm-3 mb-3 pb-sm-3';
-                if (document.documentElement.clientWidth > 1080) {
-                    incomeItem.classList = 'me-4';
+                if (this.incomeChart) {
+                    this.incomeChart.destroy();
                 }
-                incomeItem.appendChild(document.createElement('h2')).className = 'pi-title m-0';
-                incomeItem.lastChild.textContent = 'Доходы';
+
+                this.incomeItem = document.createElement('div');
+                this.incomeItem.classList = 'pie-content mb-md-4 mb-sm-3 mb-3 pb-sm-3';
+                if (document.documentElement.clientWidth > 1080) {
+                    this.incomeItem.classList = 'me-4';
+                }
+
+                this.incomeTitle = this.incomeItem.querySelector('.pi-title');
+                if (!this.incomeTitle) {
+                    this.incomeTitle = document.createElement('h2');
+                    this.incomeTitle.className = 'pi-title m-0';
+                    this.incomeTitle.textContent = 'Доходы';
+                    this.titleIncomeContainer.appendChild(this.incomeTitle);
+                } else {
+                    this.clearExistingTitles(this.titleIncomeContainer);
+                    // Если заголовок существует, просто обновите текст
+                    this.incomeTitle.textContent = 'Доходы';
+                }
+
                 const incomeLegendContainer = document.createElement('div');
                 incomeLegendContainer.id = 'legend-income-container';
-                incomeItem.appendChild(incomeLegendContainer);
+                this.incomeItem.appendChild(incomeLegendContainer);
 
-                incomeItem.appendChild(this.incomeCanvas);
+                this.incomeItem.appendChild(this.incomeCanvas);
 
                 const incomePieItem = document.querySelector('.pie-item:nth-child(1)');
-                incomePieItem.appendChild(incomeItem);
+                incomePieItem.appendChild(this.incomeItem);
 
-
-                new Chart(this.incomeCanvas, {
+                this.incomeChart = new Chart(this.incomeCanvas, {
                     type: 'pie',
                     data: {
                         labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
                         datasets: [{
                             backgroundColor: ["#FF0000FF", "#FF4500FF", "#FFFF00FF", "#008000FF", "#0000FFFF"],
-                            data: [500, 100, 300, 50, 450],
+                            data: this.amountIncomeData,
                         }]
                     },
                     options: {
@@ -308,32 +374,48 @@ export class Dashboard {
                 });
 
                 // График расходов
-                const expensesItem = document.createElement('div');
-                expensesItem.classList = 'pie-content  mb-md-4 mb-sm-3 mb-3 pb-sm-3';
-                expensesItem.appendChild(document.createElement('h2')).className = 'pi-title m-0';
-                expensesItem.lastChild.textContent = 'Расходы';
+                if (this.expensesChart) {
+                    this.expensesChart.destroy(); // Уничтожаем предыдущий график расходов, если он существует
+                }
+
+                this.expensesItem = document.createElement('div');
+                this.expensesItem.classList = 'pie-content  mb-md-4 mb-sm-3 mb-3 pb-sm-3';
+
+
+                this.expenseTitle = this.expensesItem.querySelector('.pi-title');
+                if (!this.expenseTitle) {
+                    this.expenseTitle = document.createElement('h2');
+                    this.expenseTitle.className = 'pi-title m-0';
+                    this.expenseTitle.textContent = 'Расходы';
+                    this.titleExpenseContainer.appendChild(this.expenseTitle);
+                } else {
+                    this.clearExistingTitles(this.titleExpenseContainer);
+                    // Если заголовок существует, обновите текст
+                    this.expenseTitle.textContent = 'Расходы';
+                }
+
                 if (document.documentElement.clientWidth > 1080) {
-                    expensesItem.classList = 'ms-4';
+                    this.expensesItem.classList = 'ms-4';
                 }
 
                 const expensesLegendContainer = document.createElement('div');
                 expensesLegendContainer.id = 'legend-expenses-container';
-                expensesItem.appendChild(expensesLegendContainer);
+                this.expensesItem.appendChild(expensesLegendContainer);
 
-                expensesItem.appendChild(this.expensesCanvas);
+                this.expensesItem.appendChild(this.expensesCanvas);
 
                 const expensesPieItem = document.querySelector('.pie-item:nth-child(3)');
-                expensesPieItem.appendChild(expensesItem);
+                expensesPieItem.appendChild(this.expensesItem);
 
 
                 // График расходов
-                new Chart(this.expensesCanvas, {
+                this.expensesChart = new Chart(this.expensesCanvas, {
                     type: 'pie',
                     data: {
                         labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
                         datasets: [{
                             backgroundColor: ["#FF0000FF", "#FF4500FF", "#FFFF00FF", "#008000FF", "#0000FFFF"],
-                            data: [500, 100, 300, 50, 450],
+                            data: this.amountExpenseData,
                         }]
                     },
                     options: {
@@ -357,6 +439,7 @@ export class Dashboard {
         }
     }
 
+
     stylesLayoutCanvas() {
         //Layout and Offcanvas
         this.dashboardNavItem = document.querySelectorAll('.dashboard-nav-item');
@@ -367,9 +450,9 @@ export class Dashboard {
         this.offcanvasCategory = document.getElementById('offcanvas-category');
         this.toggleIcon = document.getElementById('toggleIcon');
         this.offCanvasToggleIcon = document.getElementById('offcanvas-toggleIcon');
-        this.incomes = document.getElementsByClassName('incomes-link');
         this.categoryNavItem = document.querySelectorAll('.category-nav-item');
-
+        this.expenses = document.querySelectorAll('.expenses-link');
+        this.incomes = document.querySelectorAll('.incomes-link');
 
         for (let i = 0; i < this.dashboardNavItem.length; i++) {
             this.dashboardNavItem[i].style.backgroundColor = '#0D6EFD';
@@ -385,12 +468,21 @@ export class Dashboard {
 
         const that = this;
         document.getElementById('category-collapse').addEventListener('shown.bs.collapse', function () {
-            for (let j = 0; j < that.incomes.length; j++) {
+            for (let j = 0; j < that.categoryNavItem.length; j++) {
                 that.categoryNavItem[j].style.border = "1px solid #0D6EFD";
-                that.categoryNavItem[j].style.setProperty('border-top-right-radius', '7px', 'important');
-                that.categoryNavItem[j].style.setProperty('border-top-left-radius', '7px', 'important');
+                that.categoryNavItem[j].style.borderRadius = "7px";
             }
+            for (let i = 0; i < that.incomes.length; i++) {
+                that.incomes[i].style.setProperty('border-top-right-radius', '0', 'important');
+                that.incomes[i].style.setProperty('border-top-left-radius', '0', 'important');
+                that.incomes[i].style.setProperty('border-bottom-right-radius', '0', 'important');
+                that.incomes[i].style.setProperty('border-bottom-left-radius', '0', 'important');
 
+            }
+            for (let i = 0; i < that.expenses.length; i++) {
+                that.expenses[i].style.setProperty('border-top-right-radius', '0', 'important');
+                that.expenses[i].style.setProperty('border-top-left-radius', '0', 'important');
+            }
             that.category.style.backgroundColor = '#0D6EFD';
             that.category.style.color = 'white';
             that.toggleIcon.style.fill = 'white';

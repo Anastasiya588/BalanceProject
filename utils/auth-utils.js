@@ -1,4 +1,5 @@
 import config from "../src/config/config.js";
+import {HttpUtils} from "./http-utils";
 
 export class AuthUtils {
     static accessTokenKey = 'accessToken';
@@ -51,34 +52,25 @@ export class AuthUtils {
         let result = false;
         const refreshToken = this.getAuthInfo(this.refreshTokenKey);
         if (refreshToken) {
-            try {
-                const response = await fetch(config.api + '/refresh', {
-                    method: 'POST',
-                    headers: {
-                        'Content-type': 'application/json',
-                        'Accept': 'application/json',
-                    },
-                    body: JSON.stringify({refreshToken})
-                })
+            const response = await HttpUtils.request('/refresh', 'POST', false, {
+                refreshToken: refreshToken,
+            })
 
-                if (response && response.status === 200) {
-                    const tokens = await response.json();
-                    if (tokens && !tokens.error) {
-                        this.setTokens(tokens.accessToken, tokens.refreshToken)
-                        result = true;
-                    }
-                } else {
-                    console.error('Ошибка при обновлении токена:', response.status, response.statusText);
+            if (response && response.status === 200) {
+                const tokens = await response.json();
+                if (tokens && !tokens.error) {
+                    this.setTokens(tokens.accessToken, tokens.refreshToken)
+                    result = true;
                 }
-            } catch (error) {
-                console.error('Ошибка при выполнении запроса:', error);
+            } else {
+                console.error('Ошибка при обновлении токена:', response.status, response.statusText);
             }
         }
+
         if (!result) {
             console.error('Удаление некорректных токенов.');
             this.removeAuthInfo();
         }
-
         return result;
     }
 }

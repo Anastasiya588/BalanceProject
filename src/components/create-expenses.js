@@ -46,6 +46,7 @@ export class CreateExpenses {
         this.category = document.getElementById('category');
         this.toggleIcon = document.getElementById('toggleIcon');
         this.expenses = document.getElementsByClassName('expenses-link');
+        this.incomes = document.getElementsByClassName('incomes-link');
         this.categoryNavItem = document.querySelectorAll('.category-nav-item');
 
         this.category.style.backgroundColor = '#0D6EFD';
@@ -61,16 +62,24 @@ export class CreateExpenses {
         this.offcanvastoggleIcon.style.fill = "white";
 
         document.getElementById('category-collapse').addEventListener('shown.bs.collapse', function () {
+            for (let i = 0; i < that.categoryNavItem.length; i++) {
+                that.categoryNavItem[i].style.border = "1px solid #0D6EFD";
+                that.categoryNavItem[i].style.borderRadius = "7px";
+            }
+            for (let i = 0; i < that.incomes.length; i++) {
+                that.incomes[i].style.setProperty('border-top-right-radius', '0', 'important');
+                that.incomes[i].style.setProperty('border-top-left-radius', '0', 'important');
+                that.incomes[i].style.setProperty('border-bottom-right-radius', '0', 'important');
+                that.incomes[i].style.setProperty('border-bottom-left-radius', '0', 'important');
+
+            }
             for (let j = 0; j < that.expenses.length; j++) {
                 that.expenses[j].style.backgroundColor = '#0D6EFD';
                 that.expenses[j].children[0].style.color = 'white';
                 that.expenses[j].style.setProperty('border-bottom-left-radius', '6px', 'important');
                 that.expenses[j].style.setProperty('border-bottom-right-radius', '6px', 'important');
-                for (let i = 0; i < that.categoryNavItem.length; i++) {
-                    that.categoryNavItem[i].style.border = "1px solid #0D6EFD";
-                    that.categoryNavItem[i].style.borderRadius = "7px";
-                }
-
+                that.expenses[j].style.setProperty('border-top-right-radius', '0', 'important');
+                that.expenses[j].style.setProperty('border-top-left-radius', '0', 'important');
             }
 
             that.category.style.setProperty('border-bottom-left-radius', '0', 'important');

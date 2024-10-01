@@ -158,7 +158,8 @@ export class CreateOperations {
         this.offcanvasCategory = document.getElementById('offcanvas-category');
         this.toggleIcon = document.getElementById('toggleIcon');
         this.offCanvasToggleIcon = document.getElementById('offcanvas-toggleIcon');
-        this.incomes = document.getElementsByClassName('incomes-link');
+        this.expenses = document.querySelectorAll('.expenses-link');
+        this.incomes = document.querySelectorAll('.incomes-link');
         this.categoryNavItem = document.querySelectorAll('.category-nav-item');
 
         for (let i = 0; i < this.operationsNavItem.length; i++) {
@@ -178,8 +179,18 @@ export class CreateOperations {
         document.getElementById('category-collapse').addEventListener('shown.bs.collapse', function () {
             for (let j = 0; j < that.incomes.length; j++) {
                 that.categoryNavItem[j].style.border = "1px solid #0D6EFD";
-                that.categoryNavItem[j].style.setProperty('border-top-right-radius', '7px', 'important');
-                that.categoryNavItem[j].style.setProperty('border-top-left-radius', '7px', 'important');
+                that.categoryNavItem[j].style.borderRadius = "7px";
+            }
+            for (let i = 0; i < that.incomes.length; i++) {
+                that.incomes[i].style.setProperty('border-top-right-radius', '0', 'important');
+                that.incomes[i].style.setProperty('border-top-left-radius', '0', 'important');
+                that.incomes[i].style.setProperty('border-bottom-right-radius', '0', 'important');
+                that.incomes[i].style.setProperty('border-bottom-left-radius', '0', 'important');
+
+            }
+            for (let i = 0; i < that.expenses.length; i++) {
+                that.expenses[i].style.setProperty('border-top-right-radius', '0', 'important');
+                that.expenses[i].style.setProperty('border-top-left-radius', '0', 'important');
             }
 
             that.category.style.backgroundColor = '#0D6EFD';
