@@ -69,6 +69,7 @@ input {
   }
 }
 
+
 //Burger Menu
 .burger-menu {
   display: none;
@@ -141,7 +142,9 @@ input {
 //auth styles
 .form {
   width: 413px;
-
+  @media screen and (max-width: 413px) {
+    width: 310px;
+  }
 
   .login-title, .signUp-title {
     font-family: 'RobotoMedium', sans-serif;
@@ -211,6 +214,71 @@ input {
   }
 }
 
+.offcanvas {
+  .offcanvas-body {
+
+    .layout-nav {
+      .dashboard-nav-item:hover, .operations-nav-item :hover, #offcanvas-category:hover {
+        background-color: #0D6EFD;
+        border-radius: 7px;
+        color: white;
+      }
+
+      .nav-item {
+        :hover svg {
+          fill: white !important;
+        }
+
+        :hover p {
+          color: white !important;
+        }
+
+        .toggleIcon {
+          width: 7px;
+          height: 12px;
+          transition: transform 0.35s ease;
+          transform-origin: center;
+          fill: $blue-color;
+        }
+      }
+
+      .btn-toggle-nav {
+        padding-bottom: 0 !important;
+      }
+
+
+      .btn-toggle[aria-expanded="true"] .toggleIcon {
+        content: "";
+        transform: rotate(90deg);
+      }
+
+      .collapse {
+        .btn-toggle-nav {
+
+          .incomes-link:hover, .expenses-link:hover {
+            background-color: #0D6EFD;
+
+            a {
+              color: white;
+            }
+          }
+
+          li {
+            cursor: pointer;
+
+            a {
+              font-size: 14px;
+              line-height: 16px;
+              color: #0D6EFD;
+            }
+
+          }
+        }
+      }
+    }
+  }
+
+}
 
 //Layout
 
@@ -229,11 +297,24 @@ input {
     }
   }
 
-
   .layout {
 
     .layout-nav {
+      .dashboard-nav-item:hover, .operations-nav-item :hover, #category:hover {
+        background-color: #0D6EFD;
+        border-radius: 7px;
+        color: white;
+      }
+
       .nav-item {
+        :hover svg {
+          fill: white !important; /* Цвет для иконки SVG при наведении */
+        }
+
+        :hover p {
+          color: white !important; /* Цвет для текста p при наведении */
+        }
+
         a, .btn {
           font-size: 14px;
           line-height: 16px;
@@ -242,31 +323,39 @@ input {
           position: relative;
         }
 
+        .toggleIcon {
 
-        .btn-toggle::before {
-          content: "";
           width: 7px;
           height: 12px;
-          position: absolute;
-          right: 16px;
-          background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512' style='fill: %23052C65'%3E%3Cpath d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'/%3E%3C/svg%3E") no-repeat center;
           transition: transform .35s ease;
           transform-origin: center;
+          fill: $blue-color
         }
 
-
-        .btn-toggle[aria-expanded="true"]::before {
+        .btn-toggle[aria-expanded="true"] .toggleIcon {
+          content: "";
           transform: rotate(90deg);
         }
 
 
         .collapse {
           .btn-toggle-nav {
+
+            .incomes-link:hover, .expenses-link:hover {
+              background-color: #0D6EFD;
+
+              a {
+                color: white;
+              }
+            }
+
             li {
+              cursor: pointer;
+
               a {
                 font-size: 14px;
                 line-height: 16px;
-                color: $blue-color;
+                color: #0D6EFD;
               }
 
             }
@@ -337,7 +426,7 @@ input {
         font-size: 12px;
       }
 
-      .btn, a {
+      .btn, input {
         color: $grey-color;
         line-height: 1;
       }
@@ -359,6 +448,28 @@ input {
         }
       }
 
+      .interval {
+        @media screen and (max-width: 735px) {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        input {
+          width: 38px;
+          border: none;
+          border-bottom: 1px solid $grey-color;
+          background: white;
+          @media screen and (max-width: 500px) {
+            font-size: 12px !important;
+          }
+        }
+
+        input:focus {
+          outline: none;
+          border: none;
+          border-bottom: 1px solid $grey-color;
+        }
+      }
     }
 
     .pie-items {
@@ -567,6 +678,9 @@ input {
       @media screen and (max-width: 690px) {
         margin: 0 auto;
       }
+      @media screen and (max-width: 455px) {
+        width: 100%;
+      }
 
       #edit-income-input {
         font-family: 'RobotoRegular', sans-serif;
@@ -734,6 +848,9 @@ input {
       @media screen and (max-width: 681px) {
         margin: 0 auto;
       }
+      @media screen and (max-width: 455px) {
+        width: 100%;
+      }
 
       #edit-expenses-input {
         font-family: 'RobotoRegular', sans-serif;
@@ -764,7 +881,7 @@ input {
 
     .operations {
       .menu {
-        @media screen and (max-width: 1151px) {
+        @media screen and (max-width: 1250px) {
           justify-content: center !important;
         }
         @media screen and (max-width: 700px) {
@@ -807,7 +924,7 @@ input {
       }
 
       .btns {
-        @media screen and (max-width: 1151px) {
+        @media screen and (max-width: 1250px) {
           display: flex;
           justify-content: center;
         }
@@ -823,7 +940,7 @@ input {
       .operations-dates {
         font-family: "RobotoMedium", sans-serif;
         font-size: 16px;
-        @media screen and (max-width: 1151px) {
+        @media screen and (max-width: 1250px) {
           flex-wrap: wrap;
           justify-content: center;
         }
@@ -832,7 +949,7 @@ input {
         }
 
 
-        .btn, a {
+        .btn, input {
           color: $grey-color;
           line-height: 1;
         }
@@ -851,6 +968,29 @@ input {
           @media screen and (max-width: 500px) {
             font-size: 12px;
             padding: 6px 12px;
+          }
+        }
+
+        .interval {
+          @media screen and (max-width: 735px) {
+            flex-wrap: wrap;
+            justify-content: center;
+          }
+
+          input {
+            width: 38px;
+            border: none;
+            border-bottom: 1px solid $grey-color;
+            background: white;
+            @media screen and (max-width: 500px) {
+              font-size: 12px !important;
+            }
+          }
+
+          input:focus {
+            outline: none;
+            border: none;
+            border-bottom: 1px solid $grey-color;
           }
         }
       }
@@ -893,6 +1033,7 @@ input {
                 font-family: 'RobotoBold', sans-serif;
                 font-size: 16px;
                 border: none;
+                white-space: nowrap;
                 @media screen and (max-width: 501px) {
                   font-size: 14px;
                 }
@@ -902,6 +1043,7 @@ input {
                 font-family: 'RobotoRegular', sans-serif;
                 font-size: 16px;
                 border: none;
+                white-space: nowrap;
                 @media screen and (max-width: 501px) {
                   font-size: 14px;
                 }
@@ -970,6 +1112,9 @@ input {
     .form {
       @media screen and (max-width: 690px) {
         margin: 0 auto;
+      }
+      @media screen and (max-width: 455px) {
+        width: 100%;
       }
 
       select {
@@ -1052,6 +1197,9 @@ input {
     .form {
       @media screen and (max-width: 690px) {
         margin: 0 auto;
+      }
+      @media screen and (max-width: 455px) {
+        width: 100%;
       }
 
       select {

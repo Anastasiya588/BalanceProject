@@ -31,18 +31,17 @@
         </div>
         <div class="offcanvas-body d-flex flex-column justify-content-between">
             <div class="layout d-flex flex-column flex-shrink-0">
-
                 <ul class="nav layout-nav border-top nav-pills flex-column mb-auto py-4 px-3">
-                    <li class="nav-item">
+                    <li class="nav-item dashboard-nav-item">
                         <a href="/" class="nav-link d-flex align-items-center" aria-current="page">
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="14" class="bi bi-house"
                                  viewBox="0 0 16 16">
                                 <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
                             </svg>
-                            <p class="m-0 ms-2">Главная</p>
+                            <p class="m-0 ms-2 dashboard-link">Главная</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item operations-nav-item">
                         <a href="/operations" class="nav-link d-flex align-items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-cash-coin"
                                  viewBox="0 0 16 16">
@@ -52,7 +51,7 @@
                                 <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083q.088-.517.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1z"/>
                                 <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 6 6 0 0 1 3.13-1.567"/>
                             </svg>
-                            <p class="m-0 ms-2">Доходы & Расходы</p>
+                            <p class="m-0 ms-2 operations-link">Доходы & Расходы</p>
                         </a>
                     </li>
 
@@ -68,12 +67,12 @@
                             </svg>
                         </button>
                         <div class="collapse" id="category-collapse">
-                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal small">
                                 <li class="py-2 incomes-link px-3"><a href="/categories/income"
                                                                       class="d-inline-flex text-decoration-none rounded">Доходы</a>
                                 </li>
-                                <li class="py-2 px-3"><a href="/categories/expense"
-                                                         class="d-inline-flex text-decoration-none rounded">Расходы</a>
+                                <li class="py-2 expenses-link px-3"><a href="/categories/expense"
+                                                                       class="d-inline-flex text-decoration-none rounded">Расходы</a>
                                 </li>
                             </ul>
                         </div>
@@ -82,9 +81,9 @@
             </div>
 
             <div>
-                <div class="balance d-flex px-3 py-3 border-bottom m-0">Баланс:
-                    <a id="offcanvas-balance-number" href="#"
-                       class="offcanvas-balance-number text-decoration-none text-primary ms-2"></a>
+                <div class="balance d-flex px-3 py-3 border-bottom m-0">Баланс: <a href="#"
+                                                                                   id="offcanvas-balance-number"
+                                                                                   class="offcanvas-balance-number text-decoration-none text-primary ms-2"></a>
                     <p class="text-primary">$</p>
                 </div>
 

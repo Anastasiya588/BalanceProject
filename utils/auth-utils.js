@@ -1,4 +1,3 @@
-import {HttpUtils} from "./http-utils.js";
 import config from "../src/config/config.js";
 
 export class AuthUtils {
@@ -52,24 +51,31 @@ export class AuthUtils {
         let result = false;
         const refreshToken = this.getAuthInfo(this.refreshTokenKey);
         if (refreshToken) {
-            const response = await fetch(config.api + '/refresh', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({refreshToken: refreshToken})
-            })
+            try {
+                const response = await fetch(config.api + '/refresh', {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({refreshToken})
+                })
 
-            if (response && response.status === 200) {
-                const tokens = await response.json();
-                if (tokens && !tokens.error) {
-                    this.setTokens(result.response.accessToken, result.response.refreshToken)
-                    result = true;
+                if (response && response.status === 200) {
+                    const tokens = await response.json();
+                    if (tokens && !tokens.error) {
+                        this.setTokens(tokens.accessToken, tokens.refreshToken)
+                        result = true;
+                    }
+                } else {
+                    console.error('Ошибка при обновлении токена:', response.status, response.statusText);
                 }
+            } catch (error) {
+                console.error('Ошибка при выполнении запроса:', error);
             }
         }
         if (!result) {
+            console.error('Удаление некорректных токенов.');
             this.removeAuthInfo();
         }
 

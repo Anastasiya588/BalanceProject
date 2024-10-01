@@ -11,7 +11,8 @@ import {Operations} from "./components/operations.js";
 import {CreateOperations} from "./components/create-operations.js";
 import {EditOperations} from "./components/edit-operations.js";
 import {Logout} from "./components/logout.js";
-import {AuthUtils} from "../utils/auth-utils";
+import {AuthUtils} from "../utils/auth-utils.js";
+import {HttpUtils} from "../utils/http-utils.js";
 
 const feather = require('feather-icons');
 
@@ -34,6 +35,8 @@ export class Router {
                 load: () => {
                     new Dashboard();
                 },
+                styles: ['datepicker.min.css'],
+                scripts: ['datepicker.min.js'],
             },
             {
                 route: '/404',
@@ -65,7 +68,7 @@ export class Router {
                 filePathTemplate: '/templates/pages/incomes.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
-                    new Incomes()
+                    new Incomes(this.openNewRoute.bind(this))
                 },
             },
             {
@@ -74,7 +77,7 @@ export class Router {
                 filePathTemplate: '/templates/pages/create-incomes.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
-                    new CreateIncomes()
+                    new CreateIncomes(this.openNewRoute.bind(this))
                 },
             },
             {
@@ -83,7 +86,7 @@ export class Router {
                 filePathTemplate: '/templates/pages/edit-incomes.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
-                    new EditIncomes()
+                    new EditIncomes(this.openNewRoute.bind(this))
                 },
             },
             {
@@ -101,7 +104,7 @@ export class Router {
                 filePathTemplate: '/templates/pages/create-expenses.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
-                    new CreateExpenses()
+                    new CreateExpenses(this.openNewRoute.bind(this))
                 },
             },
             {
@@ -110,7 +113,7 @@ export class Router {
                 filePathTemplate: '/templates/pages/edit-expenses.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
-                    new EditExpenses()
+                    new EditExpenses(this.openNewRoute.bind(this))
                 },
             },
             {
@@ -119,8 +122,10 @@ export class Router {
                 filePathTemplate: '/templates/pages/operations.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
-                    new Operations()
+                    new Operations(this.openNewRoute.bind(this))
                 },
+                styles: ['datepicker.min.css'],
+                scripts: ['datepicker.min.js'],
             },
             {
                 route: '/operations/create',
@@ -128,7 +133,7 @@ export class Router {
                 filePathTemplate: '/templates/pages/create-operations.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
-                    new CreateOperations()
+                    new CreateOperations(this.openNewRoute.bind(this))
                 },
                 styles: ['datepicker.min.css'],
                 scripts: ['datepicker.min.js'],
@@ -139,8 +144,10 @@ export class Router {
                 filePathTemplate: '/templates/pages/edit-operations.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
-                    new EditOperations()
+                    new EditOperations(this.openNewRoute.bind(this))
                 },
+                styles: ['datepicker.min.css'],
+                scripts: ['datepicker.min.js'],
             },
             {
                 route: '/logout',
@@ -150,6 +157,7 @@ export class Router {
             },
 
         ]
+
     }
 
     initEvents() {
@@ -159,7 +167,6 @@ export class Router {
         window.addEventListener('popstate', this.activateRoute.bind(this));
 
         document.addEventListener('click', this.clickHandler.bind(this));
-
     }
 
     isAuthentificated() {
@@ -252,6 +259,7 @@ export class Router {
                 if (newRoute.useLayout) {
                     this.contentPageElement.innerHTML = await fetch(newRoute.useLayout).then(response => response.text());
                     contentBlock = document.getElementById('content-layout');
+                    this.showBalance().then()
                 }
                 //запрос на получение страницы
                 contentBlock.innerHTML = await fetch(newRoute.filePathTemplate).then(response => response.text());
@@ -263,6 +271,30 @@ export class Router {
             console.log('No route found')
             history.pushState({}, '', '/404');
             await this.activateRoute();
+        }
+    }
+
+    async showBalance() {
+        try {
+            const result = await HttpUtils.request('/balance');
+
+            if (result) {
+                this.balance = document.querySelectorAll('.balance-number');
+                if (this.balance.length === 0) {
+                    console.error('No elements found with class .balance-number');
+                    return;
+                }
+
+                const balanceValue = result.response.balance;
+                if (typeof balanceValue === 'number') {
+                    this.balance.forEach((elem) => {
+                        elem.innerText = balanceValue;
+                    });
+
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching the balance:', error);
         }
     }
 }
