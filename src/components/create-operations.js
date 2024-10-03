@@ -128,8 +128,9 @@ export class CreateOperations {
     async createOperation() {
         this.saveBtn.addEventListener('click', async () => {
             const operationType = this.typeSelect.value;
+
             if (this.validateForm() === true) {
-                const categoryId = this.categorySelect.value;
+                const categoryId = Number(this.categorySelect.value);
 
                 const result = await HttpUtils.request('/operations', 'POST', true, {
                     type: operationType,

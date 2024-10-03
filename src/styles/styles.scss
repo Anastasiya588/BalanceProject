@@ -548,7 +548,6 @@ input {
 
       .card {
         width: 352px;
-        height: 121px;
         border-color: $card-border-grey-color;
 
         .card-title {
@@ -563,6 +562,10 @@ input {
             font-family: 'RobotoMedium', sans-serif;
           }
         }
+      }
+
+      #card-add-income {
+        height: 121px;
       }
     }
 
@@ -719,7 +722,6 @@ input {
 
       .card {
         width: 352px;
-        height: 121px;
         border-color: $card-border-grey-color;
 
         .card-title {
@@ -735,6 +737,10 @@ input {
             font-size: 14px;
           }
         }
+      }
+
+      #card-add-expense {
+        height: 121px;
       }
     }
   }

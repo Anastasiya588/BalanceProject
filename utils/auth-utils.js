@@ -49,7 +49,7 @@ export class AuthUtils {
     }
 
     static async updateRefreshToken() {
-        let result = false;
+        let result = null;
         const refreshToken = this.getAuthInfo(this.refreshTokenKey);
         if (refreshToken) {
             const response = await HttpUtils.request('/refresh', 'POST', false, {
@@ -63,6 +63,7 @@ export class AuthUtils {
                     result = true;
                 }
             } else {
+                result = false
                 console.error('Ошибка при обновлении токена:', response.status, response.statusText);
             }
         }

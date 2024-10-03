@@ -12,48 +12,16 @@ export class Dashboard {
         this.fromDate = document.getElementById('from-date');
         this.tillDate = document.getElementById('till-date');
 
-        function resizeInput(input) {
-            input.style.width = '41px';
-            const newWidth = Math.max(input.scrollWidth, 41);
-            input.style.width = newWidth + 'px';
-        }
 
-        this.fromDate.addEventListener('input', () => resizeInput(this.fromDate));
-        this.tillDate.addEventListener('input', () => resizeInput(this.tillDate));
+
+        this.fromDate.addEventListener('input', () => this.resizeInput(this.fromDate));
+        this.tillDate.addEventListener('input', () => this.resizeInput(this.tillDate));
 
         this.tillDate.disabled = true;
         this.fromDate.disabled = true;
 
-        resizeInput(this.fromDate);
-        resizeInput(this.tillDate);
-
-        if (this.fromDate) {
-            const fromDate = datepicker(this.fromDate, {
-                customDays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-                customMonths: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-                overlayButton: "Ок",
-                overlayPlaceholder: 'Год',
-                showAllDates: true,
-                onSelect: (instance, date) => {
-                    this.fromDate.value = this.formatDate(date);
-                    resizeInput(this.fromDate);
-                }
-            });
-        }
-        if (this.tillDate) {
-            const tillDate = datepicker(this.tillDate, {
-                customDays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-                customMonths: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-                overlayButton: "Ок",
-                overlayPlaceholder: 'Введите год',
-                showAllDates: true,
-                onSelect: (instance, date) => {
-                    this.tillDate.value = this.formatDate(date);
-                    resizeInput(this.tillDate);
-                }
-            });
-        }
-
+        this.resizeInput(this.fromDate);
+        this.resizeInput(this.tillDate);
 
         this.stylesLayoutCanvas();
 
@@ -63,7 +31,11 @@ export class Dashboard {
 
         this.getOperations().then();
     }
-
+    resizeInput(input) {
+        input.style.width = '41px';
+        const newWidth = Math.max(input.scrollWidth, 41);
+        input.style.width = newWidth + 'px';
+    }
     formatDate(date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -175,6 +147,32 @@ export class Dashboard {
 
         this.intervalDate.addEventListener('click', () => {
             resetButtons();
+            if (this.fromDate) {
+                const fromDate = datepicker(this.fromDate, {
+                    customDays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                    customMonths: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                    overlayButton: "Ок",
+                    overlayPlaceholder: 'Год',
+                    showAllDates: true,
+                    onSelect: (instance, date) => {
+                        this.fromDate.value = this.formatDate(date);
+                        this.resizeInput(this.fromDate);
+                    }
+                });
+            }
+            if (this.tillDate) {
+                const tillDate = datepicker(this.tillDate, {
+                    customDays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                    customMonths: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                    overlayButton: "Ок",
+                    overlayPlaceholder: 'Введите год',
+                    showAllDates: true,
+                    onSelect: (instance, date) => {
+                        this.tillDate.value = this.formatDate(date);
+                        this.resizeInput(this.tillDate);
+                    }
+                });
+            }
             this.intervalDate.classList.add('active');
             this.intervalDate.style.color = 'white';
             this.tillDate.disabled = false;
@@ -209,14 +207,38 @@ export class Dashboard {
         if (result && result.response) {
             if (Array.isArray(result.response)) {
                 const incomeData = result.response.filter(item => item.type === 'income');
-                this.amountIncomeData = incomeData.map(item => item.amount);
-                console.log(this.amountIncomeData)
+                const incomeSummary = this.summarizeByCategory(incomeData);
+                this.categoriesIncomeData = Object.keys(incomeSummary);
+                this.amountIncomeData = Object.values(incomeSummary);
+
+
                 const expenseData = result.response.filter(item => item.type === 'expense');
-                this.amountExpenseData = expenseData.map(item => item.amount);
-                console.log(this.amountExpenseData)
+                const expenseSummary = this.summarizeByCategory(expenseData);
+                this.categoriesExpenseData = Object.keys(expenseSummary); // категории
+                this.amountExpenseData = Object.values(expenseSummary); // соответствующие суммы
             }
             this.createCharts();
         }
+    }
+
+    summarizeByCategory(data) {
+        return data.reduce((acc, item) => {
+            if (acc[item.category]) {
+                acc[item.category] += item.amount; // Суммируем если категория повторяется
+            } else {
+                acc[item.category] = item.amount;
+            }
+            return acc;
+        }, {});
+    }
+
+    getRandomColor() {
+        const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+        return `#${randomColor.padStart(6, '0')}FF`;
+    }
+
+    generateRandomColors(dataLength) {
+        return Array.from({ length: dataLength }, () => this.getRandomColor());
     }
 
     createCharts() {
@@ -317,6 +339,7 @@ export class Dashboard {
         };
         // Создание графиков
         try {
+            const colorsIncomeChart = this.generateRandomColors(this.categoriesIncomeData.length);
             // График доходов
             if (this.incomeCanvas && this.expensesCanvas) {
                 if (this.incomeChart) {
@@ -353,9 +376,9 @@ export class Dashboard {
                 this.incomeChart = new Chart(this.incomeCanvas, {
                     type: 'pie',
                     data: {
-                        labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
+                        labels: this.categoriesIncomeData,
                         datasets: [{
-                            backgroundColor: ["#FF0000FF", "#FF4500FF", "#FFFF00FF", "#008000FF", "#0000FFFF"],
+                            backgroundColor: colorsIncomeChart,
                             data: this.amountIncomeData,
                         }]
                     },
@@ -374,8 +397,11 @@ export class Dashboard {
                 });
 
                 // График расходов
+
+                const colorsExpenseChart = this.generateRandomColors(this.categoriesExpenseData.length);
+
                 if (this.expensesChart) {
-                    this.expensesChart.destroy(); // Уничтожаем предыдущий график расходов, если он существует
+                    this.expensesChart.destroy();
                 }
 
                 this.expensesItem = document.createElement('div');
@@ -412,9 +438,9 @@ export class Dashboard {
                 this.expensesChart = new Chart(this.expensesCanvas, {
                     type: 'pie',
                     data: {
-                        labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
+                        labels: this.categoriesExpenseData,
                         datasets: [{
-                            backgroundColor: ["#FF0000FF", "#FF4500FF", "#FFFF00FF", "#008000FF", "#0000FFFF"],
+                            backgroundColor: colorsExpenseChart,
                             data: this.amountExpenseData,
                         }]
                     },

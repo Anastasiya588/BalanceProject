@@ -7,7 +7,6 @@ export class EditOperations {
         this.openNewRoute = openNewRoute;
 
         this.title = document.getElementById('edit-operations-title')
-        console.log(this.title)
         this.typeSelect = document.getElementById('type-select');
         this.categorySelect = document.getElementById('category-select');
 
@@ -33,36 +32,42 @@ export class EditOperations {
 
         this.stylesLayoutCanvas();
 
+
         FileUtils.showCanvasBalance().then();
-
         this.init().then()
-
-        this.loadInitialData();
 
         this.typeSelect.addEventListener('change', () => {
             localStorage.setItem('operationType', this.typeSelect.value);
-            const operationType = localStorage.getItem('operationType');
-
-            if (operationType === 'income') {
-                this.title.innerText = 'Редактирование дохода'
-            } else if (operationType === 'expense') {
-                this.title.innerText = 'Редактирование расхода'
-            }
+            this.updateTitle();
             this.loadCategories().then();
         });
-
 
         this.editOperations();
     }
 
+    updateTitle() {
+        const operationType = localStorage.getItem('operationType')
+        if (operationType === 'income') {
+            this.title.innerText = 'Редактирование дохода'
+        } else if (operationType === 'expense') {
+            this.title.innerText = 'Редактирование расхода'
+        }
+    }
+
     async init() {
         const result = await HttpUtils.request('/operations/' + this.id)
+
         if (result && result.response) {
             this.typeSelect.value = result.response.type;
+            localStorage.setItem('operationType', this.typeSelect.value);
             this.sumInput.value = result.response.amount;
-            this.categorySelect.value = result.response.category;
             this.dateInputElement.value = result.response.date;
             this.commentInputElement.value = result.response.comment;
+            this.updateTitle();
+            await this.loadCategories();
+
+            this.categorySelect.value = await this.getCategoryIdByTitle(result.response.category);
+
         }
 
     }
@@ -70,8 +75,8 @@ export class EditOperations {
     editOperations() {
         this.editBtn.addEventListener('click', async () => {
             const operationType = this.typeSelect.value;
-            if (this.validateForm() === true) {
-                const categoryId = this.categorySelect.value;
+            if (this.validateForm()) {
+                const categoryId = Number(this.categorySelect.value);
 
                 const result = await HttpUtils.request('/operations/' + this.id, 'PUT', true, {
                     type: operationType,
@@ -80,7 +85,6 @@ export class EditOperations {
                     comment: this.commentInputElement.value,
                     category_id: categoryId
                 })
-
                 this.openNewRoute('/operations');
                 this.sumInput.value = '';
                 this.dateInputElement.value = '';
@@ -95,21 +99,6 @@ export class EditOperations {
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
-    }
-
-    loadInitialData() {
-        const operationType = localStorage.getItem('operationType');
-        console.log(operationType)
-        if (operationType === 'income') {
-            this.title.innerText = 'Редактирование дохода'
-        } else if (operationType === 'expense') {
-            this.title.innerText = 'Редактирование расхода'
-        }
-
-        if (operationType && this.typeSelect) {
-            this.typeSelect.value = operationType;
-            this.loadCategories().then();
-        }
     }
 
     async loadCategories() {
@@ -139,6 +128,12 @@ export class EditOperations {
             option.value = cat.id;
             this.categorySelect.appendChild(option);
         }
+    }
+
+    async getCategoryIdByTitle(title) {
+        const options = Array.from(this.categorySelect.options);
+        const selectedOption = options.find(option => option.innerText === title);
+        return selectedOption ? selectedOption.value : null;
     }
 
     validateForm() {

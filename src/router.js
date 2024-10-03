@@ -267,7 +267,6 @@ export class Router {
                 newRoute.load();
             }
         } else {
-            console.log('No route found')
             history.pushState({}, '', '/404');
             await this.activateRoute();
         }
@@ -280,7 +279,6 @@ export class Router {
             if (result) {
                 this.balance = document.querySelectorAll('.balance-number');
                 if (this.balance.length === 0) {
-                    console.error('No elements found with class .balance-number');
                     return;
                 }
 

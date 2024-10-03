@@ -1,5 +1,5 @@
 import {FileUtils} from "../../utils/file-utils.js";
-import {HttpUtils} from "../../utils/http-utils";
+import {HttpUtils} from "../../utils/http-utils.js";
 import datepicker from "js-datepicker";
 
 
@@ -13,47 +13,15 @@ export class Operations {
         this.fromDate = document.getElementById('from-date');
         this.tillDate = document.getElementById('till-date');
 
-        function resizeInput(input) {
-            input.style.width = '41px';
-            const newWidth = Math.max(input.scrollWidth, 41);
-            input.style.width = newWidth + 'px';
-        }
 
-        this.fromDate.addEventListener('input', () => resizeInput(this.fromDate));
-        this.tillDate.addEventListener('input', () => resizeInput(this.tillDate));
+        this.fromDate.addEventListener('input', () => this.resizeInput(this.fromDate));
+        this.tillDate.addEventListener('input', () => this.resizeInput(this.tillDate));
 
         this.tillDate.disabled = true;
         this.fromDate.disabled = true;
 
-        resizeInput(this.fromDate);
-        resizeInput(this.tillDate);
-
-        if (this.fromDate) {
-            const fromDate = datepicker(this.fromDate, {
-                customDays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-                customMonths: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-                overlayButton: "Ок",
-                overlayPlaceholder: 'Год',
-                showAllDates: true,
-                onSelect: (instance, date) => {
-                    this.fromDate.value = this.formatDate(date);
-                    resizeInput(this.fromDate);
-                }
-            });
-        }
-        if (this.tillDate) {
-            const tillDate = datepicker(this.tillDate, {
-                customDays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-                customMonths: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-                overlayButton: "Ок",
-                overlayPlaceholder: 'Введите год',
-                showAllDates: true,
-                onSelect: (instance, date) => {
-                    this.tillDate.value = this.formatDate(date);
-                    resizeInput(this.tillDate);
-                }
-            });
-        }
+        this.resizeInput(this.fromDate);
+        this.resizeInput(this.tillDate);
 
 
         this.stylesLayoutCanvas();
@@ -64,6 +32,12 @@ export class Operations {
 
         this.createFilter();
         this.createTable().then();
+    }
+
+    resizeInput(input) {
+        input.style.width = '41px';
+        const newWidth = Math.max(input.scrollWidth, 41);
+        input.style.width = newWidth + 'px';
     }
 
     formatDate(date) {
@@ -180,6 +154,32 @@ export class Operations {
 
         this.intervalDate.addEventListener('click', () => {
             resetButtons();
+            if (this.fromDate) {
+                const fromDate = datepicker(this.fromDate, {
+                    customDays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                    customMonths: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                    overlayButton: "Ок",
+                    overlayPlaceholder: 'Год',
+                    showAllDates: true,
+                    onSelect: (instance, date) => {
+                        this.fromDate.value = this.formatDate(date);
+                        this.resizeInput(this.fromDate);
+                    }
+                });
+            }
+            if (this.tillDate) {
+                const tillDate = datepicker(this.tillDate, {
+                    customDays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                    customMonths: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                    overlayButton: "Ок",
+                    overlayPlaceholder: 'Введите год',
+                    showAllDates: true,
+                    onSelect: (instance, date) => {
+                        this.tillDate.value = this.formatDate(date);
+                        this.resizeInput(this.tillDate);
+                    }
+                });
+            }
             this.intervalDate.classList.add('active');
             this.intervalDate.style.color = 'white';
             this.tillDate.disabled = false;
@@ -226,13 +226,15 @@ export class Operations {
 
                 let tableTdTypeElement = document.createElement("td");
                 tableTdTypeElement.classList = "p-3 text-success td-type";
-                tableTdTypeElement.innerText = result.response[i].type;
+
                 if (result.response[i].type === 'income') {
                     tableTdTypeElement.classList.remove('text-danger');
                     tableTdTypeElement.classList.add('text-success');
+                    tableTdTypeElement.innerText = "доход";
                 } else if (result.response[i].type === 'expense') {
                     tableTdTypeElement.classList.remove('text-success');
                     tableTdTypeElement.classList.add('text-danger');
+                    tableTdTypeElement.innerText = "расход";
                 }
 
                 let tableTdCategoryElement = document.createElement("td");

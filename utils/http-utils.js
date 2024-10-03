@@ -54,7 +54,7 @@ export class HttpUtils {
             result.response = await response.json();
         } catch {
             result.error = true;
-            return;
+            return result;
         }
 
         try {
@@ -62,18 +62,20 @@ export class HttpUtils {
                 result.error = true;
 
                 if (useAuth && response.status === 401) {
-                    result.error = true;
-                        if (!accessToken) {
-                            result.redirect = '/login'; // Токена нет
+                    if (!accessToken) {
+                        result.error = true;
+                        result.redirect = '/login'; // Токена нет
+                        return result
+                    } else {
+                        // Токен устарел или невалиден, необходимо обновить
+                        const updateTokenResult = await AuthUtils.updateRefreshToken();
+                        if (updateTokenResult) {
+                            //запрос повторно
+                            return this.request(url, method, useAuth, body, period, dateFrom, dateTo);
                         } else {
-                            // Токен устарел или невалиден, необходимо обновить
-                            const updateTokenResult = await AuthUtils.updateRefreshToken();
-                            if (updateTokenResult) {
-                                return this.request(fullUrl, method, useAuth, body, period, dateFrom, dateTo);
-                            } else {
-                                result.redirect = '/login'; // Если обновление токена не удалось
-                            }
+                            result.redirect = '/login';
                         }
+                    }
                 }
             }
         } catch (e) {
