@@ -53,12 +53,14 @@ export class HttpUtils {
             //Получение ответа
             result.response = await response.json();
         } catch {
+            console.error('Fetch error:', error);
             result.error = true;
             return result;
         }
 
         try {
             if (response.status < 200 || response.status >= 300) {
+                console.error('Error status:', response.status);
                 result.error = true;
 
                 if (useAuth && response.status === 401) {
@@ -69,6 +71,8 @@ export class HttpUtils {
                     } else {
                         // Токен устарел или невалиден, необходимо обновить
                         const updateTokenResult = await AuthUtils.updateRefreshToken();
+                        console.log(updateTokenResult)
+                        console.log('Token update result:', updateTokenResult);
                         if (updateTokenResult) {
                             //запрос повторно
                             return this.request(url, method, useAuth, body, period, dateFrom, dateTo);

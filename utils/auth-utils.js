@@ -49,17 +49,39 @@ export class AuthUtils {
     }
 
     static async updateRefreshToken() {
+        // const refreshToken = this.getAuthInfo(this.refreshTokenKey);
+        //
+        // if (!refreshToken) {
+        //     return {error: true, message: 'Refresh token is missing'};
+        // }
+        //
+        // const response = await HttpUtils.request('/refresh', 'POST', false, {
+        //     refreshToken: refreshToken,
+        // })
+        //
+        // if (response.error) {
+        //     return response;
+        // }
+        //
+        // if (response.response && response.response.tokens.accessToken && response.response.tokens.refreshToken) {
+        //     this.setTokens(response.response.tokens.accessToken, response.response.tokens.refreshToken);
+        //     return {error: false};
+        // }
+        //
+        // return {error: true, message: 'Failed to refresh token'};
         let result = null;
         const refreshToken = this.getAuthInfo(this.refreshTokenKey);
+        console.log(refreshToken)
         if (refreshToken) {
             const response = await HttpUtils.request('/refresh', 'POST', false, {
                 refreshToken: refreshToken,
             })
-
-            if (response && response.status === 200) {
-                const tokens = await response.json();
-                if (tokens && !tokens.error) {
-                    this.setTokens(tokens.accessToken, tokens.refreshToken)
+            console.log(response)
+            if (response && response.response) {
+                // const tokens = await response.json();
+                console.log(response.response)
+                if (response.response.tokens) {
+                    this.setTokens(response.response.tokens.accessToken, response.response.tokens.refreshToken)
                     result = true;
                 }
             } else {
@@ -68,10 +90,10 @@ export class AuthUtils {
             }
         }
 
-        if (!result) {
-            console.error('Удаление некорректных токенов.');
-            this.removeAuthInfo();
-        }
+        // if (!result) {
+        //     console.error('Удаление некорректных токенов.');
+        //     this.removeAuthInfo();
+        // }
         return result;
     }
 }

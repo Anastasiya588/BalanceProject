@@ -26,7 +26,10 @@ export class Operations {
 
         this.stylesLayoutCanvas();
 
+
+        FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
+        FileUtils.showBalance().then();
 
         this.editOperation();
 
@@ -60,7 +63,7 @@ export class Operations {
         });
     }
 
-    createFilter() {
+   async createFilter() {
         this.todayDate = document.getElementById('filter-today');
         this.weekDate = document.getElementById('filter-week');
         this.monthDate = document.getElementById('filter-month');
@@ -355,6 +358,7 @@ export class Operations {
             }
             this.popup.classList.remove('d-flex');
             this.popup.classList.add('d-none');
+            FileUtils.updateBalance().then();
         };
 
         // Обработка отказа от удаления

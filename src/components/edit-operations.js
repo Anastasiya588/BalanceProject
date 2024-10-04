@@ -32,8 +32,9 @@ export class EditOperations {
 
         this.stylesLayoutCanvas();
 
-
+        FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
+        FileUtils.showBalance().then();
         this.init().then()
 
         this.typeSelect.addEventListener('change', () => {
@@ -85,12 +86,14 @@ export class EditOperations {
                     comment: this.commentInputElement.value,
                     category_id: categoryId
                 })
+
                 this.openNewRoute('/operations');
                 this.sumInput.value = '';
                 this.dateInputElement.value = '';
                 this.commentInputElement.value = '';
             }
 
+            FileUtils.updateBalance().then();
         })
     }
 

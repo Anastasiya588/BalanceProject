@@ -13,6 +13,7 @@ import {EditOperations} from "./components/edit-operations.js";
 import {Logout} from "./components/logout.js";
 import {AuthUtils} from "../utils/auth-utils.js";
 import {HttpUtils} from "../utils/http-utils.js";
+import {FileUtils} from "../utils/file-utils";
 
 const feather = require('feather-icons');
 
@@ -258,7 +259,6 @@ export class Router {
                 if (newRoute.useLayout) {
                     this.contentPageElement.innerHTML = await fetch(newRoute.useLayout).then(response => response.text());
                     contentBlock = document.getElementById('content-layout');
-                    this.showBalance().then()
                 }
                 //запрос на получение страницы
                 contentBlock.innerHTML = await fetch(newRoute.filePathTemplate).then(response => response.text());
@@ -272,28 +272,7 @@ export class Router {
         }
     }
 
-    async showBalance() {
-        try {
-            const result = await HttpUtils.request('/balance');
 
-            if (result) {
-                this.balance = document.querySelectorAll('.balance-number');
-                if (this.balance.length === 0) {
-                    return;
-                }
-
-                const balanceValue = result.response.balance;
-                if (typeof balanceValue === 'number') {
-                    this.balance.forEach((elem) => {
-                        elem.innerText = balanceValue;
-                    });
-
-                }
-            }
-        } catch (error) {
-            console.error('Error fetching the balance:', error);
-        }
-    }
 }
 
 

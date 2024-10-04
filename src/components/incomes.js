@@ -7,7 +7,10 @@ export class Incomes {
 
         this.stylesLayoutCanvas();
 
+
+        FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
+        FileUtils.showBalance().then();
 
         this.cards = document.querySelector('.cards')
         this.cardAddIncome = document.getElementById('card-add-income');

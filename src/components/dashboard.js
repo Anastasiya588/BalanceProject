@@ -13,7 +13,6 @@ export class Dashboard {
         this.tillDate = document.getElementById('till-date');
 
 
-
         this.fromDate.addEventListener('input', () => this.resizeInput(this.fromDate));
         this.tillDate.addEventListener('input', () => this.resizeInput(this.tillDate));
 
@@ -25,17 +24,21 @@ export class Dashboard {
 
         this.stylesLayoutCanvas();
 
+        FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
+        FileUtils.showBalance().then();
 
         this.createFilter();
 
         this.getOperations().then();
     }
+
     resizeInput(input) {
         input.style.width = '41px';
         const newWidth = Math.max(input.scrollWidth, 41);
         input.style.width = newWidth + 'px';
     }
+
     formatDate(date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -238,7 +241,7 @@ export class Dashboard {
     }
 
     generateRandomColors(dataLength) {
-        return Array.from({ length: dataLength }, () => this.getRandomColor());
+        return Array.from({length: dataLength}, () => this.getRandomColor());
     }
 
     createCharts() {
@@ -249,6 +252,7 @@ export class Dashboard {
             }
         };
         // Создаем контейнер для заголовка доходов, если он отсутствует
+
         this.titleIncomeContainer = document.getElementById('income-title-container');
         if (!this.titleIncomeContainer) {
             this.titleIncomeContainer = document.createElement('div');
@@ -257,6 +261,7 @@ export class Dashboard {
             this.titleIncomeContainer.className = 'title-container';
             document.querySelector('.pie-item:nth-child(1)').appendChild(this.titleIncomeContainer); // или нужный вам родительский элемент
         }
+
 
         // Создаем контейнер для заголовка расходов, если он отсутствует
         this.titleExpenseContainer = document.getElementById('expense-title-container');
@@ -299,6 +304,7 @@ export class Dashboard {
                     li.style.display = 'flex';
                     li.style.flexDirection = 'row';
                     li.style.margin = '0 15px 0 0';
+                    li.style.padding = '0 0 0 0';
                     // Добавляем стиль только для последнего элемента
                     if (index === items.length - 1) {
                         li.style.margin = 0;
@@ -397,7 +403,6 @@ export class Dashboard {
                 });
 
                 // График расходов
-
                 const colorsExpenseChart = this.generateRandomColors(this.categoriesExpenseData.length);
 
                 if (this.expensesChart) {
@@ -457,6 +462,7 @@ export class Dashboard {
                     },
                     plugins: [htmlLegendPlugin],
                 });
+
             } else {
                 console.error('Элементы canvas не найдены');
             }

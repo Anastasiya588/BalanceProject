@@ -9,7 +9,10 @@ export class CreateExpenses {
         this.saveBtn = document.getElementById('saveBtn');
 
         this.stylesLayoutCanvas();
+
+        FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
+        FileUtils.showBalance().then();
 
         this.createExpense().then()
     }

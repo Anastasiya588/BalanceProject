@@ -15,7 +15,10 @@ export class EditIncomes {
 
         this.stylesLayoutCanvas();
 
+
+        FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
+        FileUtils.showBalance().then();
 
         this.editIncome().then();
     }

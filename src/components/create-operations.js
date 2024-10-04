@@ -32,7 +32,10 @@ export class CreateOperations {
 
         this.stylesLayoutCanvas();
 
+
+        FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
+        FileUtils.showBalance().then();
 
         this.loadInitialData();
 
@@ -146,6 +149,7 @@ export class CreateOperations {
                 this.commentInputElement.value = '';
             }
 
+            FileUtils.updateBalance().then();
         })
     }
 
