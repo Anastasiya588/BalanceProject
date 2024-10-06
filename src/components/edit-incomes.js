@@ -19,6 +19,7 @@ export class EditIncomes {
         FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
         FileUtils.showBalance().then();
+        FileUtils.showName();
 
         this.editIncome().then();
     }

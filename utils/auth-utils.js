@@ -1,5 +1,5 @@
 import config from "../src/config/config.js";
-import {HttpUtils} from "./http-utils";
+import {HttpUtils} from "./http-utils.js";
 
 export class AuthUtils {
     static accessTokenKey = 'accessToken';
@@ -22,7 +22,11 @@ export class AuthUtils {
     }
 
     static getAuthInfo(key = null) {
-        if (key && [this.accessTokenKey, this.refreshTokenKey, this.userInfoKey].includes(key)) {
+        if (key === this.userInfoKey) {
+            const userInfoString = localStorage.getItem(this.userInfoKey);
+            return userInfoString ? JSON.parse(userInfoString) : null; // Преобразуем JSON-строку в объект
+        }
+        if (key && [this.accessTokenKey, this.refreshTokenKey].includes(key)) {
             return localStorage.getItem(key)
         } else {
             return {
@@ -31,12 +35,6 @@ export class AuthUtils {
                 [this.userInfoKey]: localStorage.getItem(this.userInfoKey)
             }
         }
-    }
-
-    static removeAuthInfo() {
-        localStorage.removeItem(this.accessTokenKey);
-        localStorage.removeItem(this.refreshTokenKey);
-        localStorage.removeItem(this.userInfoKey);
     }
 
     static removeUserInfo() {
@@ -49,51 +47,23 @@ export class AuthUtils {
     }
 
     static async updateRefreshToken() {
-        // const refreshToken = this.getAuthInfo(this.refreshTokenKey);
-        //
-        // if (!refreshToken) {
-        //     return {error: true, message: 'Refresh token is missing'};
-        // }
-        //
-        // const response = await HttpUtils.request('/refresh', 'POST', false, {
-        //     refreshToken: refreshToken,
-        // })
-        //
-        // if (response.error) {
-        //     return response;
-        // }
-        //
-        // if (response.response && response.response.tokens.accessToken && response.response.tokens.refreshToken) {
-        //     this.setTokens(response.response.tokens.accessToken, response.response.tokens.refreshToken);
-        //     return {error: false};
-        // }
-        //
-        // return {error: true, message: 'Failed to refresh token'};
         let result = null;
         const refreshToken = this.getAuthInfo(this.refreshTokenKey);
-        console.log(refreshToken)
+        console.log('Refresh Token:', refreshToken);
         if (refreshToken) {
             const response = await HttpUtils.request('/refresh', 'POST', false, {
                 refreshToken: refreshToken,
             })
-            console.log(response)
-            if (response && response.response) {
-                // const tokens = await response.json();
-                console.log(response.response)
-                if (response.response.tokens) {
+            if (response && !response.error && response.response.tokens) {
                     this.setTokens(response.response.tokens.accessToken, response.response.tokens.refreshToken)
                     result = true;
-                }
+                return result
             } else {
                 result = false
                 console.error('Ошибка при обновлении токена:', response.status, response.statusText);
             }
         }
 
-        // if (!result) {
-        //     console.error('Удаление некорректных токенов.');
-        //     this.removeAuthInfo();
-        // }
         return result;
     }
 }

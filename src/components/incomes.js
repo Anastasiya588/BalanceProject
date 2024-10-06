@@ -11,6 +11,7 @@ export class Incomes {
         FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
         FileUtils.showBalance().then();
+        FileUtils.showName();
 
         this.cards = document.querySelector('.cards')
         this.cardAddIncome = document.getElementById('card-add-income');

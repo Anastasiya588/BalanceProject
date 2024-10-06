@@ -1,18 +1,32 @@
 import {HttpUtils} from "./http-utils.js";
+import {AuthUtils} from "./auth-utils.js";
 
 export class FileUtils {
+    static showName() {
+        this.userName = document.getElementById('userName');
+        this.offcanvasUserName = document.getElementById('offcanvasUserName');
+        let userInfo = AuthUtils.getAuthInfo(AuthUtils.userInfoKey);
+        if (userInfo) {
+            const fullName = `${userInfo.name} ${userInfo.lastName}`;
+            this.userName.innerText = fullName;
+            this.userName.overflowWrap = 'break-word'
+            this.offcanvasUserName.innerText = fullName
+        }
+
+    }
+
     static async showCanvasBalance() {
         try {
+            const offcanvasBalanceElement = document.getElementById('offcanvas-balance-number');
+            offcanvasBalanceElement.innerText = 0;
             // Выполняем запрос на получение баланса
             const result = await HttpUtils.request('/balance');
 
-            // Проверяем, есть ли поле balance и является ли оно числом
-            if (result && result.response && typeof result.response.balance === 'number') {
+            if (result && result.response && result.response.balance) {
                 const balanceValue = result.response.balance;
 
                 const offcanvasElement = document.getElementById('menuRight');
                 offcanvasElement.addEventListener('shown.bs.offcanvas', () => {
-                    const offcanvasBalanceElement = document.getElementById('offcanvas-balance-number');
                     return offcanvasBalanceElement.innerText = balanceValue;
                 });
             } else {
@@ -26,18 +40,20 @@ export class FileUtils {
 
     static async showBalance() {
         try {
-            const result = await HttpUtils.request('/balance');
+            this.updateBalance().then()
+            this.balance = document.querySelectorAll('.balance-number');
 
+            const result = await HttpUtils.request('/balance');
+            this.balance.forEach((elem) => {
+                elem.innerText = 0;
+            });
             if (result) {
-                this.balance = document.querySelectorAll('.balance-number');
                 if (this.balance.length === 0) {
                     return;
                 }
-                console.log('Balance Response:', result);
-
                 const balanceValue = result.response.balance;
 
-                if (typeof balanceValue === 'number') {
+                if (balanceValue) {
                     this.balance.forEach((elem) => {
                         elem.innerText = balanceValue;
                     });
@@ -52,19 +68,18 @@ export class FileUtils {
     static async updateBalance() {
         const result = await HttpUtils.request('/operations', 'GET', true, null, 'all')
         let sum = 0;
-        console.log(result)
         if (result) {
+            console.log(result)
             if (Array.isArray(result.response)) {
                 sum = result.response.reduce((acc, operation) => {
+                    const amount = Number(operation.amount); // Преобразуем в число
                     if (operation.type === 'expense') {
-                        return acc - operation.amount;
+                        return acc - amount;
                     } else if (operation.type === 'income') {
-                        return acc + operation.amount;
+                        return acc + amount;
                     }
                     return acc;
                 }, 0);
-            } else {
-                console.error('Результат не является массивом');
             }
             console.log(sum)
             return sum;
@@ -72,13 +87,9 @@ export class FileUtils {
 
         try {
             const result = await HttpUtils.request('/balance', 'PUT', true, {
-                "newBalance": sum
+                "newBalance": Number(sum)
             });
 
-            if (result) {
-                this.finalBalance = result.balance;
-               return this.finalBalance
-            }
         } catch (error) {
             console.error('Error fetching the balance:', error);
         }

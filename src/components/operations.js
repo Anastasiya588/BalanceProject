@@ -30,6 +30,7 @@ export class Operations {
         FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
         FileUtils.showBalance().then();
+        FileUtils.showName();
 
         this.editOperation();
 
@@ -358,7 +359,10 @@ export class Operations {
             }
             this.popup.classList.remove('d-flex');
             this.popup.classList.add('d-none');
+
             FileUtils.updateBalance().then();
+            FileUtils.showCanvasBalance().then();
+            FileUtils.showBalance().then();
         };
 
         // Обработка отказа от удаления

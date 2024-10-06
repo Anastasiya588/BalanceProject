@@ -8,6 +8,10 @@ export class Dashboard {
     constructor() {
         this.incomeCanvas = document.getElementById('pie-chart-income');
         this.expensesCanvas = document.getElementById('pie-chart-expenses');
+        this.line = document.getElementById('line');
+        this.incomePie = document.getElementById('income-pie');
+        this.expensePie = document.getElementById('expense-pie');
+
 
         this.fromDate = document.getElementById('from-date');
         this.tillDate = document.getElementById('till-date');
@@ -27,6 +31,7 @@ export class Dashboard {
         FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
         FileUtils.showBalance().then();
+        FileUtils.showName();
 
         this.createFilter();
 
@@ -65,8 +70,16 @@ export class Dashboard {
 
         this.todayDate.addEventListener('click', () => {
             resetButtons();
-            this.clearExistingTitles(this.titleIncomeContainer);
-            this.clearExistingTitles(this.titleExpenseContainer);
+            if (this.titleIncomeContainer) {
+                this.clearExistingTitles(this.titleIncomeContainer);
+            } else {
+                console.warn('titleIncomeContainer не найден');
+            }
+            if (this.titleExpenseContainer) {
+                this.clearExistingTitles(this.titleExpenseContainer);
+            } else {
+                console.warn('titleExpenseContainer не найден');
+            }
             this.todayDate.classList.add('active');
             this.todayDate.style.color = 'white';
             this.tillDate.disabled = true;
@@ -82,8 +95,16 @@ export class Dashboard {
 
         this.weekDate.addEventListener('click', () => {
             resetButtons();
-            this.clearExistingTitles(this.titleIncomeContainer);
-            this.clearExistingTitles(this.titleExpenseContainer);
+            if (this.titleIncomeContainer) {
+                this.clearExistingTitles(this.titleIncomeContainer);
+            } else {
+                console.warn('titleIncomeContainer не найден');
+            }
+            if (this.titleExpenseContainer) {
+                this.clearExistingTitles(this.titleExpenseContainer);
+            } else {
+                console.warn('titleExpenseContainer не найден');
+            }
             this.weekDate.classList.add('active');
             this.weekDate.style.color = 'white';
             this.tillDate.disabled = true;
@@ -99,8 +120,16 @@ export class Dashboard {
 
         this.monthDate.addEventListener('click', () => {
             resetButtons();
-            this.clearExistingTitles(this.titleIncomeContainer);
-            this.clearExistingTitles(this.titleExpenseContainer);
+            if (this.titleIncomeContainer) {
+                this.clearExistingTitles(this.titleIncomeContainer);
+            } else {
+                console.warn('titleIncomeContainer не найден');
+            }
+            if (this.titleExpenseContainer) {
+                this.clearExistingTitles(this.titleExpenseContainer);
+            } else {
+                console.warn('titleExpenseContainer не найден');
+            }
             this.monthDate.classList.add('active');
             this.monthDate.style.color = 'white';
             this.tillDate.disabled = true;
@@ -116,8 +145,16 @@ export class Dashboard {
 
         this.yearDate.addEventListener('click', () => {
             resetButtons();
-            this.clearExistingTitles(this.titleIncomeContainer);
-            this.clearExistingTitles(this.titleExpenseContainer);
+            if (this.titleIncomeContainer) {
+                this.clearExistingTitles(this.titleIncomeContainer);
+            } else {
+                console.warn('titleIncomeContainer не найден');
+            }
+            if (this.titleExpenseContainer) {
+                this.clearExistingTitles(this.titleExpenseContainer);
+            } else {
+                console.warn('titleExpenseContainer не найден');
+            }
             this.yearDate.classList.add('active');
             this.yearDate.style.color = 'white';
             this.tillDate.disabled = true;
@@ -133,8 +170,16 @@ export class Dashboard {
 
         this.allDate.addEventListener('click', () => {
             resetButtons();
-            this.clearExistingTitles(this.titleIncomeContainer);
-            this.clearExistingTitles(this.titleExpenseContainer);
+            if (this.titleIncomeContainer) {
+                this.clearExistingTitles(this.titleIncomeContainer);
+            } else {
+                console.warn('titleIncomeContainer не найден');
+            }
+            if (this.titleExpenseContainer) {
+                this.clearExistingTitles(this.titleExpenseContainer);
+            } else {
+                console.warn('titleExpenseContainer не найден');
+            }
             this.allDate.classList.add('active');
             this.allDate.style.color = 'white';
             this.tillDate.disabled = true;
@@ -189,8 +234,16 @@ export class Dashboard {
                 this.dateTo = this.tillDate.value;
                 if (this.dateFrom && this.dateTo) {
                     this.getOperations().then();
-                    this.clearExistingTitles(this.titleIncomeContainer);
-                    this.clearExistingTitles(this.titleExpenseContainer);
+                    if (this.titleIncomeContainer) {
+                        this.clearExistingTitles(this.titleIncomeContainer);
+                    } else {
+                        console.warn('titleIncomeContainer не найден');
+                    }
+                    if (this.titleExpenseContainer) {
+                        this.clearExistingTitles(this.titleExpenseContainer);
+                    } else {
+                        console.warn('titleExpenseContainer не найден');
+                    }
                 }
             };
 
@@ -227,7 +280,7 @@ export class Dashboard {
     summarizeByCategory(data) {
         return data.reduce((acc, item) => {
             if (acc[item.category]) {
-                acc[item.category] += item.amount; // Суммируем если категория повторяется
+                acc[item.category] += item.amount; // Суммируем, если категория повторяется
             } else {
                 acc[item.category] = item.amount;
             }
@@ -247,30 +300,14 @@ export class Dashboard {
     createCharts() {
         this.clearExistingTitles = (container) => {
             const existingTitle = container.querySelector('.pi-title');
+            if (!container) {
+                console.warn('Контейнер не найден для очистки заголовков');
+                return;
+            }
             if (existingTitle) {
                 existingTitle.remove();
             }
         };
-        // Создаем контейнер для заголовка доходов, если он отсутствует
-
-        this.titleIncomeContainer = document.getElementById('income-title-container');
-        if (!this.titleIncomeContainer) {
-            this.titleIncomeContainer = document.createElement('div');
-            this.titleIncomeContainer.id = 'income-title-container';
-            // Вы можете добавить CSS-класс для стилизации, если это необходимо
-            this.titleIncomeContainer.className = 'title-container';
-            document.querySelector('.pie-item:nth-child(1)').appendChild(this.titleIncomeContainer); // или нужный вам родительский элемент
-        }
-
-
-        // Создаем контейнер для заголовка расходов, если он отсутствует
-        this.titleExpenseContainer = document.getElementById('expense-title-container');
-        if (!this.titleExpenseContainer) {
-            this.titleExpenseContainer = document.createElement('div');
-            this.titleExpenseContainer.id = 'expense-title-container';
-            this.titleExpenseContainer.className = 'title-container';
-            document.querySelector('.pie-item:nth-child(3)').appendChild(this.titleExpenseContainer); // или нужный вам родительский элемент
-        }
 
         const getOrCreateLegendList = (chart, id) => {
             const legendContainer = document.getElementById(id);
@@ -346,10 +383,20 @@ export class Dashboard {
         // Создание графиков
         try {
             const colorsIncomeChart = this.generateRandomColors(this.categoriesIncomeData.length);
+
             // График доходов
             if (this.incomeCanvas && this.expensesCanvas) {
                 if (this.incomeChart) {
                     this.incomeChart.destroy();
+                }
+
+                // Создаем контейнер для заголовка доходов, если он отсутствует
+                this.titleIncomeContainer = document.getElementById('income-title-container');
+                if (!this.titleIncomeContainer) {
+                    this.titleIncomeContainer = document.createElement('div');
+                    this.titleIncomeContainer.id = 'income-title-container';
+                    this.titleIncomeContainer.className = 'title-container';
+                    this.incomePie.appendChild(this.titleIncomeContainer);
                 }
 
                 this.incomeItem = document.createElement('div');
@@ -359,6 +406,7 @@ export class Dashboard {
                 }
 
                 this.incomeTitle = this.incomeItem.querySelector('.pi-title');
+
                 if (!this.incomeTitle) {
                     this.incomeTitle = document.createElement('h2');
                     this.incomeTitle.className = 'pi-title m-0';
@@ -366,9 +414,10 @@ export class Dashboard {
                     this.titleIncomeContainer.appendChild(this.incomeTitle);
                 } else {
                     this.clearExistingTitles(this.titleIncomeContainer);
-                    // Если заголовок существует, просто обновите текст
+                    // Если заголовок существует, обновляем текст
                     this.incomeTitle.textContent = 'Доходы';
                 }
+
 
                 const incomeLegendContainer = document.createElement('div');
                 incomeLegendContainer.id = 'legend-income-container';
@@ -376,9 +425,10 @@ export class Dashboard {
 
                 this.incomeItem.appendChild(this.incomeCanvas);
 
-                const incomePieItem = document.querySelector('.pie-item:nth-child(1)');
-                incomePieItem.appendChild(this.incomeItem);
+                this.incomePie.appendChild(this.incomeItem);
 
+
+                this.incomeCanvas.style.display = ""
                 this.incomeChart = new Chart(this.incomeCanvas, {
                     type: 'pie',
                     data: {
@@ -402,11 +452,23 @@ export class Dashboard {
                     plugins: [htmlLegendPlugin],
                 });
 
-                // График расходов
-                const colorsExpenseChart = this.generateRandomColors(this.categoriesExpenseData.length);
 
                 if (this.expensesChart) {
                     this.expensesChart.destroy();
+                }
+
+
+                // График расходов
+                const colorsExpenseChart = this.generateRandomColors(this.categoriesExpenseData.length);
+
+
+                // Создаем контейнер для заголовка расходов, если он отсутствует
+                this.titleExpenseContainer = document.getElementById('expense-title-container');
+                if (!this.titleExpenseContainer) {
+                    this.titleExpenseContainer = document.createElement('div');
+                    this.titleExpenseContainer.id = 'expense-title-container';
+                    this.titleExpenseContainer.className = 'title-container';
+                    this.expensePie.appendChild(this.titleExpenseContainer);
                 }
 
                 this.expensesItem = document.createElement('div');
@@ -421,7 +483,7 @@ export class Dashboard {
                     this.titleExpenseContainer.appendChild(this.expenseTitle);
                 } else {
                     this.clearExistingTitles(this.titleExpenseContainer);
-                    // Если заголовок существует, обновите текст
+                    // Если заголовок существует, обновляем текст
                     this.expenseTitle.textContent = 'Расходы';
                 }
 
@@ -435,8 +497,7 @@ export class Dashboard {
 
                 this.expensesItem.appendChild(this.expensesCanvas);
 
-                const expensesPieItem = document.querySelector('.pie-item:nth-child(3)');
-                expensesPieItem.appendChild(this.expensesItem);
+                this.expensePie.appendChild(this.expensesItem);
 
 
                 // График расходов
@@ -462,10 +523,10 @@ export class Dashboard {
                     },
                     plugins: [htmlLegendPlugin],
                 });
-
             } else {
-                console.error('Элементы canvas не найдены');
+                this.expensePie.style.display = "none"
             }
+
         } catch (error) {
             console.error('Ошибка при создании графика:', error);
         }

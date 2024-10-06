@@ -13,6 +13,7 @@ export class CreateIncomes {
         FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
         FileUtils.showBalance().then();
+        FileUtils.showName();
 
         this.createIncome().then()
     }

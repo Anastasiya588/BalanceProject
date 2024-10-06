@@ -1,5 +1,6 @@
 import config from "../src/config/config.js";
 import {AuthUtils} from "./auth-utils.js";
+import {FileUtils} from "./file-utils";
 
 export class HttpUtils {
     static async request(url, method = "GET", useAuth = true, body = null, period = null, dateFrom = null, dateTo = null) {
@@ -45,14 +46,13 @@ export class HttpUtils {
         // Создаем полный URL с параметрами
         const fullUrl = `${config.api}${url}?${queryParams.toString()}`;
 
-
         let response = null;
 
         try {
             response = await fetch(fullUrl, params);
             //Получение ответа
-            result.response = await response.json();
-        } catch {
+                result.response = await response.json();
+        } catch(error) {
             console.error('Fetch error:', error);
             result.error = true;
             return result;
@@ -60,7 +60,6 @@ export class HttpUtils {
 
         try {
             if (response.status < 200 || response.status >= 300) {
-                console.error('Error status:', response.status);
                 result.error = true;
 
                 if (useAuth && response.status === 401) {
@@ -71,9 +70,9 @@ export class HttpUtils {
                     } else {
                         // Токен устарел или невалиден, необходимо обновить
                         const updateTokenResult = await AuthUtils.updateRefreshToken();
-                        console.log(updateTokenResult)
-                        console.log('Token update result:', updateTokenResult);
                         if (updateTokenResult) {
+                            const refreshToken = AuthUtils.getAuthInfo(AuthUtils.refreshTokenKey);
+                            const accessToken = AuthUtils.getAuthInfo(AuthUtils.accessTokenKey);
                             //запрос повторно
                             return this.request(url, method, useAuth, body, period, dateFrom, dateTo);
                         } else {

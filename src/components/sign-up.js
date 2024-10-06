@@ -88,7 +88,6 @@ export class SignUp {
             const email = this.fields.find(item => item.name === 'email').element.value;
             const password = this.fields.find(item => item.name === 'password').element.value;
             const passwordRepeat = this.fields.find(item => item.name === 'repeatPassword').element.value;
-            // request (Ответ)
 
             const result = await HttpUtils.request('/signup', "POST", false, {
                 name: name,
@@ -111,6 +110,18 @@ export class SignUp {
                 lastName: result.response.user.lastName,
                 email: result.response.user.email,
             })
+
+            const loginResult = await HttpUtils.request('/login', "POST", false, {
+                email: email,
+                password: password
+            });
+            if (loginResult.error || !loginResult.response) {
+                this.commonErrorElement.style.display = 'block';
+                return;
+            }
+
+            AuthUtils.setAuthInfo(loginResult.response.tokens.accessToken, loginResult.response.tokens.refreshToken, loginResult.response.user);
+
             //Перевод пользователя на главную страницу
             this.openNewRoute('/')
         }

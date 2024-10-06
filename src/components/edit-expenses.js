@@ -18,6 +18,7 @@ export class EditExpenses {
         FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
         FileUtils.showBalance().then();
+        FileUtils.showName();
 
         this.editExpense().then();
     }

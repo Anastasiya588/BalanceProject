@@ -379,6 +379,17 @@ input {
   }
 
   .user {
+    .dropdown-toggle {
+      white-space: normal;
+
+      #userName {
+        width: 120px;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+      }
+    }
+
+
     .dropdown-menu.show {
       color: $blue-color;
     }

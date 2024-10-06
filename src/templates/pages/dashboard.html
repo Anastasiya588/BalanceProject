@@ -27,11 +27,11 @@
     </div>
 
     <div class="pie-items d-flex pt-xl-5 pt-lg-4 pt-sm-3 gap-xxl-3 gap-md-1">
-        <div class="pie-item text-center">
+        <div class="pie-item text-center" id="income-pie">
             <canvas id="pie-chart-income"></canvas>
         </div>
-        <div class="line mx-2"></div>
-        <div class="pie-item text-center">
+        <div class="line mx-2" id="line"></div>
+        <div class="pie-item text-center" id="expense-pie">
             <canvas id="pie-chart-expenses"></canvas>
         </div>
     </div>
@@ -112,7 +112,7 @@
                             <p class="user-photo m-0 btn rounded-circle bg-secondary-subtle d-flex align-items-center justify-content-center">
                                 <i class="fa-regular fa-user"></i>
                             </p>
-                            <p class="user-name btn m-0 ms-1">RomanChernov</p>
+                            <p class="user-name btn m-0 ms-1" id="offcanvasUserName"></p>
                         </a>
                         <span class="visually-hidden">Toggle Dropdown</span>
                     </button>

@@ -9,6 +9,7 @@ export class Expenses {
         FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
         FileUtils.showBalance().then();
+        FileUtils.showName();
 
         this.cards = document.querySelector('.cards')
         this.cardAddExpense = document.getElementById('card-add-expense')

@@ -35,6 +35,7 @@ export class EditOperations {
         FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
         FileUtils.showBalance().then();
+        FileUtils.showName();
         this.init().then()
 
         this.typeSelect.addEventListener('change', () => {
@@ -61,7 +62,7 @@ export class EditOperations {
         if (result && result.response) {
             this.typeSelect.value = result.response.type;
             localStorage.setItem('operationType', this.typeSelect.value);
-            this.sumInput.value = result.response.amount;
+            this.sumInput.value = Number(result.response.amount);
             this.dateInputElement.value = result.response.date;
             this.commentInputElement.value = result.response.comment;
             this.updateTitle();
@@ -81,7 +82,7 @@ export class EditOperations {
 
                 const result = await HttpUtils.request('/operations/' + this.id, 'PUT', true, {
                     type: operationType,
-                    amount: this.sumInput.value,
+                    amount: Number(this.sumInput.value),
                     date: this.dateInputElement.value,
                     comment: this.commentInputElement.value,
                     category_id: categoryId
@@ -92,9 +93,10 @@ export class EditOperations {
                 this.dateInputElement.value = '';
                 this.commentInputElement.value = '';
             }
-
-            FileUtils.updateBalance().then();
         })
+        FileUtils.updateBalance().then();
+        FileUtils.showCanvasBalance().then();
+        FileUtils.showBalance().then();
     }
 
     formatDate(date) {

@@ -13,6 +13,7 @@ export class CreateExpenses {
         FileUtils.updateBalance().then();
         FileUtils.showCanvasBalance().then();
         FileUtils.showBalance().then();
+        FileUtils.showName();
 
         this.createExpense().then()
     }
