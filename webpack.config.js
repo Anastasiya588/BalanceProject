@@ -5,21 +5,15 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-    entry: './src/app.js',
+    entry: './src/app.ts',
+    devtool: 'inline-source-map',
     mode: 'development',
-    output: {
-        filename: 'app.js',
-        path: path.resolve(__dirname, 'dist'),
-        publicPath: '/',
-        assetModuleFilename: 'asset/[hash][ext][query]',
-        clean: true,
-    },
     devServer: {
         static: {
             directory: path.join(__dirname, 'public'),
         },
         compress: true,
-        port: 9000,
+        port: 9001,
         historyApiFallback: true,
     },
     module: {
@@ -31,8 +25,24 @@ module.exports = {
                     "css-loader",
                     "sass-loader",
                 ],
+                exclude: /node_modules/,
+            },
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
             },
         ],
+    },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js'],
+    },
+    output: {
+        filename: 'app.js',
+        path: path.resolve(__dirname, 'dist'),
+        publicPath: '/',
+        assetModuleFilename: 'asset/[hash][ext][query]',
+        clean: true,
     },
     plugins: [
         new HtmlWebpackPlugin({
