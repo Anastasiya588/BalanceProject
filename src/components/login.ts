@@ -1,7 +1,15 @@
-import {AuthUtils} from "../../utils/auth-utils.js";
-import {HttpUtils} from "../../utils/http-utils.js";
+import {AuthUtils} from "../../utils/auth-utils";
+import {HttpUtils} from "../../utils/http-utils";
+import {LoginFieldType} from "../types/login-field.type";
 
 export class Login {
+    readonly openNewRoute: (url: string) => void;
+    readonly processElement: HTMLElement | null;
+    readonly rememberMe: HTMLElement | null;
+    readonly commonErrorElement: HTMLElement | null;
+    private fields: LoginFieldType[];
+    private validForm: boolean;
+
     constructor(openNewRoute) {
         this.openNewRoute = openNewRoute;
         if (AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
@@ -11,7 +19,10 @@ export class Login {
         this.processElement = document.getElementById('process-button');
         this.rememberMe = document.getElementById('remember-me');
         this.commonErrorElement = document.getElementById('common-error');
-        this.processElement.addEventListener('click', this.login.bind(this))
+        if (this.processElement) {
+            this.processElement.addEventListener('click', this.login.bind(this))
+        }
+
         this.fields = [
             {
                 name: 'email',
@@ -28,16 +39,19 @@ export class Login {
                 valid: false,
             }
         ];
-        const that = this;
-        this.fields.forEach(item => {
+        const that: Login = this;
+        this.fields.forEach((item: LoginFieldType): void => {
             item.element = document.getElementById(item.id);
-            item.element.onchange = function () {
-                that.validateField.call(that, item, this);
+            if (item.element) {
+                item.element.onchange = function (): void {
+                    that.validateField.call(that, item, this as HTMLInputElement);
+                }
             }
+
         });
     }
 
-    validateField(field, element) {
+    private validateField(field: LoginFieldType, element: HTMLInputElement): void {
         if (element.value && element.value.match(field.regex)) {
             element.classList.remove('is-invalid');
             field.valid = true;
@@ -48,30 +62,35 @@ export class Login {
         this.validateForm();
     }
 
-    validateForm() {
-        return this.validForm = this.fields.every(item => item.valid);
+    private validateForm(): boolean {
+        return this.validForm = this.fields.every((item: LoginFieldType) => item.valid);
     }
 
-    async login() {
-        this.commonErrorElement.style.display = 'none';
+    private async login(): Promise<void> {
+        if (this.commonErrorElement) {
+            this.commonErrorElement.style.display = 'none';
+        }
 
-        this.fields.forEach(field => {
-            this.validateField(field, field.element);
+        this.fields.forEach((field: LoginFieldType): void => {
+            this.validateField(field, field.element as HTMLInputElement);
         });
         if (this.validateForm()) {
-            const email = this.fields.find(item => item.name === 'email').element.value;
-            const password = this.fields.find(item => item.name === 'password').element.value;
+            const email: string = (this.fields.find((item: LoginFieldType) => item.name === 'email')?.element as HTMLInputElement)?.value;
+            const password: string = (this.fields.find((item: LoginFieldType) => item.name === 'password')?.element as HTMLInputElement)?.value;
 
             const result = await HttpUtils.request('/login', "POST", false, {
                 email: email,
                 password: password,
-                rememberMe: this.rememberMe.checked
+                rememberMe: (this.rememberMe as HTMLInputElement).checked
             })
             if (result.error || !result.response ||
                 (result.response && (!result.response.tokens.accessToken ||
                     !result.response.tokens.refreshToken || !result.response.user.name ||
                     !result.response.user.lastName || !result.response.user.id))) {
-                this.commonErrorElement.style.display = 'block';
+                if (this.commonErrorElement) {
+                    this.commonErrorElement.style.display = 'block';
+                }
+
                 return;
             }
 
@@ -83,7 +102,7 @@ export class Login {
             })
 
             //Перевод пользователя на главную страницу
-                this.openNewRoute('/');
+            this.openNewRoute('/');
 
         }
     }

@@ -3,7 +3,7 @@ export type RouteType = {
     title?: string,
     filePathTemplate?: string,
     useLayout?: string,
-    load?: () => void,
+    load: () => void,
     styles?: string[],
     scripts?: string[],
 }

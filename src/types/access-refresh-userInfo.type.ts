@@ -1,15 +1,7 @@
+import {UserInfoType} from "./user-info.type";
+import {TokensType} from "./tokens.type";
+
 export type AccessRefreshUserInfoType = {
-    tokens: Tokens,
-    user: UserInfo,
-}
-
-export type Tokens = {
-    accessToken: string;
-    refreshToken: string;
-}
-
-export type UserInfo = {
-    name: string;
-    lastName: string;
-    id: number;
+    tokens: TokensType,
+    user: UserInfoType,
 }

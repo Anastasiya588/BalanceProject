@@ -13,7 +13,6 @@ import {EditOperations} from "./components/edit-operations";
 import {Logout} from "./components/logout";
 import {AuthUtils} from "../utils/auth-utils";
 import {RouteType} from "./types/route.type";
-import {PromiseOr} from "sass";
 
 const feather = require('feather-icons');
 
@@ -180,7 +179,7 @@ export class Router {
         return AuthUtils.getAuthInfo(AuthUtils.userInfoKey) !== null;
     }
 
-    private async openNewRoute(url): Promise<void> {
+    private async openNewRoute(url: string): Promise<void> {
         //текущий роут
         const currentRoute: string = window.location.pathname;
         //Чтобы сверху url отображался тот, на который нажали (т.е. обновляем url-адрес в браузере)
@@ -235,7 +234,7 @@ export class Router {
         //Получаем текущий url, а точнее все что идет после pathname
         const urlRoute: string = window.location.pathname;
         //Находим какому url-адресу относится текущий url-адрес когда проходим по всем нашим routes
-        const newRoute: RouteType | undefined = this.routes.find(item => item.route === urlRoute);
+        const newRoute: RouteType | undefined = this.routes.find((item: RouteType) => item.route === urlRoute);
 
         if (newRoute) {
             const isPublicRoute: boolean = newRoute.route === '/login' || newRoute.route === '/signup';
@@ -257,7 +256,7 @@ export class Router {
                 })
             }
             if (newRoute.scripts && newRoute.scripts.length > 0) {
-                newRoute.scripts.forEach(script => {
+                newRoute.scripts.forEach((script: string) => {
                     const scriptElement: HTMLScriptElement = document.createElement('script');
                     scriptElement.src = '/js/' + script;
                     document.body.appendChild(scriptElement);
@@ -277,7 +276,7 @@ export class Router {
                 }
                 //запрос на получение страницы
                 if (contentBlock) {
-                    contentBlock.innerHTML = await fetch(newRoute.filePathTemplate).then(response => response.text());
+                    contentBlock.innerHTML = await fetch(newRoute.filePathTemplate).then((response: Response) => response.text());
                 }
             }
             if (newRoute.load && typeof newRoute.load === 'function') {
@@ -288,8 +287,6 @@ export class Router {
             await this.activateRoute(null, null);
         }
     }
-
-
 }
 
 

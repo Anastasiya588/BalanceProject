@@ -64,6 +64,7 @@ module.exports = {
                 {from: "./node_modules/chart.js/auto", to: "js/chart.js/auto"},
                 {from: "./node_modules/js-datepicker/dist/datepicker.min.css", to: "css"},
                 {from: "./node_modules/js-datepicker/dist/datepicker.min.js", to: "js"},
+                {from: "./node_modules/js-datepicker/datepicker.d.ts", to: "types"},
             ],
         }),],
 };

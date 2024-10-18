@@ -1,8 +1,10 @@
 import config from "../src/config/config";
 import {AuthUtils} from "./auth-utils";
+import {UserInfoType} from "../src/types/user-info.type";
+import {AuthInfoType} from "../src/types/auth-info.type";
 
 export class HttpUtils {
-    public static async request(url: string, method: string = "GET", useAuth: boolean = true, body = null, period = null, dateFrom = null, dateTo = null): Promise<any> {
+    public static async request(url: string, method: string = "GET", useAuth: boolean = true, body: any | null = null, period: string | null = null, dateFrom: string | null = null, dateTo: string | null = null): Promise<any> {
         const result: any = {
             error: false,
             response: null
@@ -68,9 +70,9 @@ export class HttpUtils {
                         return result
                     } else {
                         // Токен устарел или невалиден, необходимо обновить
-                        const updateTokenResult = await AuthUtils.updateRefreshToken();
+                        const updateTokenResult: boolean = await AuthUtils.updateRefreshToken();
                         if (updateTokenResult) {
-                            const accessToken = AuthUtils.getAuthInfo(AuthUtils.accessTokenKey);
+                            const accessToken: UserInfoType | string | null | AuthInfoType = AuthUtils.getAuthInfo(AuthUtils.accessTokenKey);
                             if (accessToken) {
                                 params.headers['x-auth-token'] = accessToken;
                             }

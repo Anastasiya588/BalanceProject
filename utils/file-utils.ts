@@ -1,21 +1,22 @@
 import {HttpUtils} from "./http-utils";
 import {AuthUtils} from "./auth-utils";
-import {AccessRefreshUserInfoType} from "../src/types/access-refresh-userInfo.type";
 import {DefaultResponseType} from "../src/types/default-response.type";
-import {GetBalanceType} from "../src/types/get-balance.type";
-import {Element} from "chart.js";
+import {GetBalanceEsponseType} from "../src/types/get-balance.type";
+import {UserInfoType} from "../src/types/user-info.type";
+import {AuthInfoType} from "../src/types/auth-info.type";
+import {OperationsResponseType} from "../src/types/operations-response.type";
+import {OperationResponseType} from "../src/types/operation-response.type";
+import {UpdateBalanceType} from "../src/types/update-balance.type";
 
 export class FileUtils {
     public static userName: HTMLElement | null;
     public static offcanvasUserName: HTMLElement | null;
-    public static balance: NodeListOf<Element>;
+    public static balance: NodeListOf<HTMLElement>;
 
     public static showName(): void {
         this.userName = document.getElementById('userName');
         this.offcanvasUserName = document.getElementById('offcanvasUserName');
-        let userInfo: AccessRefreshUserInfoType | string | null | {
-            [key: string]: string | null
-        } = AuthUtils.getAuthInfo(AuthUtils.userInfoKey);
+        let userInfo: UserInfoType | string | null | AuthInfoType = AuthUtils.getAuthInfo(AuthUtils.userInfoKey);
         if (userInfo && typeof userInfo !== 'string' && 'name' in userInfo && 'lastName' in userInfo) {
             const fullName: string = `${userInfo.name} ${userInfo.lastName}`;
             if (this.userName) {
@@ -37,15 +38,15 @@ export class FileUtils {
             }
 
             // Выполняем запрос на получение баланса
-            const result: DefaultResponseType | GetBalanceType = await HttpUtils.request('/balance');
+            const result: DefaultResponseType | GetBalanceEsponseType = await HttpUtils.request('/balance');
             if (result) {
                 if ((result as DefaultResponseType).error !== undefined) {
                     throw new Error((result as DefaultResponseType).message);
                 }
             }
 
-            if (result && result.response.balance) {
-                const balanceValue: number = (result as GetBalanceType).response.balance;
+            if ((result as GetBalanceEsponseType) && (result as GetBalanceEsponseType).response.balance) {
+                const balanceValue: number = (result as GetBalanceEsponseType).response.balance;
 
                 const offcanvasElement: HTMLElement | null = document.getElementById('menuRight');
                 if (offcanvasElement && offcanvasBalanceElement) {
@@ -68,19 +69,19 @@ export class FileUtils {
             this.updateBalance().then()
             this.balance = document.querySelectorAll('.balance-number');
 
-            const result: DefaultResponseType | GetBalanceType = await HttpUtils.request('/balance');
-            this.balance.forEach((elem: Element): void => {
-                elem.innerText = 0;
+            const result: DefaultResponseType | GetBalanceEsponseType = await HttpUtils.request('/balance');
+            this.balance.forEach((elem: HTMLElement): void => {
+                elem.innerText = (0).toString();
             });
             if (result) {
                 if (this.balance.length === 0) {
                     return;
                 }
-                const balanceValue = result.response.balance;
+                const balanceValue: number = (result as GetBalanceEsponseType).response.balance;
 
                 if (balanceValue) {
                     this.balance.forEach((elem) => {
-                        elem.innerText = balanceValue;
+                        elem.innerText = balanceValue.toString();
                     });
 
                 }
@@ -91,12 +92,12 @@ export class FileUtils {
     }
 
     public static async updateBalance(): Promise<number> {
-        const result = await HttpUtils.request('/operations', 'GET', true, null, 'all')
-        let sum:number = 0;
+        const result: DefaultResponseType | OperationsResponseType = await HttpUtils.request('/operations', 'GET', true, null, 'all')
+        let sum: number = 0;
         if (result) {
-            if (Array.isArray(result.response)) {
-                sum = result.response.reduce((acc, operation) => {
-                    const amount:number = Number(operation.amount); // Преобразуем в число
+            if (Array.isArray((result as OperationsResponseType).response)) {
+                sum = (result as OperationsResponseType).response.reduce((acc: number, operation: OperationResponseType): number => {
+                    const amount: number = Number(operation.amount);
                     if (operation.type === 'expense') {
                         return acc - amount;
                     } else if (operation.type === 'income') {
@@ -109,7 +110,7 @@ export class FileUtils {
         }
 
         try {
-            const result = await HttpUtils.request('/balance', 'PUT', true, {
+            const result: DefaultResponseType | UpdateBalanceType = await HttpUtils.request('/balance', 'PUT', true, {
                 "newBalance": Number(sum)
             });
 
