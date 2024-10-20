@@ -91,7 +91,7 @@ export class FileUtils {
         }
     }
 
-    public static async updateBalance(): Promise<number> {
+    public static async updateBalance(): Promise<number | undefined> {
         const result: DefaultResponseType | OperationsResponseType = await HttpUtils.request('/operations', 'GET', true, null, 'all')
         let sum: number = 0;
         if (result) {

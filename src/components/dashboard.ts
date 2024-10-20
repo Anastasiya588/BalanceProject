@@ -1,4 +1,4 @@
-import {Chart} from "chart.js/auto";
+import {Chart, LegendItem, registerables, ChartOptions , Plugin } from "chart.js/auto";
 import {FileUtils} from "../../utils/file-utils";
 import datepicker, {DatepickerInstance} from "js-datepicker";
 import {HttpUtils} from "../../utils/http-utils";
@@ -6,8 +6,7 @@ import {DefaultResponseType} from "../types/default-response.type";
 import {OperationsResponseType} from "../types/operations-response.type";
 import {OperationResponseType} from "../types/operation-response.type";
 import {ChartHtmlLegendType} from "../types/chart-html-legend.type";
-import {LegendItem} from "../types/Legend-item.type";
-
+import { CustomChartOptions } from "../types/custom-chart-options.type";
 
 export class Dashboard {
     readonly incomeCanvas: HTMLCanvasElement | null;
@@ -17,29 +16,28 @@ export class Dashboard {
     readonly expensePie: HTMLElement | null;
     readonly fromDate: HTMLElement | null;
     readonly tillDate: HTMLElement | null;
-    private todayDate: HTMLElement | null;
-    private weekDate: HTMLElement | null;
-    private monthDate: HTMLElement | null;
-    private yearDate: HTMLElement | null;
-    private allDate: HTMLElement | null;
-    private intervalDate: HTMLElement | null;
+    readonly todayDate: HTMLElement | null;
+    readonly weekDate: HTMLElement | null;
+    readonly monthDate: HTMLElement | null;
+    readonly yearDate: HTMLElement | null;
+    readonly allDate: HTMLElement | null;
+    readonly intervalDate: HTMLElement | null;
     private titleIncomeContainer: HTMLElement | null;
     private titleExpenseContainer: HTMLElement | null;
-    private incomeItem: HTMLElement | null;
-    private expensesItem: HTMLElement | null;
+    readonly incomeItem: HTMLElement | null;
+    readonly expensesItem: HTMLElement | null;
     private incomeTitle: Element | null;
     private expenseTitle: Element | null;
     private period: string | null;
     private dateFrom: string | null;
     private dateTo: string | null;
-    private isEventListenersAdded: boolean;
     private categoriesIncomeData: string[] | null;
     private categoriesExpenseData: string[] | null;
     private amountIncomeData: number[] | null;
     private amountExpenseData: number[] | null;
-    private clearExistingTitles: (container: HTMLElement) => void;
-    private incomeChart: Chart<"bar" | "line" | "scatter" | "bubble" | "pie" | "doughnut" | "polarArea" | "radar", number[] | null, string>;
-    private expensesChart: Chart<"bar" | "line" | "scatter" | "bubble" | "pie" | "doughnut" | "polarArea" | "radar", number[] | null, string>;
+    readonly clearExistingTitles: (container: HTMLElement) => void;
+    private incomeChart: Chart<"bar" | "line" | "scatter" | "bubble" | "pie" | "doughnut" | "polarArea" | "radar", number[] | null, string> | null;
+    private expensesChart: Chart<"bar" | "line" | "scatter" | "bubble" | "pie" | "doughnut" | "polarArea" | "radar", number[] | null, string> | null;
 
     private dashboardNavItem: NodeListOf<Element>;
     private dashboardLink: HTMLCollectionOf<Element>;
@@ -54,16 +52,57 @@ export class Dashboard {
     private incomes: NodeListOf<Element>;
 
     constructor() {
+        
+
         this.incomeCanvas = document.getElementById('pie-chart-income') as HTMLCanvasElement;
         this.expensesCanvas = document.getElementById('pie-chart-expenses') as HTMLCanvasElement;
         this.line = document.getElementById('line');
         this.incomePie = document.getElementById('income-pie');
         this.expensePie = document.getElementById('expense-pie');
 
-
         this.fromDate = document.getElementById('from-date');
         this.tillDate = document.getElementById('till-date');
-
+        this.todayDate = document.getElementById('filter-today');
+        this.weekDate = document.getElementById('filter-week');
+        this.monthDate = document.getElementById('filter-month');
+        this.yearDate = document.getElementById('filter-year');
+        this.allDate = document.getElementById('filter-all');
+        this.intervalDate = document.getElementById('filter-interval');
+        this.titleIncomeContainer = document.getElementById('income-title-container');
+        this.titleExpenseContainer = document.getElementById('expense-title-container');
+        this.incomeItem = document.createElement('div');
+        this.incomeTitle = this.incomeItem.querySelector('.pi-title');
+        this.expensesItem = document.createElement('div');
+        this.expenseTitle = this.expensesItem.querySelector('.pi-title');
+        this.dateFrom = '';
+        this.dateTo = '';
+        this.period = '';
+        this.dashboardNavItem = document.querySelectorAll('.dashboard-nav-item');
+        this.dashboardLink = document.getElementsByClassName('dashboard-link');
+        this.dashboardSvg = document.querySelectorAll('.bi-house');
+        this.categoriesIncomeData = null;
+        this.categoriesExpenseData = null;
+        this.amountIncomeData=null;
+        this.amountExpenseData=null;
+        this.category = document.getElementById('category');
+        this.offcanvasCategory = document.getElementById('offcanvas-category');
+        this.toggleIcon = document.getElementById('toggleIcon');
+        this.offCanvasToggleIcon = document.getElementById('offcanvas-toggleIcon');
+        this.categoryNavItem = document.querySelectorAll('.category-nav-item');
+        this.expenses = document.querySelectorAll('.expenses-link');
+        this.incomes = document.querySelectorAll('.incomes-link');
+        this.incomeChart = null;
+        this.expensesChart = null;
+        this.clearExistingTitles = (container: HTMLElement): void => {
+            const existingTitle: Element | null = container.querySelector('.pi-title');
+            if (!container) {
+                console.warn('Контейнер не найден для очистки заголовков');
+                return;
+            }
+            if (existingTitle) {
+                existingTitle.remove();
+            }
+        };
 
         if (this.fromDate) {
             this.fromDate.addEventListener('input', () => this.resizeInput(this.fromDate as HTMLInputElement));
@@ -105,17 +144,15 @@ export class Dashboard {
     }
 
     private async createFilter(): Promise<void> {
-        this.todayDate = document.getElementById('filter-today');
-        this.weekDate = document.getElementById('filter-week');
-        this.monthDate = document.getElementById('filter-month');
-        this.yearDate = document.getElementById('filter-year');
-        this.allDate = document.getElementById('filter-all');
-        this.intervalDate = document.getElementById('filter-interval');
+        
         const resetButtons = (): void => {
             const buttons: (HTMLElement | null)[] = [this.todayDate, this.weekDate, this.monthDate, this.yearDate, this.allDate, this.intervalDate];
-            buttons.forEach((button: HTMLElement): void => {
-                button.classList.remove('active');
+            buttons.forEach((button: HTMLElement|null): void => {
+                if(button) {
+                     button.classList.remove('active');
                 button.style.color = '';
+                }
+               
             });
 
 
@@ -303,11 +340,6 @@ export class Dashboard {
                 (this.fromDate as HTMLInputElement).disabled = false;
                 this.period = 'interval';
 
-                if (this.fromDate) {
-                    this.isEventListenersAdded = this.fromDate.dataset.eventListenersAdded === 'true';
-                }
-
-
                 const updateDates = (): void => {
                     this.dateFrom = (this.fromDate as HTMLInputElement).value;
                     this.dateTo = (this.tillDate as HTMLInputElement).value;
@@ -326,8 +358,10 @@ export class Dashboard {
                     }
                 };
 
+                if (this.fromDate) {
+                    const isEventListenersAdded = this.fromDate.dataset.eventListenersAdded === 'true';
 
-                if (!this.isEventListenersAdded) {
+                if (!isEventListenersAdded) {
                     if (this.fromDate) {
                         this.fromDate.addEventListener('input', updateDates);
                         // Установим флаг, что обработчики добавлены
@@ -338,6 +372,7 @@ export class Dashboard {
                         this.tillDate.dataset.eventListenersAdded = 'true';
                     }
                 }
+            }
             })
         }
     }
@@ -382,18 +417,7 @@ export class Dashboard {
     }
 
     private createCharts(): void {
-        this.clearExistingTitles = (container: HTMLElement): void => {
-            const existingTitle: Element | null = container.querySelector('.pi-title');
-            if (!container) {
-                console.warn('Контейнер не найден для очистки заголовков');
-                return;
-            }
-            if (existingTitle) {
-                existingTitle.remove();
-            }
-        };
-
-        const getOrCreateLegendList = (chart: Chart, id: number) => {
+        const getOrCreateLegendList = (chart: Chart, id: string) => {
             const legendContainer: HTMLElement | null = document.getElementById((id).toString());
             if (legendContainer) {
                 let listContainer: HTMLElement | null = legendContainer.querySelector('ul');
@@ -415,12 +439,18 @@ export class Dashboard {
         };
         const htmlLegendPlugin: ChartHtmlLegendType = {
             id: 'htmlLegend',
-            afterUpdate(chart: Chart, args: any, options: { containerID: number }): void {
-                const ul: HTMLElement = getOrCreateLegendList(chart, options.containerID);
-                while (ul.firstChild) {
+            afterUpdate(chart: Chart, args: any, options: { containerID: string}): void {
+                const ul: HTMLElement|undefined = getOrCreateLegendList(chart, options.containerID);
+                
+                if(ul) {
+                   while (ul.firstChild) {
                     ul.firstChild.remove();
+                } 
                 }
-                const items: LegendItem[] = chart.options.plugins.legend.labels.generateLabels(chart);
+                
+                if (chart && chart.options && chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
+                const items: LegendItem[] = (chart.options.plugins as any).legend.labels.generateLabels(chart);
+                
                 items.forEach((item: LegendItem, index: number): void => {
                     const li: HTMLElement = document.createElement('li');
                     li.style.alignItems = 'center';
@@ -434,16 +464,24 @@ export class Dashboard {
                         li.style.margin = (0).toString();
                     }
                     li.onclick = (): void => {
-                        if (chart.config.type === 'pie' || chart.config.type === 'doughnut') {
+                        if (item.index !== undefined) {
+                        if ((chart.config as any).type === 'pie' || (chart.config as any).type === 'doughnut') {
                             chart.toggleDataVisibility(item.index);
                         } else {
+                            if (item.datasetIndex !== undefined) {
                             chart.setDatasetVisibility(item.datasetIndex, !chart.isDatasetVisible(item.datasetIndex));
                         }
+                    }
+                    }
                         chart.update();
                     };
                     const boxSpan: HTMLSpanElement = document.createElement('span');
-                    boxSpan.style.background = item.fillStyle;
-                    boxSpan.style.borderColor = item.strokeStyle;
+                    if(item.fillStyle) {
+                        boxSpan.style.background = (item.fillStyle).toString();
+                    }
+                    if(item.strokeStyle) {
+                    boxSpan.style.borderColor = (item.strokeStyle).toString();
+                    }
                     boxSpan.style.borderWidth = item.lineWidth + 'px';
                     boxSpan.style.display = 'inline-block';
                     boxSpan.style.flexShrink = (0).toString();
@@ -463,10 +501,14 @@ export class Dashboard {
                     textContainer.appendChild(text);
                     li.appendChild(boxSpan);
                     li.appendChild(textContainer);
-                    ul.appendChild(li);
+                    if(ul) {
+                       ul.appendChild(li); 
+                    } 
                 });
             }
+        }
         };
+        
         // Создание графиков
         try {
             if (this.categoriesIncomeData) {
@@ -480,7 +522,7 @@ export class Dashboard {
                     }
 
                     // Создаем контейнер для заголовка доходов, если он отсутствует
-                    this.titleIncomeContainer = document.getElementById('income-title-container');
+                    
                     if (!this.titleIncomeContainer) {
                         this.titleIncomeContainer = document.createElement('div');
                         this.titleIncomeContainer.id = 'income-title-container';
@@ -491,13 +533,15 @@ export class Dashboard {
 
                     }
 
-                    this.incomeItem = document.createElement('div');
-                    this.incomeItem.classList.add('pie-content mb-md-4 mb-sm-3 mb-3 pb-sm-3');
+                    if( this.incomeItem) {
+                        this.incomeItem.classList.add('pie-content mb-md-4 mb-sm-3 mb-3 pb-sm-3');
                     if (document.documentElement.clientWidth > 1080) {
                         this.incomeItem.classList.add('me-4');
                     }
+                    }
+                    
 
-                    this.incomeTitle = this.incomeItem.querySelector('.pi-title');
+                    
 
                     if (!this.incomeTitle) {
                         this.incomeTitle = document.createElement('h2');
@@ -513,16 +557,18 @@ export class Dashboard {
 
                     const incomeLegendContainer: HTMLDivElement = document.createElement('div');
                     incomeLegendContainer.id = 'legend-income-container';
-                    this.incomeItem.appendChild(incomeLegendContainer);
+                    if( this.incomeItem) {
+                        this.incomeItem.appendChild(incomeLegendContainer);
 
                     this.incomeItem.appendChild(this.incomeCanvas);
 
                     if (this.incomePie) {
                         this.incomePie.appendChild(this.incomeItem);
                     }
+                    }
 
-
-                    this.incomeCanvas.style.display = ""
+                    this.incomeCanvas.style.display = "";
+                    
                     this.incomeChart = new Chart(this.incomeCanvas, {
                         type: 'pie',
                         data: {
@@ -542,7 +588,7 @@ export class Dashboard {
                                 },
                             },
                             responsive: true,
-                        },
+                        }  as CustomChartOptions,
                         plugins: [htmlLegendPlugin],
                     });
 
@@ -558,7 +604,7 @@ export class Dashboard {
 
 
                     // Создаем контейнер для заголовка расходов, если он отсутствует
-                    this.titleExpenseContainer = document.getElementById('expense-title-container');
+                    
                     if (!this.titleExpenseContainer) {
                         this.titleExpenseContainer = document.createElement('div');
                         this.titleExpenseContainer.id = 'expense-title-container';
@@ -569,11 +615,10 @@ export class Dashboard {
 
                     }
 
-                    this.expensesItem = document.createElement('div');
-                    this.expensesItem.classList.add('pie-content  mb-md-4 mb-sm-3 mb-3 pb-sm-3');
-
-
-                    this.expenseTitle = this.expensesItem.querySelector('.pi-title');
+                    if(this.expensesItem) {
+                        this.expensesItem.classList.add('pie-content  mb-md-4 mb-sm-3 mb-3 pb-sm-3');
+                    }
+                    
                     if (!this.expenseTitle) {
                         this.expenseTitle = document.createElement('h2');
                         this.expenseTitle.className = 'pi-title m-0';
@@ -585,19 +630,24 @@ export class Dashboard {
                         this.expenseTitle.textContent = 'Расходы';
                     }
 
-                    if (document.documentElement.clientWidth > 1080) {
+                    if(this.expensesItem) {
+                        if (document.documentElement.clientWidth > 1080) {
                         this.expensesItem.classList.add('ms-4');
                     }
 
                     const expensesLegendContainer: HTMLDivElement = document.createElement('div');
                     expensesLegendContainer.id = 'legend-expenses-container';
                     this.expensesItem.appendChild(expensesLegendContainer);
-
-                    this.expensesItem.appendChild(this.expensesCanvas);
+if(this.expensesCanvas) {
+    this.expensesItem.appendChild(this.expensesCanvas);
+}
+                    
                     if (
                         this.expensePie) {
                         this.expensePie.appendChild(this.expensesItem);
                     }
+                    }
+                    
 
 
                     // График расходов
@@ -621,7 +671,7 @@ export class Dashboard {
                                     },
                                 },
                                 responsive: true,
-                            },
+                            }  as CustomChartOptions,
                             plugins: [htmlLegendPlugin],
                         });
                     }
@@ -642,18 +692,7 @@ export class Dashboard {
 
     private stylesLayoutCanvas(): void {
         //Layout and Offcanvas
-        this.dashboardNavItem = document.querySelectorAll('.dashboard-nav-item');
-        this.dashboardLink = document.getElementsByClassName('dashboard-link');
-        this.dashboardSvg = document.querySelectorAll('.bi-house');
-
-        this.category = document.getElementById('category');
-        this.offcanvasCategory = document.getElementById('offcanvas-category');
-        this.toggleIcon = document.getElementById('toggleIcon');
-        this.offCanvasToggleIcon = document.getElementById('offcanvas-toggleIcon');
-        this.categoryNavItem = document.querySelectorAll('.category-nav-item');
-        this.expenses = document.querySelectorAll('.expenses-link');
-        this.incomes = document.querySelectorAll('.incomes-link');
-
+        
         for (let i: number = 0; i < this.dashboardNavItem.length; i++) {
             (this.dashboardNavItem[i] as HTMLElement).style.backgroundColor = '#0D6EFD';
             (this.dashboardNavItem[i] as HTMLElement).style.setProperty('border-radius', '7px', 'important');

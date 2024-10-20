@@ -190,20 +190,24 @@ export class Router {
     }
 
     //Эта функция обрабатывает клик по ссылке и открывает новый роут(переход на другую страницу через функционал)
-    private async clickHandler(e): Promise<void> {
-        let element = null;
-        if (e.target.nodeName === 'A') {
-            element = e.target
-        } else if (e.target.parentNode.nodeName === 'A') {
-            element = e.target.parentNode;
+    private async clickHandler(e:Event): Promise<void> {
+        let element: HTMLElement | null = null;
+        if(e.target) {
+            const target = e.target as HTMLElement;
+           if (target.nodeName === 'A') {
+            element = target;
+        } else if (target.parentNode && (target.parentNode as HTMLElement).nodeName === 'A') {
+            element = target.parentNode as HTMLElement;
+        } 
         }
+        
 
         if (element) {
             e.preventDefault();
 
             const currentRoute: string = window.location.pathname;
             //Вырезаем из url http://localhost:9000 и заменяем на ''
-            const url = element.href.replace(window.location.origin, '');
+            const url = (element as HTMLLinkElement).href.replace(window.location.origin, '');
             if (!url || currentRoute === url.replace('#', '') || url.startsWith('javascript:void(0)')) {
                 return;
             }
@@ -220,12 +224,20 @@ export class Router {
             if (currentRoute) {
                 if (currentRoute.styles && currentRoute.styles.length > 0) {
                     currentRoute.styles.forEach((style: string): void => {
-                        document.querySelector(`link[href='/css/${style}']`).remove()
+                        const styleRemove:Element|null=document.querySelector(`link[href='/css/${style}']`);
+                        if(styleRemove) {
+                            styleRemove.remove()
+                        }
+                        
                     })
                 }
                 if (currentRoute.scripts && currentRoute.scripts.length > 0) {
                     currentRoute.scripts.forEach((script: string): void => {
-                        document.querySelector(`script[src='/js/${script}']`).remove()
+                        const scriptRemove:Element|null=document.querySelector(`script[src='/js/${script}']`);
+                        if(scriptRemove) {
+                            scriptRemove.remove();
+                        }
+                        
                     })
                 }
             }

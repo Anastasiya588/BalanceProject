@@ -25,7 +25,7 @@ export class CreateOperations {
     private incomes: NodeListOf<Element> | null;
     private categoryNavItem: NodeListOf<Element> | null;
 
-    constructor(openNewRoute) {
+    constructor(openNewRoute:{ (url: string): Promise<void>; (url: string): void; }) {
         this.openNewRoute = openNewRoute;
 
         this.title = document.getElementById('create-operations-title')
@@ -35,6 +35,17 @@ export class CreateOperations {
 
         this.dateInputElement = document.getElementById('date-input');
         this.commentInputElement = document.getElementById('comment-input');
+        this.operationsNavItem = document.querySelectorAll('.operations-nav-item');
+        this.operationsLink = document.getElementsByClassName('operations-link');
+        this.operationsSvg = document.querySelectorAll('.bi-cash-coin');
+
+        this.category = document.getElementById('category');
+        this.offcanvasCategory = document.getElementById('offcanvas-category');
+        this.toggleIcon = document.getElementById('toggleIcon');
+        this.offCanvasToggleIcon = document.getElementById('offcanvas-toggleIcon');
+        this.expenses = document.querySelectorAll('.expenses-link');
+        this.incomes = document.querySelectorAll('.incomes-link');
+        this.categoryNavItem = document.querySelectorAll('.category-nav-item');
 
         if (this.dateInputElement) {
             const chooseDate: DatepickerInstance = datepicker(this.dateInputElement, {
@@ -129,7 +140,7 @@ export class CreateOperations {
 
     }
 
-    private createCategories(categories): void {
+    private createCategories(categories: [{ id: number; title: string; }]): void {
         if (this.categorySelect) {
             this.categorySelect.innerHTML = '';
         }
@@ -137,7 +148,7 @@ export class CreateOperations {
         for (const cat of categories) {
             const option: HTMLOptionElement = document.createElement('option');
             option.innerText = cat.title;
-            option.value = cat.id;
+            option.value = (cat.id).toString();
             if (this.categorySelect) {
                 this.categorySelect.appendChild(option);
             }
@@ -205,30 +216,24 @@ export class CreateOperations {
 
     private stylesLayoutCanvas(): void {
         //Layout and Offcanvas
-        this.operationsNavItem = document.querySelectorAll('.operations-nav-item');
-        this.operationsLink = document.getElementsByClassName('operations-link');
-        this.operationsSvg = document.querySelectorAll('.bi-cash-coin');
-
-        this.category = document.getElementById('category');
-        this.offcanvasCategory = document.getElementById('offcanvas-category');
-        this.toggleIcon = document.getElementById('toggleIcon');
-        this.offCanvasToggleIcon = document.getElementById('offcanvas-toggleIcon');
-        this.expenses = document.querySelectorAll('.expenses-link');
-        this.incomes = document.querySelectorAll('.incomes-link');
-        this.categoryNavItem = document.querySelectorAll('.category-nav-item');
-
-        for (let i: number = 0; i < this.operationsNavItem.length; i++) {
+        
+if(this.operationsNavItem) {
+     for (let i: number = 0; i < this.operationsNavItem.length; i++) {
             (this.operationsNavItem[i] as HTMLElement).style.backgroundColor = '#0D6EFD';
             (this.operationsNavItem[i] as HTMLElement).style.setProperty('border-radius', '7px', 'important');
         }
-
+}
+       
+if(this.operationsLink) {
         for (let i: number = 0; i < this.operationsLink.length; i++) {
             (this.operationsLink[i] as HTMLElement).style.color = "white";
         }
-
+    }
+    if(this.operationsSvg) {
         for (let i: number = 0; i < this.operationsSvg.length; i++) {
             (this.operationsSvg[i] as HTMLElement).style.fill = 'white';
         }
+    }
 
         const that: CreateOperations = this;
         const categoryCollapse: HTMLElement | null = document.getElementById('category-collapse');

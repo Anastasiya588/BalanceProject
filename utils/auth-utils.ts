@@ -47,7 +47,7 @@ export class AuthUtils {
         localStorage.removeItem(this.refreshTokenKey);
     }
 
-    public static async updateRefreshToken(): Promise<boolean> {
+    public static async updateRefreshToken(): Promise<boolean | null> {
         let result = null;
         const refreshToken: string | null = localStorage.getItem(this.refreshTokenKey);
 

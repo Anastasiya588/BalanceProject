@@ -4,7 +4,6 @@ import {DefaultResponseType} from "../types/default-response.type";
 import {CategoriesExpenseResponse} from "../types/categories-expense-response";
 
 export class Expenses {
-    readonly openNewRoute: (url: string) => void;
     readonly cards: Element | null;
     readonly cardAddExpense: HTMLElement | null;
     private deletePopUpBtns: NodeListOf<Element> | null;
@@ -18,6 +17,14 @@ export class Expenses {
     private categoryNavItem: NodeListOf<Element> | null;
 
     constructor() {
+        this.deletePopUpBtns = document.querySelectorAll('.delete');
+        this.offcanvasCategory = document.getElementById('offcanvas-category');
+        this.offcanvastoggleIcon = document.getElementById('offcanvas-toggleIcon');
+        this.category = document.getElementById('category');
+        this.toggleIcon = document.getElementById('toggleIcon');
+        this.expenses = document.querySelectorAll('.expenses-link');
+        this.incomes = document.querySelectorAll('.incomes-link');
+        this.categoryNavItem = document.querySelectorAll('.category-nav-item');
         this.stylesLayoutCanvas();
 
 
@@ -73,9 +80,9 @@ export class Expenses {
             }
 
             let popUp: HTMLElement | null = document.getElementById('pop-up');
-            this.deletePopUpBtns = document.querySelectorAll('.delete');
-
-            this.deletePopUpBtns.forEach((delBtn: Element): void => {
+         
+if(this.deletePopUpBtns) {
+    this.deletePopUpBtns.forEach((delBtn: Element): void => {
                 delBtn.addEventListener('click', function (): void {
                     const id: number = Number(delBtn.getAttribute('data-id'));
 
@@ -92,10 +99,15 @@ export class Expenses {
                                 const delResult: DefaultResponseType = await HttpUtils.request('/categories/expense/' + id, "DELETE", true)
 
                                 if (!delResult.error) {
-                                    const elementToRemove: Element | null = document.querySelector(`[data-id='${id}']`).closest('.card');
-                                    if (elementToRemove) {
-                                        elementToRemove.remove();
+                                    const dataid:Element|null=document.querySelector(`[data-id='${id}']`);
+                                    if(dataid) {
+                                        const elementToRemove: Element | null = dataid.closest('.card');
+                                        if (elementToRemove) {
+                                            elementToRemove.remove();
+                                        }
                                     }
+                                    
+                                   
                                 }
 
                                 if (popUp) {
@@ -115,17 +127,15 @@ export class Expenses {
                     }
                 })
             })
+}
+            
         }
 
     }
 
     private stylesLayoutCanvas(): void {
         //Layout
-        this.category = document.getElementById('category');
-        this.toggleIcon = document.getElementById('toggleIcon');
-        this.expenses = document.querySelectorAll('.expenses-link');
-        this.incomes = document.querySelectorAll('.incomes-link');
-        this.categoryNavItem = document.querySelectorAll('.category-nav-item');
+        
 
         if (this.category) {
             this.category.style.backgroundColor = '#0D6EFD';
@@ -137,8 +147,7 @@ export class Expenses {
         }
 
         //OffCanvas Layout
-        this.offcanvasCategory = document.getElementById('offcanvas-category');
-        this.offcanvastoggleIcon = document.getElementById('offcanvas-toggleIcon')
+        
 
         if (this.offcanvasCategory) {
             this.offcanvasCategory.style.backgroundColor = '#0D6EFD';

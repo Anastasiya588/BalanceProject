@@ -4,7 +4,7 @@ import {HttpUtils} from "../../utils/http-utils";
 export class Logout {
     readonly openNewRoute: (url: string) => void;
 
-    constructor(openNewRoute) {
+    constructor(openNewRoute: { (url: string): Promise<void>; (url: string): void; }) {
         this.openNewRoute = openNewRoute;
 
         this.logout().then();

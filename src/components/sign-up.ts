@@ -12,10 +12,12 @@ export class SignUp {
     constructor(openNewRoute: (url: string) => void) {
         this.openNewRoute = openNewRoute;
         if (AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
-            return this.openNewRoute('/');
+            this.openNewRoute('/');
         }
         this.commonErrorElement = document.getElementById('common-error');
         this.processElement = document.getElementById('process-button');
+        this.validForm = false;
+        
         if (this.processElement) {
             this.processElement.addEventListener('click', this.signup.bind(this));
         }

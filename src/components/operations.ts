@@ -24,7 +24,6 @@ export class Operations {
     private period: string | null;
     private dateFrom: string | null;
     private dateTo: string | null;
-    private isEventListenersAdded: boolean;
 
     private operationsNavItem: NodeListOf<Element> | null;
     private operationsLink: HTMLCollectionOf<Element> | null;
@@ -37,14 +36,36 @@ export class Operations {
     private incomes: NodeListOf<Element> | null;
     private categoryNavItem: NodeListOf<Element> | null;
 
-    constructor(openNewRoute) {
+    constructor(openNewRoute: { (url: string): Promise<void>; (url: string): void; }) {
         this.openNewRoute = openNewRoute;
-
+        this.todayDate = document.getElementById('filter-today');
+        this.weekDate = document.getElementById('filter-week');
+        this.monthDate = document.getElementById('filter-month');
+        this.yearDate = document.getElementById('filter-year');
+        this.allDate = document.getElementById('filter-all');
+        this.intervalDate = document.getElementById('filter-interval');
         this.createIncomeBtn = document.getElementById('create-income');
         this.createExpenseBtn = document.getElementById('create-expense');
-
+        this.dateFrom = '';
+        this.dateTo = '';
         this.fromDate = document.getElementById('from-date');
         this.tillDate = document.getElementById('till-date');
+        this.tableBody = document.getElementById('tbody');
+        this.tableRow = document.createElement("tr");
+        this.popup = document.getElementById('pop-up');
+        this.tableSvgLinkDeleteElement = document.createElement("a");
+        this.period = '';
+        this.operationsNavItem = document.querySelectorAll('.operations-nav-item');
+        this.operationsLink = document.getElementsByClassName('operations-link');
+        this.operationsSvg = document.querySelectorAll('.bi-cash-coin');
+
+        this.category = document.getElementById('category');
+        this.offcanvasCategory = document.getElementById('offcanvas-category');
+        this.toggleIcon = document.getElementById('toggleIcon');
+        this.offCanvasToggleIcon = document.getElementById('offcanvas-toggleIcon');
+        this.expenses = document.querySelectorAll('.expenses-link');
+        this.incomes = document.querySelectorAll('.incomes-link');
+        this.categoryNavItem = document.querySelectorAll('.category-nav-item');
 
         if (this.fromDate) {
             this.fromDate.addEventListener('input', () => this.resizeInput(this.fromDate as HTMLInputElement));
@@ -107,17 +128,15 @@ export class Operations {
     }
 
     private async createFilter(): Promise<void> {
-        this.todayDate = document.getElementById('filter-today');
-        this.weekDate = document.getElementById('filter-week');
-        this.monthDate = document.getElementById('filter-month');
-        this.yearDate = document.getElementById('filter-year');
-        this.allDate = document.getElementById('filter-all');
-        this.intervalDate = document.getElementById('filter-interval');
+        
         const resetButtons = (): void => {
             const buttons: (HTMLElement | null)[] = [this.todayDate, this.weekDate, this.monthDate, this.yearDate, this.allDate, this.intervalDate];
-            buttons.forEach((button: HTMLElement): void => {
+            buttons.forEach((button: HTMLElement|null): void => {
+                if(button) {
                 button.classList.remove('active');
                 button.style.color = '';
+                }
+               
             });
 
 
@@ -258,8 +277,8 @@ export class Operations {
                 (this.fromDate as HTMLInputElement).disabled = true;
                 this.period = 'interval';
                 if (this.fromDate) {
-                    this.isEventListenersAdded = this.fromDate.dataset.eventListenersAdded === 'true';
-                }
+                    const isEventListenersAdded = this.fromDate.dataset.eventListenersAdded === 'true';
+                
 
 
                 const updateDates = ():void => {
@@ -271,7 +290,7 @@ export class Operations {
                 };
 
 
-                if (!this.isEventListenersAdded) {
+                if (!isEventListenersAdded) {
                     if (this.fromDate) {
                         this.fromDate.addEventListener('input', updateDates);
                         // Установим флаг, что обработчики добавлены
@@ -283,13 +302,13 @@ export class Operations {
                         this.tillDate.dataset.eventListenersAdded = 'true';
                     }
                 }
+            }
             })
         }
 
     }
 
     private async createTable(): Promise<void> {
-        this.tableBody = document.getElementById('tbody');
         if (this.tableBody) {
             this.tableBody.innerHTML = '';
         }
@@ -298,9 +317,11 @@ export class Operations {
 
         if ((result as OperationsResponseType) && (result as OperationsResponseType).response) {
             for (let i: number = 0; i < (result as OperationsResponseType).response.length; i++) {
-                this.tableRow = document.createElement("tr");
-                this.tableRow.classList.add("border-bottom align-middle tr-element");
+                if(this.tableRow) {
+                      this.tableRow.classList.add("border-bottom align-middle tr-element");
                 this.tableRow.setAttribute('data-id', ((result as OperationsResponseType).response[i].id).toString());
+                }
+              
 
                 let tableThIdElement: HTMLTableCellElement = document.createElement("th");
                 tableThIdElement.setAttribute("scope", "row");
@@ -352,9 +373,11 @@ export class Operations {
                 tableSvgsPElement.classList.add("d-flex align-items-center my-auto");
 
                 //SVG Delete
-                this.tableSvgLinkDeleteElement = document.createElement("a");
+              if(this.tableSvgLinkDeleteElement) {
                 this.tableSvgLinkDeleteElement.setAttribute("href", "#");
                 this.tableSvgLinkDeleteElement.classList.add("text-decoration-none");
+              }
+                
 
                 let tableSvgDeleteElement: SVGElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
                 tableSvgDeleteElement.setAttribute("width", "16");
@@ -389,15 +412,16 @@ export class Operations {
                 path3.setAttribute("d", "M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325");
                 tableSvgEditElement.appendChild(path3);
 
-
+if( this.tableSvgLinkDeleteElement) {
                 this.tableSvgLinkDeleteElement.appendChild(tableSvgDeleteElement);
                 tableSvgLinkEditElement.appendChild(tableSvgEditElement);
                 tableSvgsPElement.appendChild(this.tableSvgLinkDeleteElement);
                 tableSvgsPElement.appendChild(tableSvgLinkEditElement);
                 tableTdSvgsElement.appendChild(tableSvgsPElement);
+}
 
-
-                this.tableRow.appendChild(tableThIdElement)
+if(this.tableRow) {
+      this.tableRow.appendChild(tableThIdElement)
                 this.tableRow.appendChild(tableTdTypeElement)
                 this.tableRow.appendChild(tableTdCategoryElement)
                 this.tableRow.appendChild(tableTdSumElement)
@@ -407,23 +431,28 @@ export class Operations {
                 if (this.tableBody) {
                     this.tableBody.appendChild(this.tableRow)
                 }
+}
+              
             }
 
             const deleteIcons: NodeListOf<Element> = document.querySelectorAll('.bi-trash');
             deleteIcons.forEach((icon: Element) => {
-                icon.closest('a').addEventListener('click', (event: MouseEvent): void => {
+                const anchor = icon.closest('a');
+                if(anchor) {
+                    anchor.addEventListener('click', (event: MouseEvent): void => {
                     event.preventDefault();
                     let row: Element |null = icon.closest('.tr-element');
                    if (row) {
                        this.showPopUp(Number(row.getAttribute('data-id')));
                    }
                 });
-            });
+                }
+               });
         }
     }
 
     private showPopUp(id: number): void {
-        this.popup = document.getElementById('pop-up');
+        
         if (this.popup) {
             this.popup.classList.remove('d-none');
             this.popup.classList.add('d-flex');
@@ -466,29 +495,22 @@ export class Operations {
 
     private stylesLayoutCanvas(): void {
         //Layout and Offcanvas
-        this.operationsNavItem = document.querySelectorAll('.operations-nav-item');
-        this.operationsLink = document.getElementsByClassName('operations-link');
-        this.operationsSvg = document.querySelectorAll('.bi-cash-coin');
-
-        this.category = document.getElementById('category');
-        this.offcanvasCategory = document.getElementById('offcanvas-category');
-        this.toggleIcon = document.getElementById('toggleIcon');
-        this.offCanvasToggleIcon = document.getElementById('offcanvas-toggleIcon');
-        this.expenses = document.querySelectorAll('.expenses-link');
-        this.incomes = document.querySelectorAll('.incomes-link');
-        this.categoryNavItem = document.querySelectorAll('.category-nav-item');
-
-        for (let i: number = 0; i < this.operationsNavItem.length; i++) {
+        if(this.operationsNavItem) {
+            for (let i: number = 0; i < this.operationsNavItem.length; i++) {
             (this.operationsNavItem[i] as HTMLElement).style.backgroundColor = '#0D6EFD';
             (this.operationsNavItem[i] as HTMLElement).style.setProperty('border-radius', '7px', 'important');
         }
+        }
+        if(this.operationsLink) {
         for (let i:number = 0; i < this.operationsLink.length; i++) {
             (this.operationsLink[i] as HTMLElement).style.color = "white";
         }
+    }
+    if(this.operationsSvg) {
         for (let i:number = 0; i < this.operationsSvg.length; i++) {
             (this.operationsSvg[i] as HTMLElement).style.fill = 'white'
         }
-
+    }
         const that: Operations = this;
         const categoryCollapse: HTMLElement | null = document.getElementById('category-collapse');
         if (categoryCollapse) {

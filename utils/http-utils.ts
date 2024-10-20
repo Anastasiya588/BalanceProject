@@ -70,7 +70,7 @@ export class HttpUtils {
                         return result
                     } else {
                         // Токен устарел или невалиден, необходимо обновить
-                        const updateTokenResult: boolean = await AuthUtils.updateRefreshToken();
+                        const updateTokenResult: boolean | null = await AuthUtils.updateRefreshToken();
                         if (updateTokenResult) {
                             const accessToken: UserInfoType | string | null | AuthInfoType = AuthUtils.getAuthInfo(AuthUtils.accessTokenKey);
                             if (accessToken) {

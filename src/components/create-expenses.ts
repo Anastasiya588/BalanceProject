@@ -13,11 +13,19 @@ export class CreateExpenses {
     private offcanvasCategory: HTMLElement | null;
     private offcanvastoggleIcon: HTMLElement | null;
 
-    constructor(openNewRoute) {
+    constructor(openNewRoute:{ (url: string): Promise<void>; (url: string): void; }) {
         this.openNewRoute = openNewRoute;
 
         this.createExpenseInput = document.getElementById('create-expenses-input');
         this.saveBtn = document.getElementById('saveBtn');
+
+        this.category = document.getElementById('category');
+        this.toggleIcon = document.getElementById('toggleIcon');
+        this.expenses = document.querySelectorAll('.expenses-link');
+        this.incomes = document.querySelectorAll('.incomes-link');
+        this.categoryNavItem = document.querySelectorAll('.category-nav-item');
+        this.offcanvasCategory = document.getElementById('offcanvas-category');
+        this.offcanvastoggleIcon = document.getElementById('offcanvas-toggleIcon');
 
         this.stylesLayoutCanvas();
 
@@ -63,11 +71,7 @@ export class CreateExpenses {
     private stylesLayoutCanvas(): void {
         const that: CreateExpenses = this;
 //Layout
-        this.category = document.getElementById('category');
-        this.toggleIcon = document.getElementById('toggleIcon');
-        this.expenses = document.querySelectorAll('.expenses-link');
-        this.incomes = document.querySelectorAll('.incomes-link');
-        this.categoryNavItem = document.querySelectorAll('.category-nav-item');
+        
         if (this.category) {
             this.category.style.backgroundColor = '#0D6EFD';
             this.category.style.color = "white";
@@ -76,8 +80,7 @@ export class CreateExpenses {
             this.toggleIcon.style.fill = "white";
         }
         //OffCanvas Layout
-        this.offcanvasCategory = document.getElementById('offcanvas-category');
-        this.offcanvastoggleIcon = document.getElementById('offcanvas-toggleIcon')
+        
         if (this.offcanvasCategory) {
             this.offcanvasCategory.style.backgroundColor = '#0D6EFD';
             this.offcanvasCategory.style.color = "white";

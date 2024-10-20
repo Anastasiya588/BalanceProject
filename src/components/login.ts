@@ -10,15 +10,19 @@ export class Login {
     private fields: LoginFieldType[];
     private validForm: boolean;
 
-    constructor(openNewRoute) {
+    constructor(openNewRoute: { (url: string): Promise<void>; (url: string): void; }) {
         this.openNewRoute = openNewRoute;
-        if (AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
-            return this.openNewRoute('/');
-        }
-
         this.processElement = document.getElementById('process-button');
         this.rememberMe = document.getElementById('remember-me');
         this.commonErrorElement = document.getElementById('common-error');
+        this.fields=[];
+        this.validForm = false;
+       
+        if (AuthUtils.getAuthInfo(AuthUtils.accessTokenKey)) {
+            this.openNewRoute('/');
+        }
+
+      
         if (this.processElement) {
             this.processElement.addEventListener('click', this.login.bind(this))
         }

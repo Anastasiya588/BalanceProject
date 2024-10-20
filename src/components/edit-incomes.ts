@@ -7,7 +7,7 @@ export class EditIncomes {
     readonly openNewRoute: (url: string) => void;
     private editIncomeInput: HTMLElement | null;
     readonly saveBtn: HTMLElement | null;
-    readonly editIncomeId: number | null;
+    readonly editIncomeId: string | null;
     private category: HTMLElement | null;
     private toggleIcon: HTMLElement | null;
     private expenses: NodeListOf<Element>;
@@ -16,14 +16,23 @@ export class EditIncomes {
     private offcanvasCategory: HTMLElement | null;
     private offcanvastoggleIcon: HTMLElement | null;
 
-    constructor(openNewRoute) {
+    constructor(openNewRoute: { (url: string): Promise<void>; (url: string): void; }) {
         this.openNewRoute = openNewRoute;
 
         this.editIncomeInput = document.getElementById('edit-income-input');
-        this.editIncomeId = parseInt(localStorage.getItem('editIncomeId'));
-
-        this.init().then((title:string):void => {
-            (this.editIncomeInput as HTMLInputElement).value = title;
+        this.editIncomeId = localStorage.getItem('editIncomeId');
+        this.category = document.getElementById('category');
+        this.toggleIcon = document.getElementById('toggleIcon');
+        this.expenses = document.querySelectorAll('.expenses-link');
+        this.incomes = document.querySelectorAll('.incomes-link');
+        this.categoryNavItem = document.querySelectorAll('.category-nav-item');
+        this.offcanvasCategory = document.getElementById('offcanvas-category');
+        this.offcanvastoggleIcon = document.getElementById('offcanvas-toggleIcon')
+        this.init().then((title:string|undefined):void => {
+            if(title) {
+                (this.editIncomeInput as HTMLInputElement).value = title;
+            }
+            
         });
         this.saveBtn = document.getElementById('saveBtn');
 
@@ -38,7 +47,7 @@ export class EditIncomes {
         this.editIncome().then();
     }
 
-    private async init(): Promise<string> {
+    private async init(): Promise<string|undefined> {
         const result: DefaultResponseType | CategoryIncomeEditResponse = await HttpUtils.request('/categories/income/' + this.editIncomeId)
         if (result) {
             return (result as CategoryIncomeEditResponse).response.title;
@@ -63,13 +72,7 @@ export class EditIncomes {
     private stylesLayoutCanvas(): void {
         const that: EditIncomes = this;
         //Layout
-        this.category = document.getElementById('category');
-        this.toggleIcon = document.getElementById('toggleIcon');
-        this.expenses = document.querySelectorAll('.expenses-link');
-        this.incomes = document.querySelectorAll('.incomes-link');
-        this.categoryNavItem = document.querySelectorAll('.category-nav-item');
-
-        if (this.category) {
+               if (this.category) {
             this.category.style.backgroundColor = '#0D6EFD';
             this.category.style.color = "white";
         }
@@ -79,8 +82,7 @@ export class EditIncomes {
         }
 
         //OffCanvas Layout
-        this.offcanvasCategory = document.getElementById('offcanvas-category');
-        this.offcanvastoggleIcon = document.getElementById('offcanvas-toggleIcon')
+       
 
         if (this.offcanvasCategory) {
             this.offcanvasCategory.style.backgroundColor = '#0D6EFD';
