@@ -1,14 +1,15 @@
-import config from "../src/config/config.js";
-import {AuthUtils} from "./auth-utils.js";
-import {FileUtils} from "./file-utils";
+import config from "../src/config/config";
+import {AuthUtils} from "./auth-utils";
+import {UserInfoType} from "../src/types/user-info.type";
+import {AuthInfoType} from "../src/types/auth-info.type";
 
 export class HttpUtils {
-    static async request(url, method = "GET", useAuth = true, body = null, period = null, dateFrom = null, dateTo = null) {
-        const result = {
+    public static async request(url: string, method: string = "GET", useAuth: boolean = true, body: any | null = null, period: string | null = null, dateFrom: string | null = null, dateTo: string | null = null): Promise<any> {
+        const result: any = {
             error: false,
             response: null
         }
-        const params = {
+        const params: any = {
             method: method,
             headers: {
                 'Content-type': 'application/json',
@@ -29,7 +30,7 @@ export class HttpUtils {
         }
 
         // Сбор параметров для запроса
-        const queryParams = new URLSearchParams();
+        const queryParams: URLSearchParams = new URLSearchParams();
 
         if (period) {
             queryParams.append('period', period);
@@ -44,15 +45,15 @@ export class HttpUtils {
         }
 
         // Создаем полный URL с параметрами
-        const fullUrl = `${config.api}${url}?${queryParams.toString()}`;
+        const fullUrl: string = `${config.api}${url}?${queryParams.toString()}`;
 
         let response = null;
 
         try {
             response = await fetch(fullUrl, params);
             //Получение ответа
-                result.response = await response.json();
-        } catch(error) {
+            result.response = await response.json();
+        } catch (error) {
             console.error('Fetch error:', error);
             result.error = true;
             return result;
@@ -69,10 +70,12 @@ export class HttpUtils {
                         return result
                     } else {
                         // Токен устарел или невалиден, необходимо обновить
-                        const updateTokenResult = await AuthUtils.updateRefreshToken();
+                        const updateTokenResult: boolean | null = await AuthUtils.updateRefreshToken();
                         if (updateTokenResult) {
-                            const refreshToken = AuthUtils.getAuthInfo(AuthUtils.refreshTokenKey);
-                            const accessToken = AuthUtils.getAuthInfo(AuthUtils.accessTokenKey);
+                            const accessToken: UserInfoType | string | null | AuthInfoType = AuthUtils.getAuthInfo(AuthUtils.accessTokenKey);
+                            if (accessToken) {
+                                params.headers['x-auth-token'] = accessToken;
+                            }
                             //запрос повторно
                             return this.request(url, method, useAuth, body, period, dateFrom, dateTo);
                         } else {

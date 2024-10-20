@@ -1,15 +1,17 @@
-import {AuthUtils} from "../../utils/auth-utils.js";
-import {HttpUtils} from "../../utils/http-utils.js";
+import {AuthUtils} from "../../utils/auth-utils";
+import {HttpUtils} from "../../utils/http-utils";
 
 export class Logout {
-    constructor(openNewRoute) {
+    readonly openNewRoute: (url: string) => void;
+
+    constructor(openNewRoute: { (url: string): Promise<void>; (url: string): void; }) {
         this.openNewRoute = openNewRoute;
 
         this.logout().then();
     }
 
-    async logout() {
-        const result = await HttpUtils.request('/logout', "POST", false, {
+    public async logout(): Promise<void> {
+        await HttpUtils.request('/logout', "POST", false, {
             refreshToken: AuthUtils.getAuthInfo(AuthUtils.refreshTokenKey)
         })
 

@@ -1,23 +1,28 @@
-import {Dashboard} from "./components/dashboard.js";
-import {Login} from "./components/login.js";
-import {SignUp} from "./components/sign-up.js";
-import {Incomes} from "./components/incomes.js";
-import {CreateIncomes} from "./components/create-incomes.js";
-import {EditIncomes} from "./components/edit-incomes.js";
-import {Expenses} from "./components/expenses.js";
-import {CreateExpenses} from "./components/create-expenses.js";
-import {EditExpenses} from "./components/edit-expenses.js";
-import {Operations} from "./components/operations.js";
-import {CreateOperations} from "./components/create-operations.js";
-import {EditOperations} from "./components/edit-operations.js";
-import {Logout} from "./components/logout.js";
-import {AuthUtils} from "../utils/auth-utils.js";
-import {HttpUtils} from "../utils/http-utils.js";
-import {FileUtils} from "../utils/file-utils";
+import {Dashboard} from "./components/dashboard";
+import {Login} from "./components/login";
+import {SignUp} from "./components/sign-up";
+import {Incomes} from "./components/incomes";
+import {CreateIncomes} from "./components/create-incomes";
+import {EditIncomes} from "./components/edit-incomes";
+import {Expenses} from "./components/expenses";
+import {CreateExpenses} from "./components/create-expenses";
+import {EditExpenses} from "./components/edit-expenses";
+import {Operations} from "./components/operations";
+import {CreateOperations} from "./components/create-operations";
+import {EditOperations} from "./components/edit-operations";
+import {Logout} from "./components/logout";
+import {AuthUtils} from "../utils/auth-utils";
+import {RouteType} from "./types/route.type";
 
 const feather = require('feather-icons');
 
 export class Router {
+    readonly titlePageElement: HTMLElement | null;
+    readonly contentPageElement: HTMLElement | null;
+    readonly adaptiveMeta: HTMLElement | null;
+
+    private routes: RouteType[];
+
     constructor() {
         this.titlePageElement = document.getElementById('title');
         this.contentPageElement = document.getElementById('content');
@@ -26,6 +31,7 @@ export class Router {
         feather.replace();
 
         this.initEvents();
+
         this.routes = [
             {
                 route: '/',
@@ -160,7 +166,7 @@ export class Router {
 
     }
 
-    initEvents() {
+    private initEvents(): void {
         //это отлавливаем когда пользователь загружает страницу
         window.addEventListener('DOMContentLoaded', this.activateRoute.bind(this));
         //это отлавливаем когда меняется url, т.е. пользователь перешел на другую страницу в рамках работающего приложения
@@ -169,13 +175,13 @@ export class Router {
         document.addEventListener('click', this.clickHandler.bind(this));
     }
 
-    isAuthentificated() {
+    private isAuthentificated(): boolean {
         return AuthUtils.getAuthInfo(AuthUtils.userInfoKey) !== null;
     }
 
-    async openNewRoute(url) {
+    private async openNewRoute(url: string): Promise<void> {
         //текущий роут
-        const currentRoute = window.location.pathname;
+        const currentRoute: string = window.location.pathname;
         //Чтобы сверху url отображался тот, на который нажали (т.е. обновляем url-адрес в браузере)
         history.pushState({}, '', url);
 
@@ -184,20 +190,24 @@ export class Router {
     }
 
     //Эта функция обрабатывает клик по ссылке и открывает новый роут(переход на другую страницу через функционал)
-    async clickHandler(e) {
-        let element = null;
-        if (e.target.nodeName === 'A') {
-            element = e.target
-        } else if (e.target.parentNode.nodeName === 'A') {
-            element = e.target.parentNode;
+    private async clickHandler(e:Event): Promise<void> {
+        let element: HTMLElement | null = null;
+        if(e.target) {
+            const target = e.target as HTMLElement;
+           if (target.nodeName === 'A') {
+            element = target;
+        } else if (target.parentNode && (target.parentNode as HTMLElement).nodeName === 'A') {
+            element = target.parentNode as HTMLElement;
+        } 
         }
+        
 
         if (element) {
             e.preventDefault();
 
-            const currentRoute = window.location.pathname;
+            const currentRoute: string = window.location.pathname;
             //Вырезаем из url http://localhost:9000 и заменяем на ''
-            const url = element.href.replace(window.location.origin, '');
+            const url = (element as HTMLLinkElement).href.replace(window.location.origin, '');
             if (!url || currentRoute === url.replace('#', '') || url.startsWith('javascript:void(0)')) {
                 return;
             }
@@ -206,29 +216,40 @@ export class Router {
         }
     }
 
-    async activateRoute(e, oldRoute = null) {
+    private async activateRoute(e: Event | null, oldRoute: string | null = null): Promise<void> {
         if (oldRoute) {
             //Получаем старый роут, с которого мы уходим
-            const currentRoute = this.routes.find(item => item.route === oldRoute);
+            const currentRoute: RouteType | undefined = this.routes.find(item => item.route === oldRoute);
             //удаляем стили и скрипты у текущего роута
-            if (currentRoute.styles && currentRoute.styles.length > 0) {
-                currentRoute.styles.forEach(style => {
-                    document.querySelector(`link[href='/css/${style}']`).remove()
-                })
+            if (currentRoute) {
+                if (currentRoute.styles && currentRoute.styles.length > 0) {
+                    currentRoute.styles.forEach((style: string): void => {
+                        const styleRemove:Element|null=document.querySelector(`link[href='/css/${style}']`);
+                        if(styleRemove) {
+                            styleRemove.remove()
+                        }
+                        
+                    })
+                }
+                if (currentRoute.scripts && currentRoute.scripts.length > 0) {
+                    currentRoute.scripts.forEach((script: string): void => {
+                        const scriptRemove:Element|null=document.querySelector(`script[src='/js/${script}']`);
+                        if(scriptRemove) {
+                            scriptRemove.remove();
+                        }
+                        
+                    })
+                }
             }
-            if (currentRoute.scripts && currentRoute.scripts.length > 0) {
-                currentRoute.scripts.forEach(script => {
-                    document.querySelector(`script[src='/js/${script}']`).remove()
-                })
-            }
+
         }
         //Получаем текущий url, а точнее все что идет после pathname
-        const urlRoute = window.location.pathname;
+        const urlRoute: string = window.location.pathname;
         //Находим какому url-адресу относится текущий url-адрес когда проходим по всем нашим routes
-        const newRoute = this.routes.find(item => item.route === urlRoute);
+        const newRoute: RouteType | undefined = this.routes.find((item: RouteType) => item.route === urlRoute);
 
         if (newRoute) {
-            const isPublicRoute = newRoute.route === '/login' || newRoute.route === '/signup';
+            const isPublicRoute: boolean = newRoute.route === '/login' || newRoute.route === '/signup';
             if (!isPublicRoute && !this.isAuthentificated()) {
                 history.pushState({}, '', '/login');
                 await this.activateRoute(null, '/login');
@@ -236,43 +257,48 @@ export class Router {
             }
 
             if (newRoute.styles && newRoute.styles.length > 0) {
-                newRoute.styles.forEach(style => {
-                    const link = document.createElement('link');
+                newRoute.styles.forEach((style: string): void => {
+                    const link: HTMLLinkElement = document.createElement('link');
                     link.rel = 'stylesheet';
                     link.href = '/css/' + style;
-                    document.head.insertBefore(link, this.adaptiveMeta);
+                    if (this.adaptiveMeta) {
+                        document.head.insertBefore(link, this.adaptiveMeta);
+                    }
+
                 })
             }
             if (newRoute.scripts && newRoute.scripts.length > 0) {
-                newRoute.scripts.forEach(script => {
-                    const scriptElement = document.createElement('script');
+                newRoute.scripts.forEach((script: string) => {
+                    const scriptElement: HTMLScriptElement = document.createElement('script');
                     scriptElement.src = '/js/' + script;
                     document.body.appendChild(scriptElement);
                 })
             }
-            if (newRoute.title) {
+            if (newRoute.title && this.titlePageElement) {
                 this.titlePageElement.innerText = newRoute.title + ' | Finance';
             }
 
             if (newRoute.filePathTemplate) {
-                let contentBlock = this.contentPageElement;
+                let contentBlock: HTMLElement | null = this.contentPageElement;
                 if (newRoute.useLayout) {
-                    this.contentPageElement.innerHTML = await fetch(newRoute.useLayout).then(response => response.text());
+                    if (this.contentPageElement) {
+                        this.contentPageElement.innerHTML = await fetch(newRoute.useLayout).then(response => response.text());
+                    }
                     contentBlock = document.getElementById('content-layout');
                 }
                 //запрос на получение страницы
-                contentBlock.innerHTML = await fetch(newRoute.filePathTemplate).then(response => response.text());
+                if (contentBlock) {
+                    contentBlock.innerHTML = await fetch(newRoute.filePathTemplate).then((response: Response) => response.text());
+                }
             }
             if (newRoute.load && typeof newRoute.load === 'function') {
                 newRoute.load();
             }
         } else {
             history.pushState({}, '', '/404');
-            await this.activateRoute();
+            await this.activateRoute(null, null);
         }
     }
-
-
 }
 
 
