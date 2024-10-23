@@ -52,14 +52,8 @@ export class HttpUtils {
         try {
             response = await fetch(fullUrl, params);
             //Получение ответа
-            result.response = await response.json();
-        } catch (error) {
-            console.error('Fetch error:', error);
-            result.error = true;
-            return result;
-        }
+            // result.response = await response.json();
 
-        try {
             if (response.status < 200 || response.status >= 300) {
                 result.error = true;
 
@@ -72,17 +66,19 @@ export class HttpUtils {
                         // Токен устарел или невалиден, необходимо обновить
                         const updateTokenResult: boolean | null = await AuthUtils.updateRefreshToken();
                         if (updateTokenResult) {
-                            const accessToken: UserInfoType | string | null | AuthInfoType = AuthUtils.getAuthInfo(AuthUtils.accessTokenKey);
+                            const accessToken: UserInfoType | string | null | AuthInfoType = await AuthUtils.getAuthInfo(AuthUtils.accessTokenKey);
                             if (accessToken) {
                                 params.headers['x-auth-token'] = accessToken;
                             }
                             //запрос повторно
-                            return this.request(url, method, useAuth, body, period, dateFrom, dateTo);
+                            this.request(url, method, useAuth, body, period, dateFrom, dateTo);
                         } else {
                             result.redirect = '/login';
                         }
                     }
                 }
+            } else {
+                result.response = await response.json();
             }
         } catch (e) {
             console.error('Error during fetch:', e);

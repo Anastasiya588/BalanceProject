@@ -11,23 +11,21 @@ export class Operations {
     readonly createExpenseBtn: HTMLElement | null;
     readonly fromDate: HTMLElement | null;
     readonly tillDate: HTMLElement | null;
-    private todayDate: HTMLElement | null;
-    private weekDate: HTMLElement | null;
-    private monthDate: HTMLElement | null;
-    private yearDate: HTMLElement | null;
-    private allDate: HTMLElement | null;
-    private intervalDate: HTMLElement | null;
-    private tableBody: HTMLElement | null;
-    private tableRow: HTMLElement | null;
-    private popup: HTMLElement | null;
-    private tableSvgLinkDeleteElement: HTMLElement | null;
+    readonly todayDate: HTMLElement | null;
+    readonly weekDate: HTMLElement | null;
+    readonly monthDate: HTMLElement | null;
+    readonly yearDate: HTMLElement | null;
+    readonly allDate: HTMLElement | null;
+    readonly intervalDate: HTMLElement | null;
+    readonly tableBody: HTMLElement | null;
+    readonly popup: HTMLElement | null;
     private period: string | null;
     private dateFrom: string | null;
     private dateTo: string | null;
 
-    private operationsNavItem: NodeListOf<Element> | null;
-    private operationsLink: HTMLCollectionOf<Element> | null;
-    private operationsSvg: NodeListOf<Element> | null;
+    readonly operationsNavItem: NodeListOf<Element> | null;
+    readonly operationsLink: HTMLCollectionOf<Element> | null;
+    readonly operationsSvg: NodeListOf<Element> | null;
     private category: HTMLElement | null;
     private offcanvasCategory: HTMLElement | null;
     private toggleIcon: HTMLElement | null;
@@ -51,9 +49,7 @@ export class Operations {
         this.fromDate = document.getElementById('from-date');
         this.tillDate = document.getElementById('till-date');
         this.tableBody = document.getElementById('tbody');
-        this.tableRow = document.createElement("tr");
         this.popup = document.getElementById('pop-up');
-        this.tableSvgLinkDeleteElement = document.createElement("a");
         this.period = '';
         this.operationsNavItem = document.querySelectorAll('.operations-nav-item');
         this.operationsLink = document.getElementsByClassName('operations-link');
@@ -128,22 +124,22 @@ export class Operations {
     }
 
     private async createFilter(): Promise<void> {
-        
+
         const resetButtons = (): void => {
             const buttons: (HTMLElement | null)[] = [this.todayDate, this.weekDate, this.monthDate, this.yearDate, this.allDate, this.intervalDate];
-            buttons.forEach((button: HTMLElement|null): void => {
-                if(button) {
-                button.classList.remove('active');
-                button.style.color = '';
+            buttons.forEach((button: HTMLElement | null): void => {
+                if (button) {
+                    button.classList.remove('active');
+                    button.style.color = '';
                 }
-               
+
             });
 
 
         };
 
         if (this.todayDate) {
-            this.todayDate.addEventListener('click', ():void => {
+            this.todayDate.addEventListener('click', (): void => {
                 resetButtons();
                 if (this.todayDate) {
                     this.todayDate.classList.add('active');
@@ -162,7 +158,7 @@ export class Operations {
         }
 
         if (this.weekDate) {
-            this.weekDate.addEventListener('click', ():void => {
+            this.weekDate.addEventListener('click', (): void => {
                 resetButtons();
                 if (this.weekDate) {
                     this.weekDate.classList.add('active');
@@ -181,7 +177,7 @@ export class Operations {
         }
 
         if (this.monthDate) {
-            this.monthDate.addEventListener('click', ():void => {
+            this.monthDate.addEventListener('click', (): void => {
                 resetButtons();
                 if (this.monthDate) {
                     this.monthDate.classList.add('active');
@@ -200,7 +196,7 @@ export class Operations {
         }
 
         if (this.yearDate) {
-            this.yearDate.addEventListener('click', ():void => {
+            this.yearDate.addEventListener('click', (): void => {
                 resetButtons();
                 if (this.yearDate) {
                     this.yearDate.classList.add('active');
@@ -259,7 +255,7 @@ export class Operations {
                         overlayButton: "Ок",
                         overlayPlaceholder: 'Введите год',
                         showAllDates: true,
-                        onSelect: (instance:DatepickerInstance, date: Date | undefined): void => {
+                        onSelect: (instance: DatepickerInstance, date: Date | undefined): void => {
                             if (date) {
                                 (this.tillDate as HTMLInputElement).value = this.formatDate(date as Date);
                             }
@@ -273,15 +269,11 @@ export class Operations {
                     this.intervalDate.style.color = 'white';
                 }
 
-                (this.tillDate as HTMLInputElement).disabled = true;
-                (this.fromDate as HTMLInputElement).disabled = true;
+                (this.tillDate as HTMLInputElement).disabled = false;
+                (this.fromDate as HTMLInputElement).disabled = false;
                 this.period = 'interval';
-                if (this.fromDate) {
-                    const isEventListenersAdded = this.fromDate.dataset.eventListenersAdded === 'true';
-                
 
-
-                const updateDates = ():void => {
+                const updateDates = (): void => {
                     this.dateFrom = (this.fromDate as HTMLInputElement).value;
                     this.dateTo = (this.tillDate as HTMLInputElement).value;
                     if (this.dateFrom && this.dateTo) {
@@ -289,20 +281,21 @@ export class Operations {
                     }
                 };
 
-
-                if (!isEventListenersAdded) {
-                    if (this.fromDate) {
-                        this.fromDate.addEventListener('input', updateDates);
-                        // Установим флаг, что обработчики добавлены
-                        this.fromDate.dataset.eventListenersAdded = 'true';
-                    }
-                    if (this.tillDate) {
-                        this.tillDate.addEventListener('input', updateDates);
-                        // Установим флаг, что обработчики добавлены
-                        this.tillDate.dataset.eventListenersAdded = 'true';
+                if (this.fromDate) {
+                    const isEventListenersAdded = this.fromDate.dataset.eventListenersAdded === 'true';
+                    if (!isEventListenersAdded) {
+                        if (this.fromDate) {
+                            this.fromDate.addEventListener('input', updateDates);
+                            // Установим флаг, что обработчики добавлены
+                            this.fromDate.dataset.eventListenersAdded = 'true';
+                        }
+                        if (this.tillDate) {
+                            this.tillDate.addEventListener('input', updateDates);
+                            // Установим флаг, что обработчики добавлены
+                            this.tillDate.dataset.eventListenersAdded = 'true';
+                        }
                     }
                 }
-            }
             })
         }
 
@@ -314,22 +307,23 @@ export class Operations {
         }
 
         const result: DefaultResponseType | OperationsResponseType = await HttpUtils.request('/operations', 'GET', true, null, this.period, this.dateFrom, this.dateTo)
-
+        console.log(result);
         if ((result as OperationsResponseType) && (result as OperationsResponseType).response) {
             for (let i: number = 0; i < (result as OperationsResponseType).response.length; i++) {
-                if(this.tableRow) {
-                      this.tableRow.classList.add("border-bottom align-middle tr-element");
-                this.tableRow.setAttribute('data-id', ((result as OperationsResponseType).response[i].id).toString());
+                const tableRow: HTMLTableRowElement = document.createElement("tr");
+                if (tableRow) {
+                    tableRow.classList.add("border-bottom", "align-middle", "tr-element");
+                    tableRow.setAttribute('data-id', ((result as OperationsResponseType).response[i].id).toString());
                 }
-              
+
 
                 let tableThIdElement: HTMLTableCellElement = document.createElement("th");
                 tableThIdElement.setAttribute("scope", "row");
-                tableThIdElement.classList.add("p-3 th-id");
+                tableThIdElement.classList.add("p-3", "th-id");
                 tableThIdElement.innerText = (i + 1).toString()
 
                 let tableTdTypeElement: HTMLTableCellElement = document.createElement("td");
-                tableTdTypeElement.classList.add("p-3 text-success td-type");
+                tableTdTypeElement.classList.add("p-3", "text-success", "td-type");
 
                 if ((result as OperationsResponseType).response[i].type === 'income') {
                     tableTdTypeElement.classList.remove('text-danger');
@@ -342,49 +336,50 @@ export class Operations {
                 }
 
                 let tableTdCategoryElement: HTMLTableCellElement = document.createElement("td");
-                tableTdCategoryElement.classList.add("p-3 td-category");
+                tableTdCategoryElement.classList.add("p-3", "td-category");
                 tableTdCategoryElement.innerText = (result as OperationsResponseType).response[i].category
 
                 let tableTdSumElement: HTMLTableCellElement = document.createElement("td");
-                tableTdSumElement.classList.add("p-3 td-sum d-flex justify-content-center");
+                tableTdSumElement.classList.add("p-3", "td-sum", "d-flex", "justify-content-center");
 
                 let amountTextNode: Text = document.createTextNode(((result as OperationsResponseType).response[i].amount).toString());
                 tableTdSumElement.appendChild(amountTextNode);
 
                 let tablePSumElement: HTMLParagraphElement = document.createElement("p");
-                tablePSumElement.classList.add("dollar m-0");
+                tablePSumElement.classList.add("dollar", "m-0");
                 tablePSumElement.innerText = "$";
 
                 tableTdSumElement.appendChild(tablePSumElement);
 
                 let tableTdDateElement: HTMLTableCellElement = document.createElement("td");
-                tableTdDateElement.classList.add("p-3 td-date");
+                tableTdDateElement.classList.add("p-3", "td-date");
                 tableTdDateElement.style.width = "148px";
                 tableTdDateElement.innerText = (result as OperationsResponseType).response[i].date
 
                 let tableTdCommentElement: HTMLTableCellElement = document.createElement("td");
-                tableTdCommentElement.classList.add("p-3 comment");
+                tableTdCommentElement.classList.add("p-3", "comment");
                 tableTdCommentElement.innerText = (result as OperationsResponseType).response[i].comment
 
                 let tableTdSvgsElement: HTMLTableCellElement = document.createElement("td");
-                tableTdSvgsElement.classList.add("svgs py-3 ps-3 pe-0 align-middle border-0 align-items-center");
+                tableTdSvgsElement.classList.add("svgs", "py-3", "ps-3", "pe-0", "align-middle", "border-0", "align-items-center");
 
                 let tableSvgsPElement: HTMLParagraphElement = document.createElement("p");
-                tableSvgsPElement.classList.add("d-flex align-items-center my-auto");
+                tableSvgsPElement.classList.add("d-flex", "align-items-center", "my-auto");
 
+               const tableSvgLinkDeleteElement:HTMLAnchorElement = document.createElement("a");
                 //SVG Delete
-              if(this.tableSvgLinkDeleteElement) {
-                this.tableSvgLinkDeleteElement.setAttribute("href", "#");
-                this.tableSvgLinkDeleteElement.classList.add("text-decoration-none");
-              }
-                
+                if (tableSvgLinkDeleteElement) {
+                    tableSvgLinkDeleteElement.setAttribute("href", "#");
+                    tableSvgLinkDeleteElement.classList.add("text-decoration-none");
+                }
+
 
                 let tableSvgDeleteElement: SVGElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
                 tableSvgDeleteElement.setAttribute("width", "16");
                 tableSvgDeleteElement.setAttribute("height", "16");
                 tableSvgDeleteElement.setAttribute("fill", "black");
                 tableSvgDeleteElement.setAttribute("viewBox", "0 0 16 16");
-                tableSvgDeleteElement.classList.add("bi bi-trash me-2");
+                tableSvgDeleteElement.classList.add("bi", "bi-trash", "me-2");
 
                 let path1: SVGPathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 path1.setAttribute("d", "M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z");
@@ -406,53 +401,53 @@ export class Operations {
                 tableSvgEditElement.setAttribute("height", "16");
                 tableSvgEditElement.setAttribute("fill", "black");
                 tableSvgEditElement.setAttribute("viewBox", "0 0 16 16");
-                tableSvgEditElement.classList.add("bi bi-pencil");
+                tableSvgEditElement.classList.add("bi", "bi-pencil");
 
                 let path3: SVGPathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 path3.setAttribute("d", "M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325");
                 tableSvgEditElement.appendChild(path3);
 
-if( this.tableSvgLinkDeleteElement) {
-                this.tableSvgLinkDeleteElement.appendChild(tableSvgDeleteElement);
-                tableSvgLinkEditElement.appendChild(tableSvgEditElement);
-                tableSvgsPElement.appendChild(this.tableSvgLinkDeleteElement);
-                tableSvgsPElement.appendChild(tableSvgLinkEditElement);
-                tableTdSvgsElement.appendChild(tableSvgsPElement);
-}
-
-if(this.tableRow) {
-      this.tableRow.appendChild(tableThIdElement)
-                this.tableRow.appendChild(tableTdTypeElement)
-                this.tableRow.appendChild(tableTdCategoryElement)
-                this.tableRow.appendChild(tableTdSumElement)
-                this.tableRow.appendChild(tableTdDateElement)
-                this.tableRow.appendChild(tableTdCommentElement)
-                this.tableRow.appendChild(tableTdSvgsElement)
-                if (this.tableBody) {
-                    this.tableBody.appendChild(this.tableRow)
+                if (tableSvgLinkDeleteElement) {
+                    tableSvgLinkDeleteElement.appendChild(tableSvgDeleteElement);
+                    tableSvgLinkEditElement.appendChild(tableSvgEditElement);
+                    tableSvgsPElement.appendChild(tableSvgLinkDeleteElement);
+                    tableSvgsPElement.appendChild(tableSvgLinkEditElement);
+                    tableTdSvgsElement.appendChild(tableSvgsPElement);
                 }
-}
-              
+
+                if (tableRow) {
+                    tableRow.appendChild(tableThIdElement)
+                    tableRow.appendChild(tableTdTypeElement)
+                    tableRow.appendChild(tableTdCategoryElement)
+                    tableRow.appendChild(tableTdSumElement)
+                    tableRow.appendChild(tableTdDateElement)
+                    tableRow.appendChild(tableTdCommentElement)
+                    tableRow.appendChild(tableTdSvgsElement)
+                    if (this.tableBody) {
+                        this.tableBody.appendChild(tableRow)
+                    }
+                }
+
             }
 
             const deleteIcons: NodeListOf<Element> = document.querySelectorAll('.bi-trash');
             deleteIcons.forEach((icon: Element) => {
                 const anchor = icon.closest('a');
-                if(anchor) {
+                if (anchor) {
                     anchor.addEventListener('click', (event: MouseEvent): void => {
-                    event.preventDefault();
-                    let row: Element |null = icon.closest('.tr-element');
-                   if (row) {
-                       this.showPopUp(Number(row.getAttribute('data-id')));
-                   }
-                });
+                        event.preventDefault();
+                        let row: Element | null = icon.closest('.tr-element');
+                        if (row) {
+                            this.showPopUp(Number(row.getAttribute('data-id')));
+                        }
+                    });
                 }
-               });
+            });
         }
     }
 
     private showPopUp(id: number): void {
-        
+
         if (this.popup) {
             this.popup.classList.remove('d-none');
             this.popup.classList.add('d-flex');
@@ -467,7 +462,7 @@ if(this.tableRow) {
             agreeDelete.onclick = async (): Promise<void> => {
                 const delResult: DefaultResponseType = await HttpUtils.request('/operations/' + id, 'DELETE', true);
                 if (!delResult.error) {
-                    const elementToRemove: Element |null = document.querySelector(`[data-id='${id}']`);
+                    const elementToRemove: Element | null = document.querySelector(`[data-id='${id}']`);
                     if (elementToRemove) {
                         elementToRemove.remove();
                     }
@@ -495,22 +490,22 @@ if(this.tableRow) {
 
     private stylesLayoutCanvas(): void {
         //Layout and Offcanvas
-        if(this.operationsNavItem) {
+        if (this.operationsNavItem) {
             for (let i: number = 0; i < this.operationsNavItem.length; i++) {
-            (this.operationsNavItem[i] as HTMLElement).style.backgroundColor = '#0D6EFD';
-            (this.operationsNavItem[i] as HTMLElement).style.setProperty('border-radius', '7px', 'important');
+                (this.operationsNavItem[i] as HTMLElement).style.backgroundColor = '#0D6EFD';
+                (this.operationsNavItem[i] as HTMLElement).style.setProperty('border-radius', '7px', 'important');
+            }
         }
+        if (this.operationsLink) {
+            for (let i: number = 0; i < this.operationsLink.length; i++) {
+                (this.operationsLink[i] as HTMLElement).style.color = "white";
+            }
         }
-        if(this.operationsLink) {
-        for (let i:number = 0; i < this.operationsLink.length; i++) {
-            (this.operationsLink[i] as HTMLElement).style.color = "white";
+        if (this.operationsSvg) {
+            for (let i: number = 0; i < this.operationsSvg.length; i++) {
+                (this.operationsSvg[i] as HTMLElement).style.fill = 'white'
+            }
         }
-    }
-    if(this.operationsSvg) {
-        for (let i:number = 0; i < this.operationsSvg.length; i++) {
-            (this.operationsSvg[i] as HTMLElement).style.fill = 'white'
-        }
-    }
         const that: Operations = this;
         const categoryCollapse: HTMLElement | null = document.getElementById('category-collapse');
         if (categoryCollapse) {
@@ -523,7 +518,7 @@ if(this.tableRow) {
                         }
 
                     }
-                    for (let i:number = 0; i < that.incomes.length; i++) {
+                    for (let i: number = 0; i < that.incomes.length; i++) {
                         (that.incomes[i] as HTMLElement).style.setProperty('border-top-right-radius', '0', 'important');
                         (that.incomes[i] as HTMLElement).style.setProperty('border-top-left-radius', '0', 'important');
                         (that.incomes[i] as HTMLElement).style.setProperty('border-bottom-right-radius', '0', 'important');
@@ -532,7 +527,7 @@ if(this.tableRow) {
                     }
                 }
                 if (that.expenses) {
-                    for (let i:number = 0; i < that.expenses.length; i++) {
+                    for (let i: number = 0; i < that.expenses.length; i++) {
                         (that.expenses[i] as HTMLElement).style.setProperty('border-top-right-radius', '0', 'important');
                         (that.expenses[i] as HTMLElement).style.setProperty('border-top-left-radius', '0', 'important');
                     }

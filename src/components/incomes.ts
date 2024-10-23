@@ -48,18 +48,18 @@ export class Incomes {
         if (!(result as DefaultResponseType).error && (result as CategoriesIncomeResponse).response) {
             for (let i: number = 0; i < (result as CategoriesIncomeResponse).response.length; i++) {
                 let card: HTMLDivElement = document.createElement("div");
-                card.classList.add("card p-3 rounded-3");
+                card.classList.add("card", "p-3", "rounded-3");
 
                 let cardBody: HTMLDivElement = document.createElement("div");
-                cardBody.classList.add("card-body p-1");
+                cardBody.classList.add("card-body","p-1");
 
                 let cardTitle: HTMLHeadingElement = document.createElement("h2");
-                cardTitle.classList.add("card-title mb-2");
+                cardTitle.classList.add("card-title","mb-2");
                 cardTitle.innerText = (result as CategoriesIncomeResponse).response[i].title;
 
                 let btnEdit: HTMLAnchorElement = document.createElement("a");
                 btnEdit.setAttribute('href', "/categories/income/edit");
-                btnEdit.classList.add("btn btn-primary py-2 px-3 me-2");
+                btnEdit.classList.add("btn", "btn-primary", "py-2", "px-3", "me-2");
                 btnEdit.innerText = "Редактировать";
                 btnEdit.setAttribute('data-id', ((result as CategoriesIncomeResponse).response[i].id).toString());
                 btnEdit.addEventListener('click', function () {
@@ -69,7 +69,7 @@ export class Incomes {
 
                 let btnDelete: HTMLAnchorElement = document.createElement("a");
                 btnDelete.setAttribute('href', "#");
-                btnDelete.classList.add("btn btn-danger py-2 px-3 delete");
+                btnDelete.classList.add("btn","btn-danger", "py-2", "px-3", "delete");
                 btnDelete.innerText = "Удалить";
                 btnDelete.setAttribute('data-id', ((result as CategoriesIncomeResponse).response[i].id).toString());
 

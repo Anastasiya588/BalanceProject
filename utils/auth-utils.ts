@@ -61,7 +61,7 @@ export class AuthUtils {
                 return result
             } else {
                 result = false
-                console.error('Ошибка при обновлении токена:', response.status, response.statusText);
+                console.error('Ошибка при обновлении токена:', response.error);
             }
         }
 

@@ -1,9 +1,8 @@
-export type GetBalanceEsponseType = {
+export type GetBalanceResponseType = {
     response: GetBalanceType;
 }
 
 
 export type GetBalanceType = {
-    user_id: number,
     balance: number,
 }

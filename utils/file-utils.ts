@@ -1,7 +1,7 @@
 import {HttpUtils} from "./http-utils";
 import {AuthUtils} from "./auth-utils";
 import {DefaultResponseType} from "../src/types/default-response.type";
-import {GetBalanceEsponseType} from "../src/types/get-balance.type";
+import {GetBalanceResponseType} from "../src/types/get-balance.type";
 import {UserInfoType} from "../src/types/user-info.type";
 import {AuthInfoType} from "../src/types/auth-info.type";
 import {OperationsResponseType} from "../src/types/operations-response.type";
@@ -38,15 +38,15 @@ export class FileUtils {
             }
 
             // Выполняем запрос на получение баланса
-            const result: DefaultResponseType | GetBalanceEsponseType = await HttpUtils.request('/balance');
+            const result: DefaultResponseType | GetBalanceResponseType = await HttpUtils.request('/balance');
             if (result) {
-                if ((result as DefaultResponseType).error !== undefined) {
+                if ((result as DefaultResponseType).error) {
                     throw new Error((result as DefaultResponseType).message);
                 }
             }
 
-            if ((result as GetBalanceEsponseType) && (result as GetBalanceEsponseType).response.balance) {
-                const balanceValue: number = (result as GetBalanceEsponseType).response.balance;
+            if ((result as GetBalanceResponseType) && (result as GetBalanceResponseType).response.balance) {
+                const balanceValue: number = (result as GetBalanceResponseType).response.balance;
 
                 const offcanvasElement: HTMLElement | null = document.getElementById('menuRight');
                 if (offcanvasElement && offcanvasBalanceElement) {
@@ -69,7 +69,7 @@ export class FileUtils {
             this.updateBalance().then()
             this.balance = document.querySelectorAll('.balance-number');
 
-            const result: DefaultResponseType | GetBalanceEsponseType = await HttpUtils.request('/balance');
+            const result: DefaultResponseType | GetBalanceResponseType = await HttpUtils.request('/balance');
             this.balance.forEach((elem: HTMLElement): void => {
                 elem.innerText = (0).toString();
             });
@@ -77,7 +77,7 @@ export class FileUtils {
                 if (this.balance.length === 0) {
                     return;
                 }
-                const balanceValue: number = (result as GetBalanceEsponseType).response.balance;
+                const balanceValue: number = (result as GetBalanceResponseType).response.balance;
 
                 if (balanceValue) {
                     this.balance.forEach((elem) => {

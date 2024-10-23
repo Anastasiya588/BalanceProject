@@ -1,4 +1,4 @@
-import {Chart, LegendItem, registerables, ChartOptions , Plugin } from "chart.js/auto";
+import {Chart, LegendItem, registerables, ChartOptions, Plugin} from "chart.js/auto";
 import {FileUtils} from "../../utils/file-utils";
 import datepicker, {DatepickerInstance} from "js-datepicker";
 import {HttpUtils} from "../../utils/http-utils";
@@ -6,7 +6,7 @@ import {DefaultResponseType} from "../types/default-response.type";
 import {OperationsResponseType} from "../types/operations-response.type";
 import {OperationResponseType} from "../types/operation-response.type";
 import {ChartHtmlLegendType} from "../types/chart-html-legend.type";
-import { CustomChartOptions } from "../types/custom-chart-options.type";
+import {CustomChartOptions} from "../types/custom-chart-options.type";
 
 export class Dashboard {
     readonly incomeCanvas: HTMLCanvasElement | null;
@@ -35,7 +35,7 @@ export class Dashboard {
     private categoriesExpenseData: string[] | null;
     private amountIncomeData: number[] | null;
     private amountExpenseData: number[] | null;
-    readonly clearExistingTitles: (container: HTMLElement) => void;
+    // readonly clearExistingTitles: (container: HTMLElement) => void;
     private incomeChart: Chart<"bar" | "line" | "scatter" | "bubble" | "pie" | "doughnut" | "polarArea" | "radar", number[] | null, string> | null;
     private expensesChart: Chart<"bar" | "line" | "scatter" | "bubble" | "pie" | "doughnut" | "polarArea" | "radar", number[] | null, string> | null;
 
@@ -52,8 +52,6 @@ export class Dashboard {
     private incomes: NodeListOf<Element>;
 
     constructor() {
-        
-
         this.incomeCanvas = document.getElementById('pie-chart-income') as HTMLCanvasElement;
         this.expensesCanvas = document.getElementById('pie-chart-expenses') as HTMLCanvasElement;
         this.line = document.getElementById('line');
@@ -82,8 +80,8 @@ export class Dashboard {
         this.dashboardSvg = document.querySelectorAll('.bi-house');
         this.categoriesIncomeData = null;
         this.categoriesExpenseData = null;
-        this.amountIncomeData=null;
-        this.amountExpenseData=null;
+        this.amountIncomeData = null;
+        this.amountExpenseData = null;
         this.category = document.getElementById('category');
         this.offcanvasCategory = document.getElementById('offcanvas-category');
         this.toggleIcon = document.getElementById('toggleIcon');
@@ -93,16 +91,16 @@ export class Dashboard {
         this.incomes = document.querySelectorAll('.incomes-link');
         this.incomeChart = null;
         this.expensesChart = null;
-        this.clearExistingTitles = (container: HTMLElement): void => {
-            const existingTitle: Element | null = container.querySelector('.pi-title');
-            if (!container) {
-                console.warn('Контейнер не найден для очистки заголовков');
-                return;
-            }
-            if (existingTitle) {
-                existingTitle.remove();
-            }
-        };
+        // this.clearExistingTitles = (container: HTMLElement): void => {
+        //     const existingTitle: Element | null = container.querySelector('.pi-title');
+        //     if (!container) {
+        //         console.warn('Контейнер не найден для очистки заголовков');
+        //         return;
+        //     }
+        //     if (existingTitle) {
+        //         existingTitle.remove();
+        //     }
+        // };
 
         if (this.fromDate) {
             this.fromDate.addEventListener('input', () => this.resizeInput(this.fromDate as HTMLInputElement));
@@ -144,15 +142,15 @@ export class Dashboard {
     }
 
     private async createFilter(): Promise<void> {
-        
+
         const resetButtons = (): void => {
             const buttons: (HTMLElement | null)[] = [this.todayDate, this.weekDate, this.monthDate, this.yearDate, this.allDate, this.intervalDate];
-            buttons.forEach((button: HTMLElement|null): void => {
-                if(button) {
-                     button.classList.remove('active');
-                button.style.color = '';
+            buttons.forEach((button: HTMLElement | null): void => {
+                if (button) {
+                    button.classList.remove('active');
+                    button.style.color = '';
                 }
-               
+
             });
 
 
@@ -361,18 +359,25 @@ export class Dashboard {
                 if (this.fromDate) {
                     const isEventListenersAdded = this.fromDate.dataset.eventListenersAdded === 'true';
 
-                if (!isEventListenersAdded) {
-                    if (this.fromDate) {
-                        this.fromDate.addEventListener('input', updateDates);
-                        // Установим флаг, что обработчики добавлены
-                        this.fromDate.dataset.eventListenersAdded = 'true';
-                    }
-                    if (this.tillDate) {
-                        this.tillDate.addEventListener('input', updateDates);
-                        this.tillDate.dataset.eventListenersAdded = 'true';
+                    if (!isEventListenersAdded) {
+                        if (this.fromDate) {
+                            this.fromDate.addEventListener('input', updateDates);
+                            // Установим флаг, что обработчики добавлены
+                            this.fromDate.dataset.eventListenersAdded = 'true';
+                        }
+                        if (this.tillDate) {
+                            this.tillDate.addEventListener('input', updateDates);
+                        }
+
+                        if (this.fromDate) {
+                            // Установим флаг, что обработчики добавлены
+                            this.fromDate.dataset.eventListenersAdded = 'true';
+                        }
+                        if (this.tillDate) {
+                            this.tillDate.dataset.eventListenersAdded = 'true';
+                        }
                     }
                 }
-            }
             })
         }
     }
@@ -416,7 +421,45 @@ export class Dashboard {
         return Array.from({length: dataLength}, () => this.getRandomColor());
     }
 
+    private clearExistingTitles = (container: HTMLElement): void => {
+        const existingTitle: Element | null = container.querySelector('.pi-title');
+        if (!container) {
+            console.warn('Контейнер не найден для очистки заголовков');
+            return;
+        }
+        if (existingTitle) {
+            existingTitle.remove();
+        }
+    };
+
     private createCharts(): void {
+        if (this.titleIncomeContainer) {
+            this.clearExistingTitles(this.titleIncomeContainer);
+        } else {
+            if (!this.titleIncomeContainer) {
+                this.titleIncomeContainer = document.createElement('div');
+                this.titleIncomeContainer.id = 'income-title-container';
+                this.titleIncomeContainer.className = 'title-container';
+                if (this.incomePie) {
+                    this.incomePie.appendChild(this.titleIncomeContainer);
+                }
+
+            }
+        }
+        if (this.titleExpenseContainer) {
+            this.clearExistingTitles(this.titleExpenseContainer);
+        } else {
+            if (!this.titleExpenseContainer) {
+                this.titleExpenseContainer = document.createElement('div');
+                this.titleExpenseContainer.id = 'expense-title-container';
+                this.titleExpenseContainer.className = 'title-container';
+                if (this.expensePie) {
+                    this.expensePie.appendChild(this.titleExpenseContainer);
+                }
+
+            }
+
+        }
         const getOrCreateLegendList = (chart: Chart, id: string) => {
             const legendContainer: HTMLElement | null = document.getElementById((id).toString());
             if (legendContainer) {
@@ -439,260 +482,258 @@ export class Dashboard {
         };
         const htmlLegendPlugin: ChartHtmlLegendType = {
             id: 'htmlLegend',
-            afterUpdate(chart: Chart, args: any, options: { containerID: string}): void {
-                const ul: HTMLElement|undefined = getOrCreateLegendList(chart, options.containerID);
-                
-                if(ul) {
-                   while (ul.firstChild) {
-                    ul.firstChild.remove();
-                } 
+            afterUpdate(chart: Chart, args: any, options: { containerID: string }): void {
+                const ul: HTMLElement | undefined = getOrCreateLegendList(chart, options.containerID);
+
+                if (ul) {
+                    while (ul.firstChild) {
+                        ul.firstChild.remove();
+                    }
                 }
-                
+
                 if (chart && chart.options && chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
-                const items: LegendItem[] = (chart.options.plugins as any).legend.labels.generateLabels(chart);
-                
-                items.forEach((item: LegendItem, index: number): void => {
-                    const li: HTMLElement = document.createElement('li');
-                    li.style.alignItems = 'center';
-                    li.style.cursor = 'pointer';
-                    li.style.display = 'flex';
-                    li.style.flexDirection = 'row';
-                    li.style.margin = '0 15px 0 0';
-                    li.style.padding = '0 0 0 0';
-                    // Добавляем стиль только для последнего элемента
-                    if (index === items.length - 1) {
-                        li.style.margin = (0).toString();
-                    }
-                    li.onclick = (): void => {
-                        if (item.index !== undefined) {
-                        if ((chart.config as any).type === 'pie' || (chart.config as any).type === 'doughnut') {
-                            chart.toggleDataVisibility(item.index);
-                        } else {
-                            if (item.datasetIndex !== undefined) {
-                            chart.setDatasetVisibility(item.datasetIndex, !chart.isDatasetVisible(item.datasetIndex));
+                    const items: LegendItem[] = (chart.options.plugins as any).legend.labels.generateLabels(chart);
+
+                    items.forEach((item: LegendItem, index: number): void => {
+                        const li: HTMLElement = document.createElement('li');
+                        li.style.alignItems = 'center';
+                        li.style.cursor = 'pointer';
+                        li.style.display = 'flex';
+                        li.style.flexDirection = 'row';
+                        li.style.margin = '0 15px 0 0';
+                        li.style.padding = '0 0 0 0';
+                        // Добавляем стиль только для последнего элемента
+                        if (index === items.length - 1) {
+                            li.style.margin = (0).toString();
                         }
-                    }
-                    }
-                        chart.update();
-                    };
-                    const boxSpan: HTMLSpanElement = document.createElement('span');
-                    if(item.fillStyle) {
-                        boxSpan.style.background = (item.fillStyle).toString();
-                    }
-                    if(item.strokeStyle) {
-                    boxSpan.style.borderColor = (item.strokeStyle).toString();
-                    }
-                    boxSpan.style.borderWidth = item.lineWidth + 'px';
-                    boxSpan.style.display = 'inline-block';
-                    boxSpan.style.flexShrink = (0).toString();
-                    boxSpan.style.height = '10px';
-                    boxSpan.style.marginRight = '10px';
-                    boxSpan.style.width = '35px';
+                        li.onclick = (): void => {
+                            if (item.index !== undefined) {
+                                if ((chart.config as any).type === 'pie' || (chart.config as any).type === 'doughnut') {
+                                    chart.toggleDataVisibility(item.index);
+                                } else {
+                                    if (item.datasetIndex !== undefined) {
+                                        chart.setDatasetVisibility(item.datasetIndex, !chart.isDatasetVisible(item.datasetIndex));
+                                    }
+                                }
+                            }
+                            chart.update();
+                        };
+                        const boxSpan: HTMLSpanElement = document.createElement('span');
+                        if (item.fillStyle) {
+                            boxSpan.style.background = (item.fillStyle).toString();
+                        }
+                        if (item.strokeStyle) {
+                            boxSpan.style.borderColor = (item.strokeStyle).toString();
+                        }
+                        boxSpan.style.borderWidth = item.lineWidth + 'px';
+                        boxSpan.style.display = 'inline-block';
+                        boxSpan.style.flexShrink = (0).toString();
+                        boxSpan.style.height = '10px';
+                        boxSpan.style.marginRight = '10px';
+                        boxSpan.style.width = '35px';
 
-                    const textContainer: HTMLParagraphElement = document.createElement('p');
-                    textContainer.style.color = 'black';
-                    textContainer.style.fontFamily = 'RobotoMedium';
-                    textContainer.style.fontSize = '12px';
-                    textContainer.style.margin = (0).toString();
-                    textContainer.style.padding = (0).toString();
-                    textContainer.style.textDecoration = item.hidden ? 'line-through' : '';
+                        const textContainer: HTMLParagraphElement = document.createElement('p');
+                        textContainer.style.color = 'black';
+                        textContainer.style.fontFamily = 'RobotoMedium';
+                        textContainer.style.fontSize = '12px';
+                        textContainer.style.margin = (0).toString();
+                        textContainer.style.padding = (0).toString();
+                        textContainer.style.textDecoration = item.hidden ? 'line-through' : '';
 
-                    const text: Text = document.createTextNode(item.text);
-                    textContainer.appendChild(text);
-                    li.appendChild(boxSpan);
-                    li.appendChild(textContainer);
-                    if(ul) {
-                       ul.appendChild(li); 
-                    } 
-                });
+                        const text: Text = document.createTextNode(item.text);
+                        textContainer.appendChild(text);
+                        li.appendChild(boxSpan);
+                        li.appendChild(textContainer);
+                        if (ul) {
+                            ul.appendChild(li);
+                        }
+                    });
+                }
             }
-        }
         };
-        
+
         // Создание графиков
-        try {
-            if (this.categoriesIncomeData) {
-                const colorsIncomeChart: string[] = this.generateRandomColors(this.categoriesIncomeData.length);
+        // try {
 
 
-                // График доходов
-                if (this.incomeCanvas && this.expensesCanvas) {
-                    if (this.incomeChart) {
-                        this.incomeChart.destroy();
+        if (this.categoriesIncomeData) {
+            const colorsIncomeChart: string[] = this.generateRandomColors(this.categoriesIncomeData.length);
+
+
+            // График доходов
+            if (this.incomeCanvas && this.expensesCanvas) {
+                if (this.incomeChart) {
+                    this.incomeChart.destroy();
+                }
+
+                // Создаем контейнер для заголовка доходов, если он отсутствует
+
+                if (!this.titleIncomeContainer) {
+                    this.titleIncomeContainer = document.createElement('div');
+                    this.titleIncomeContainer.id = 'income-title-container';
+                    this.titleIncomeContainer.className = 'title-container';
+                    if (this.incomePie) {
+                        this.incomePie.appendChild(this.titleIncomeContainer);
                     }
 
-                    // Создаем контейнер для заголовка доходов, если он отсутствует
-                    
-                    if (!this.titleIncomeContainer) {
-                        this.titleIncomeContainer = document.createElement('div');
-                        this.titleIncomeContainer.id = 'income-title-container';
-                        this.titleIncomeContainer.className = 'title-container';
-                        if (this.incomePie) {
-                            this.incomePie.appendChild(this.titleIncomeContainer);
-                        }
+                }
 
-                    }
-
-                    if( this.incomeItem) {
-                        this.incomeItem.classList.add('pie-content mb-md-4 mb-sm-3 mb-3 pb-sm-3');
+                if (this.incomeItem) {
+                    this.incomeItem.classList.add('pie-content', 'mb-md-4', 'mb-sm-3', 'mb-3', 'pb-sm-3');
                     if (document.documentElement.clientWidth > 1080) {
                         this.incomeItem.classList.add('me-4');
                     }
-                    }
-                    
-
-                    
-
-                    if (!this.incomeTitle) {
-                        this.incomeTitle = document.createElement('h2');
-                        this.incomeTitle.className = 'pi-title m-0';
-                        this.incomeTitle.textContent = 'Доходы';
-                        this.titleIncomeContainer.appendChild(this.incomeTitle);
-                    } else {
-                        this.clearExistingTitles(this.titleIncomeContainer);
-                        // Если заголовок существует, обновляем текст
-                        this.incomeTitle.textContent = 'Доходы';
-                    }
+                }
 
 
-                    const incomeLegendContainer: HTMLDivElement = document.createElement('div');
-                    incomeLegendContainer.id = 'legend-income-container';
-                    if( this.incomeItem) {
-                        this.incomeItem.appendChild(incomeLegendContainer);
+                if (!this.incomeTitle) {
+                    this.incomeTitle = document.createElement('h2');
+                    this.incomeTitle.className = 'pi-title m-0';
+                    this.incomeTitle.textContent = 'Доходы';
+                    this.titleIncomeContainer.appendChild(this.incomeTitle);
+                } else {
+                    this.clearExistingTitles(this.titleIncomeContainer);
+                    // Если заголовок существует, обновляем текст
+                    this.incomeTitle.textContent = 'Доходы';
+                }
+
+
+                const incomeLegendContainer: HTMLDivElement = document.createElement('div');
+                incomeLegendContainer.id = 'legend-income-container';
+                if (this.incomeItem) {
+                    this.incomeItem.appendChild(incomeLegendContainer);
 
                     this.incomeItem.appendChild(this.incomeCanvas);
 
                     if (this.incomePie) {
                         this.incomePie.appendChild(this.incomeItem);
                     }
-                    }
+                }
 
-                    this.incomeCanvas.style.display = "";
-                    
-                    this.incomeChart = new Chart(this.incomeCanvas, {
-                        type: 'pie',
-                        data: {
-                            labels: this.categoriesIncomeData,
-                            datasets: [{
-                                backgroundColor: colorsIncomeChart,
-                                data: this.amountIncomeData,
-                            }]
-                        },
-                        options: {
-                            plugins: {
-                                htmlLegend: {
-                                    containerID: 'legend-income-container',
-                                },
-                                legend: {
-                                    display: false,
-                                },
+                this.incomeCanvas.style.display = "";
+
+                this.incomeChart = new Chart(this.incomeCanvas, {
+                    type: 'pie',
+                    data: {
+                        labels: this.categoriesIncomeData,
+                        datasets: [{
+                            backgroundColor: colorsIncomeChart,
+                            data: this.amountIncomeData,
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            htmlLegend: {
+                                containerID: 'legend-income-container',
                             },
-                            responsive: true,
-                        }  as CustomChartOptions,
-                        plugins: [htmlLegendPlugin],
-                    });
+                            legend: {
+                                display: false,
+                            },
+                        },
+                        responsive: true,
+                    } as CustomChartOptions,
+                    plugins: [htmlLegendPlugin],
+                });
+
+            }
+            if (this.expensesChart) {
+                this.expensesChart.destroy();
+            }
+
+
+            // График расходов
+            if (this.categoriesExpenseData) {
+                const colorsExpenseChart: string[] = this.generateRandomColors(this.categoriesExpenseData.length);
+
+
+                // Создаем контейнер для заголовка расходов, если он отсутствует
+
+                if (!this.titleExpenseContainer) {
+                    this.titleExpenseContainer = document.createElement('div');
+                    this.titleExpenseContainer.id = 'expense-title-container';
+                    this.titleExpenseContainer.className = 'title-container';
+                    if (this.expensePie) {
+                        this.expensePie.appendChild(this.titleExpenseContainer);
+                    }
 
                 }
-                if (this.expensesChart) {
-                    this.expensesChart.destroy();
+
+                if (this.expensesItem) {
+                    this.expensesItem.classList.add('pie-content', 'mb-md-4', 'mb-sm-3', 'mb-3', 'pb-sm-3');
                 }
 
+                if (!this.expenseTitle) {
+                    this.expenseTitle = document.createElement('h2');
+                    this.expenseTitle.className = 'pi-title m-0';
+                    this.expenseTitle.textContent = 'Расходы';
+                    this.titleExpenseContainer.appendChild(this.expenseTitle);
+                } else {
+                    this.clearExistingTitles(this.titleExpenseContainer);
+                    // Если заголовок существует, обновляем текст
+                    this.expenseTitle.textContent = 'Расходы';
+                }
 
-                // График расходов
-                if (this.categoriesExpenseData) {
-                    const colorsExpenseChart: string[] = this.generateRandomColors(this.categoriesExpenseData.length);
-
-
-                    // Создаем контейнер для заголовка расходов, если он отсутствует
-                    
-                    if (!this.titleExpenseContainer) {
-                        this.titleExpenseContainer = document.createElement('div');
-                        this.titleExpenseContainer.id = 'expense-title-container';
-                        this.titleExpenseContainer.className = 'title-container';
-                        if (this.expensePie) {
-                            this.expensePie.appendChild(this.titleExpenseContainer);
-                        }
-
-                    }
-
-                    if(this.expensesItem) {
-                        this.expensesItem.classList.add('pie-content  mb-md-4 mb-sm-3 mb-3 pb-sm-3');
-                    }
-                    
-                    if (!this.expenseTitle) {
-                        this.expenseTitle = document.createElement('h2');
-                        this.expenseTitle.className = 'pi-title m-0';
-                        this.expenseTitle.textContent = 'Расходы';
-                        this.titleExpenseContainer.appendChild(this.expenseTitle);
-                    } else {
-                        this.clearExistingTitles(this.titleExpenseContainer);
-                        // Если заголовок существует, обновляем текст
-                        this.expenseTitle.textContent = 'Расходы';
-                    }
-
-                    if(this.expensesItem) {
-                        if (document.documentElement.clientWidth > 1080) {
+                if (this.expensesItem) {
+                    if (document.documentElement.clientWidth > 1080) {
                         this.expensesItem.classList.add('ms-4');
                     }
 
                     const expensesLegendContainer: HTMLDivElement = document.createElement('div');
                     expensesLegendContainer.id = 'legend-expenses-container';
                     this.expensesItem.appendChild(expensesLegendContainer);
-if(this.expensesCanvas) {
-    this.expensesItem.appendChild(this.expensesCanvas);
-}
-                    
+                    if (this.expensesCanvas) {
+                        this.expensesItem.appendChild(this.expensesCanvas);
+                    }
+
                     if (
                         this.expensePie) {
                         this.expensePie.appendChild(this.expensesItem);
                     }
-                    }
-                    
-
-
-                    // График расходов
-                    if (this.expensesCanvas) {
-                        this.expensesChart = new Chart(this.expensesCanvas, {
-                            type: 'pie',
-                            data: {
-                                labels: this.categoriesExpenseData,
-                                datasets: [{
-                                    backgroundColor: colorsExpenseChart,
-                                    data: this.amountExpenseData,
-                                }]
-                            },
-                            options: {
-                                plugins: {
-                                    htmlLegend: {
-                                        containerID: 'legend-expenses-container',
-                                    },
-                                    legend: {
-                                        display: false,
-                                    },
-                                },
-                                responsive: true,
-                            }  as CustomChartOptions,
-                            plugins: [htmlLegendPlugin],
-                        });
-                    }
-
                 }
-            } else {
-                if (this.expensePie) {
-                    this.expensePie.style.display = "none"
+
+
+                // График расходов
+                if (this.expensesCanvas) {
+                    this.expensesChart = new Chart(this.expensesCanvas, {
+                        type: 'pie',
+                        data: {
+                            labels: this.categoriesExpenseData,
+                            datasets: [{
+                                backgroundColor: colorsExpenseChart,
+                                data: this.amountExpenseData,
+                            }]
+                        },
+                        options: {
+                            plugins: {
+                                htmlLegend: {
+                                    containerID: 'legend-expenses-container',
+                                },
+                                legend: {
+                                    display: false,
+                                },
+                            },
+                            responsive: true,
+                        } as CustomChartOptions,
+                        plugins: [htmlLegendPlugin],
+                    });
                 }
 
             }
+        } else {
+            if (this.expensePie) {
+                this.expensePie.style.display = "none"
+            }
 
-        } catch (error) {
-            console.error('Ошибка при создании графика:', error);
         }
+        // } catch (error) {
+        //     console.error('Ошибка при создании графика:', error);
+        // }
     }
 
 
     private stylesLayoutCanvas(): void {
         //Layout and Offcanvas
-        
+
         for (let i: number = 0; i < this.dashboardNavItem.length; i++) {
             (this.dashboardNavItem[i] as HTMLElement).style.backgroundColor = '#0D6EFD';
             (this.dashboardNavItem[i] as HTMLElement).style.setProperty('border-radius', '7px', 'important');
